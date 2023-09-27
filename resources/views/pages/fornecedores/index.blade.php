@@ -8,8 +8,13 @@
     <div>
         <form action="{{ route('supply.find') }}" method="POST">
             @csrf
-            <input type="text" required name="search" placeholder="Digite o nome" />
+            <input type="text" required minlength="3" value="{{$search ?? ''}}" name="search" placeholder="Digite o nome" />
             <button> pesquisar </button>
+            @if(isset($search))
+                <a href="{{ route('supply.index') }}" class="btn btn-danger btn-sm">
+                    Limpar Pesquisa
+                </a>
+            @endif
         </form>
         <a type="button" href="" class="btn btn-success float-end">
             Adicionar

@@ -17,7 +17,10 @@ class SupplyController extends Controller
 
     public function find(SupplyFormRequest $request, SupplyRepository $supplyRepository)
     {
-        $supplies = $supplyRepository->find($request->search);
-        return view('pages.fornecedores.index', compact('supplies'));
+        $search = $request->search;
+        $supplies = $supplyRepository->find($search);
+        return view('pages.fornecedores.index', 
+            compact('supplies', 'search')
+        );
     }
 }
