@@ -13,11 +13,14 @@ class ProdutosSeeder extends Seeder
      */
     public function run(): void
     {
-        Produto::create(
-            [
-                'nome' => 'Victor Padovan',
-                'valor' => '20.00',
-            ]
-        );
+        $faker = \Faker\Factory::create();
+        for ($i = 0; $i < 100; $i++) {
+            Produto::create(
+                [
+                    'nome' => $faker->name(),
+                    'valor' => $faker->randomNumber(2),
+                ]
+            );
+        }
     }
 }
