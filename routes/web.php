@@ -26,5 +26,6 @@ Route::prefix('produtos')->group( function () {
 
 Route::prefix('fornecedores')->group(function() {
     Route::get('/', [SupplyController::class, 'index'])->name('supply.index');
+    Route::get('/find', [SupplyController::class, 'index']);
     Route::post('/find', [SupplyController::class, 'find'])->name('supply.find');
 });

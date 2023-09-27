@@ -8,7 +8,7 @@
     <div>
         <form action="{{ route('supply.find') }}" method="POST">
             @csrf
-            <input type="text" name="search" placeholder="Digite o nome" />
+            <input type="text" required name="search" placeholder="Digite o nome" />
             <button> pesquisar </button>
         </form>
         <a type="button" href="" class="btn btn-success float-end">
