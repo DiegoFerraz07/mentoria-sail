@@ -9,15 +9,30 @@ use App\Models\Supply;
 class SupplyRepository implements SupplyRepositoryInterface
 {
 
-    public function getAll()
+    public function getAll(): Collection
     {
         return Supply::all();
     }
 
     /**
+     * find a supply by name or CNPJ and return first 10
+     *
+     * @param string $search
+     * 
+     * @return Collection<Supply> 
+     */
+    public function find(string $search): Collection
+    {
+        return Supply::where(function($q) use ($search) {
+            $q->where("name", "LIKE", "%$search%")
+                ->orWhere("cnpj", $search);
+        })->limit(10)->get();
+    }
+
+    /**
      * Return all data with array 0 is_init false or true
      * 
-     * @return Supply
+     * @return Collection<Supply>
      */
     public function getAllWithInit(): Collection
     {
@@ -29,4 +44,5 @@ class SupplyRepository implements SupplyRepositoryInterface
         
         return $supplies;
     }
+
 }

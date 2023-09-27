@@ -6,8 +6,9 @@
         <h1 class="h2">Fornecedores</h1>
     </div>
     <div>
-        <form action="#" method="post">
-            <input type="text" name="pesquisar" placeholder="Digite o nome" />
+        <form action="{{ route('supply.find') }}" method="POST">
+            @csrf
+            <input type="text" name="search" placeholder="Digite o nome" />
             <button> pesquisar </button>
         </form>
         <a type="button" href="" class="btn btn-success float-end">
