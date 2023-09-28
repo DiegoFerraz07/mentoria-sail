@@ -174,6 +174,23 @@
     </svg>
     <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/">GESTAO</a>
+        <div style="display: flex;justify-content: center;align-items: center;width: 100%; flex-direction: row;">
+            <div style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFF;
+            border-radius: 5px;
+            color: #000;
+            padding: 2px;
+            margin: 2px;
+            height: 100%;">
+                <div style="display: flex;justify-content: center;align-items: center; margin-right: 5px;">
+                    <img src="{{ Vite::asset('resources/assets/icons/sun.png') }}" width="30px">
+                </div>
+                <div style="display: flex;justify-content: center;align-items: center; "class="timeHour"> 00:00:00</div>
+            </div>
+        </div>
 
         <ul class="navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
@@ -223,6 +240,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.js"></script>
     <script src="/js/projeto.js"></script>
 
+    <script>
+        function getTime() {
+            setInterval(function () {
+                let hora = new Date().toLocaleTimeString();
+                const elements = [...document.getElementsByClassName('timeHour')];
+                console.log(elements);
+                elements.map(element => {
+                    element.innerHTML = hora;
+                })
+            }, 1000);
+        }
+
+        getTime();
+    </script>
+
 </body>
+
 
 </html>
