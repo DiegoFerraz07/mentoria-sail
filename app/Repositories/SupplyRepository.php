@@ -18,8 +18,8 @@ class SupplyRepository implements SupplyRepositoryInterface
      * find a supply by name or CNPJ and return first 10
      *
      * @param string $search
-     * 
-     * @return Collection<Supply> 
+     *
+     * @return Collection<Supply>
      */
     public function find(string $search): Collection
     {
@@ -31,7 +31,7 @@ class SupplyRepository implements SupplyRepositoryInterface
 
     /**
      * Return all data with array 0 is_init false or true
-     * 
+     *
      * @return Collection<Supply>
      */
     public function getAllWithInit(): Collection
@@ -41,8 +41,12 @@ class SupplyRepository implements SupplyRepositoryInterface
         if(count($supplies) > 0) {
             $supplies[0]['is_init'] = true;
         }
-        
+
         return $supplies;
     }
 
+    public function delete($id)
+    {
+        return Supply::where('id', $id)->delete();
+    }
 }

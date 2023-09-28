@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SupplyDeleteFormRequest;
 use Illuminate\Http\Request;
 use App\Repositories\SupplyRepository;
 use App\Http\Requests\SupplyFormRequest;
@@ -19,8 +20,16 @@ class SupplyController extends Controller
     {
         $search = $request->search;
         $supplies = $supplyRepository->find($search);
-        return view('pages.fornecedores.index', 
+        return view('pages.fornecedores.index',
             compact('supplies', 'search')
         );
+    }
+
+    public function delete(SupplyDeleteFormRequest $request, SupplyRepository $supplyRepository)
+    {
+        $supplyRepository->delete($request->idForne);
+        return response()->json([
+            'sucess' => true
+        ]);
     }
 }
