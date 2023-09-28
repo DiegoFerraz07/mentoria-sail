@@ -32,7 +32,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link d-flex align-items-center gap-2" href="{{route('supply.index')}}">
-              <svg class="bi"><use xlink:href="#supply"/></svg>
+              <svg class="bi"><use xlink:href="#people"/></svg>
               Fornecedores
             </a>
           </li>
