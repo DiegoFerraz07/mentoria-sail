@@ -28,5 +28,5 @@ Route::prefix('fornecedores')->group(function() {
     Route::get('/', [SupplyController::class, 'index'])->name('supply.index');
     Route::get('/find', [SupplyController::class, 'index']);
     Route::post('/find', [SupplyController::class, 'find'])->name('supply.find');
-    Route::get('/delete', [SupplyController::class, 'delete'])->name('supply.delete');
+    Route::delete('/delete', [SupplyController::class, 'delete'])->name('supply.delete');
 });

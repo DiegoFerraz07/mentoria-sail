@@ -42,7 +42,7 @@
                                     </a>
 
                                     <meta name='csrf-token' content="{{ csrf_token() }}"/>
-                                    <button onclick="delete({{$supply->id}})" class="btn btn-danger btn-sm">
+                                    <button onclick="deleteSupply({{$supply->id}})" class="btn btn-danger btn-sm">
                                         Excluir
                                     </button>
                                 </td>
@@ -58,16 +58,21 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-    function delete(id) {
-        axios.delete('{{route("supply.delete")}}',
-        {
-            idForne: id,
+    function deleteSupply(id) {
+        axios.delete('{{route("supply.delete")}}', {
+            data: {
+                idForne: id,
+            }
         })
         .then(function(response) {
+            //verificar se deu succes igual a true 
+            //e fazer um reload da página
             console.log(response);
         })
         .catch(function(error){
+            // exibir um alert para mostrar o erro
             console.log(error);
+            
         });
     }
 </script>

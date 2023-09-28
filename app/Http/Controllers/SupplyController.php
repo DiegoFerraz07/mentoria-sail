@@ -29,7 +29,7 @@ class SupplyController extends Controller
     {
         $supplyRepository->delete($request->idForne);
         return response()->json([
-            'sucess' => true
+            'success' => true
         ]);
     }
 }
