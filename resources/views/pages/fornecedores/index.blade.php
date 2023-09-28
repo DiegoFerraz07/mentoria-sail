@@ -42,9 +42,9 @@
                                     </a>
 
                                     <meta name='csrf-token' content="{{ csrf_token() }}"/>
-                                    <a href="#" class="btn btn-danger btn-sm">
+                                    <button onclick="delete({{$supply->id}})" class="btn btn-danger btn-sm">
                                         Excluir
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -55,3 +55,19 @@
     </div>
 @endsection
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    function delete(id) {
+        axios.delete('{{route("supply.delete")}}',
+        {
+            idForne: id,
+        })
+        .then(function(response) {
+            console.log(response);
+        })
+        .catch(function(error){
+            console.log(error);
+        });
+    }
+</script>
