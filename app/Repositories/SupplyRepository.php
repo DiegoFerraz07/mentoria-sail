@@ -6,13 +6,16 @@ use App\Http\Requests\SupplyAddFormRequest;
 use App\Interfaces\SupplyRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Supply;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class SupplyRepository implements SupplyRepositoryInterface
 {
 
     public function getAll(): Collection
     {
-        return Supply::all();
+        return Supply::all()
+            ->sortByDesc('id');
     }
 
     /**
@@ -31,32 +34,36 @@ class SupplyRepository implements SupplyRepositoryInterface
     }
 
     /**
-     * Return all data with array 0 is_init false or true
-     *
-     * @return Collection<Supply>
+     * Delete a specific supply
+     * @param int $id
+     * 
+     * @return bool
      */
-    public function getAllWithInit(): Collection
+    public function delete(int $id): bool
     {
-        $supplies = $this->getAll();
+        $deleted = Supply::where('id', $id)
+            ->delete();
 
-        if(count($supplies) > 0) {
-            $supplies[0]['is_init'] = true;
+        return $deleted 
+            ? true 
+            : false;
+    }
+
+    /**
+     * Store a new supply
+     * @param SupplyAddFormRequest $request
+     * 
+     * @return void
+     */
+    public function store(SupplyAddFormRequest $request): void
+    {
+        try {
+            $supply = new Supply();
+            $supply->fillSupply($request)
+                ->save();
+        } catch(Exception $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            return;
         }
-
-        return $supplies;
-    }
-
-    public function delete($id)
-    {
-        return Supply::where('id', $id)->delete();
-    }
-
-    public function store(SupplyAddFormRequest $request)
-    {
-        $supply = new Supply();
-        $supply->name = $request->name;
-        $supply->cnpj = $request->cnpj;
-
-        $supply->save();
     }
 }

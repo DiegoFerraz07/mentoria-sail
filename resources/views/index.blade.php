@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html5>
 <html lang="en" data-bs-theme="auto">
 
 <head>
@@ -227,20 +227,20 @@
             </main>
         </div>
     </div>
-    @yield('scripts')
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="/js/bootstap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
         integrity="sha384-gdQErvCNWvHQZj6XZM0dNsAoY4v+j5P1XDpNkcM3HJG1Yx04ecqIHk7+4VBOCHOG" crossorigin="anonymous">
     </script>
     <script src="/js/dashboard.js"></script>
-    <script src="/js/color-modes.js"></script>
     {{-- BlocUI loading --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.js"></script>
     <script src="/js/projeto.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+
+    @yield('scripts')
 
     <script>
         function getTime() {

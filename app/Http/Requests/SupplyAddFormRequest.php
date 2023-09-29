@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Supply;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SupplyAddFormRequest extends FormRequest

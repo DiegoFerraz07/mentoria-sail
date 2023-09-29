@@ -26,6 +26,7 @@
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Nome</th>
                             <th>cnpj</th>
                             <th>Ações</th>
@@ -34,6 +35,7 @@
                     <tbody>
                         @foreach ($supplies as $supply)
                             <tr>
+                                <td>{{ $supply->id }}</td>
                                 <td>{{ $supply->name }}</td>
                                 <td>{{ $supply->cnpj }}</td>
                                 <td>
@@ -55,6 +57,7 @@
     </div>
 @endsection
 
+@section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
@@ -99,3 +102,4 @@
         });
     }
 </script>
+@endsection
