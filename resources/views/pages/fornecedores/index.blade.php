@@ -16,7 +16,7 @@
                 </a>
             @endif
         </form>
-        <a type="button" href="" class="btn btn-success float-end">
+        <a type="button" href="{{route('supply.add')}}" class="btn btn-success float-end">
             Adicionar
         </a>
         <div class="table-responsive mt-4">
@@ -65,14 +65,14 @@
             }
         })
         .then(function(response) {
-            //verificar se deu succes igual a true 
+            //verificar se deu succes igual a true
             //e fazer um reload da página
             console.log(response);
         })
         .catch(function(error){
             // exibir um alert para mostrar o erro
             console.log(error);
-            
+
         });
     }
 </script>

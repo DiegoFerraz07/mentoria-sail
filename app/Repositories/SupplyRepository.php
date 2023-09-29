@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\SupplyAddFormRequest;
 use App\Interfaces\SupplyRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Supply;
@@ -48,5 +49,14 @@ class SupplyRepository implements SupplyRepositoryInterface
     public function delete($id)
     {
         return Supply::where('id', $id)->delete();
+    }
+
+    public function store(SupplyAddFormRequest $request)
+    {
+        $supply = new Supply();
+        $supply->name = $request->name;
+        $supply->cnpj = $request->cnpj;
+
+        $supply->save();
     }
 }
