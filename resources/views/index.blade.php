@@ -240,12 +240,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.js"></script>
     <script src="/js/projeto.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function getTime() {
             setInterval(function () {
                 let hora = new Date().toLocaleTimeString();
                 const elements = [...document.getElementsByClassName('timeHour')];
-                console.log(elements);
                 elements.map(element => {
                     element.innerHTML = hora;
                 })

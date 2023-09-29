@@ -38,7 +38,7 @@
                     <h6 class="timeHour"></h6>
                 </div>
     
-                <div class="d-flex flex-column text-center mt-5 mb-4">
+                <div class="d-flex flex-column text-center mt-5 mb-4 ">
                     <div class="d-flex justify-content-center text-center flex-center flex-row">
                         <div class="container-weather d-flex justify-content-center text-center flex-center flex-row"> 
                             <div class="label-weather">
