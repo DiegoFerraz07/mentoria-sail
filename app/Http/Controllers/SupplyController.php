@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SupplyAddFormRequest;
 use App\Http\Requests\SupplyDeleteFormRequest;
 use Illuminate\Http\Request;
 use App\Repositories\SupplyRepository;
@@ -32,4 +33,16 @@ class SupplyController extends Controller
             'success' => true
         ]);
     }
+
+    public function add()
+    {
+        return view('pages.fornecedores.form');
+    }
+
+    public function store(SupplyAddFormRequest $request, SupplyRepository $supplyRepository)
+    {
+        $supplyRepository->store($request);
+        return redirect()->route('supply.index');
+    }
+
 }

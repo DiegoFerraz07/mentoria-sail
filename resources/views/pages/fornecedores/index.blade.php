@@ -16,7 +16,7 @@
                 </a>
             @endif
         </form>
-        <a type="button" href="" class="btn btn-success float-end">
+        <a type="button" href="{{route('supply.add')}}" class="btn btn-success float-end">
             Adicionar
         </a>
         <div class="table-responsive mt-4">
