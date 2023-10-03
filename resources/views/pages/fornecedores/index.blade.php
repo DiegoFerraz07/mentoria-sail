@@ -44,7 +44,7 @@
                                     </a>
 
                                     <meta name='csrf-token' content="{{ csrf_token() }}"/>
-                                    <button onclick="deleteSupply('{{$supply->id}}', '{{$supply->name}}')" class="btn btn-danger btn-sm">
+                                    <button onclick="confirmDeleteSupply('{{$supply->id}}', '{{$supply->name}}')" class="btn btn-danger btn-sm">
                                         Excluir
                                     </button>
                                 </td>
@@ -58,47 +58,40 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 <script>
-    function deleteSupply(id, name) {
-        Swal.fire({
-            title: 'Atenção',
-            html: `Deseja realmente excluir o fornecedor <b>"${name}"</b>?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#868e96',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sim, remover!',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axios.delete('{{route("supply.delete")}}', {
-                    data: {
-                        idForne: id,
-                    }
-                })
-                .then(response => {
-
-                    if(response.data.success) {
-                        Swal.fire({
-                            title: 'Excluido com sucesso',
-                            icon: 'success'
-                        })
-                        .then(res => {
-                            document.location.reload();
-                        })
-                    }
-                })
-                .catch(error => {
-                    Swal.fire(
-                        'Oops',
-                        'Não foi possivel excluir!!',
-                        'error'
-                    )
-                    
-                });
+    function confirmDeleteSupply(id, name) {
+        const alertSwal = window.alertSweet;
+        alertSwal(
+            `Deseja realmente excluir o fornecedor <b>"${name}"</b>?`, 
+            'warning', 
+            success => {
+                this.deleteSupply(id);
             }
+        );
+    }
+
+    function deleteSupply(id) {
+        axios.delete('{{route("supply.delete")}}', {
+            data: {
+                idForne: id,
+            }
+        })
+        .then(response => {
+            if(response.data.success) {
+                alertSweet(
+                    'Excluido com sucesso', 
+                    'success',
+                    success => {
+                        document.location.reload();
+                    }
+                );
+            }
+        })
+        .catch(error => {
+            alertSweet(
+                'Não foi possivel excluir!!',
+                'error'
+            )
         });
     }
 </script>

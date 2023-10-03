@@ -60,8 +60,16 @@ class SupplyController extends Controller
      */
     public function store(SupplyAddFormRequest $request, SupplyRepository $supplyRepository)
     {
-        $supplyRepository->store($request);
-        return redirect()->route('supply.index');
+        $saved = $supplyRepository->store($request);
+        if($saved) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Erro ao tentar salvar'
+        ]);
     }
 
 }

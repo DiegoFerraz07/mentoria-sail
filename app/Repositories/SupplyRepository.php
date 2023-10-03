@@ -53,17 +53,17 @@ class SupplyRepository implements SupplyRepositoryInterface
      * Store a new supply
      * @param SupplyAddFormRequest $request
      * 
-     * @return void
+     * @return bool
      */
-    public function store(SupplyAddFormRequest $request): void
+    public function store(SupplyAddFormRequest $request): bool
     {
         try {
             $supply = new Supply();
-            $supply->fillSupply($request)
-                ->save();
+            $supply->fillSupply($request);
+            return $supply->save();
         } catch(Exception $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
-            return;
+            return false;
         }
     }
 }
