@@ -39,7 +39,7 @@
                                 <td>{{ $supply->name }}</td>
                                 <td>{{ $supply->cnpj }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-light btn-sm">
+                                    <a href="{{route("supply.edit", ['id' => $supply->id])}}" class="btn btn-light btn-sm">
                                         Editar
                                     </a>
 

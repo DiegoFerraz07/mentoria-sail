@@ -31,4 +31,6 @@ Route::prefix('fornecedores')->group(function() {
     Route::delete('/delete', [SupplyController::class, 'delete'])->name('supply.delete');
     Route::get('/add', [SupplyController::class, 'add'])->name('supply.add');
     Route::post('/store', [SupplyController::class, 'store'])->name('supply.store');
+    Route::get('/edit/{id}', [SupplyController::class, 'edit'])->name('supply.edit');
+    Route::post('/update', [SupplyController::class, 'update'])->name('supply.update');
 });

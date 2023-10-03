@@ -4,12 +4,16 @@
 @section('content')
     <form>
         @csrf
+        <input type="hidden" 
+            id="supply-id"
+            value="{{ isset($supply) ? $supply->id : ''}}">
         <div class="form-group">
             <label for="name">Nome</label>
             <input type="text"
                 class="form-control"
                 name="name"
                 id="name"
+                value="{{ isset($supply) ? $supply->name : ''}}"
                 required
                 placeholder="Nome">
         </div>
@@ -22,6 +26,7 @@
                 minlength="18"
                 data-mask="00.000.000/0000-00"
                 id="cnpj"
+                value="{{ isset($supply) ? $supply->cnpj : ''}}"
                 required
                 placeholder="CNPJ">
             <div id="cnpj-error" class="error"></div>
@@ -80,13 +85,22 @@
                     formData[input.name] = input.value;
                 }
 
+                let route = "{{route('supply.store')}}";
+                let messageSuccess = "Adicionado com sucesso";
+                const supplyId = $('#supply-id').val();
+                if(supplyId) {
+                    route = "{{route('supply.update')}}";
+                    messageSuccess = "Alterado com sucesso";
+                    formData['id'] = supplyId;
+                }
+
                 axios.post(
-                    "{{route('supply.store')}}", 
+                    route, 
                     formData
                 ).then(response => {
                     if(response.data.success) {
                         alertSweet(
-                            'Adicionado com sucesso', 
+                            messageSuccess, 
                             'success',
                             success => {
                                 document.location.href = "{{ route('supply.index')}}";

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SupplyAddFormRequest;
 use App\Http\Requests\SupplyDeleteFormRequest;
+use App\Http\Requests\SupplyEditFormRequest;
 use Illuminate\Http\Request;
 use App\Repositories\SupplyRepository;
 use App\Http\Requests\SupplyFormRequest;
+use App\Http\Requests\SupplyUpdateFormRequest;
 use App\Models\Supply;
 
 class SupplyController extends Controller
@@ -62,6 +64,41 @@ class SupplyController extends Controller
     {
         $saved = $supplyRepository->store($request);
         if($saved) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Erro ao tentar salvar'
+        ]);
+    }
+
+
+    /**
+     * Open view to edit a specific Supply 
+     * 
+     * @return View
+     */
+    public function edit(SupplyEditFormRequest $request, SupplyRepository $supplyRepository)
+    {
+        $supply = $supplyRepository->get($request->id);
+        return view('pages.fornecedores.form', compact('supply'));
+    }
+
+
+    /**
+     * Update a supply
+     * 
+     * @param SupplyUpdateFormRequest $request, 
+     * @param SupplyRepository $supplyRepository
+     * 
+     * @return Json
+     */
+    public function update(SupplyUpdateFormRequest $request, SupplyRepository $supplyRepository)
+    {
+        $updated = $supplyRepository->update($request);
+        if($updated) {
             return response()->json([
                 'success' => true
             ]);

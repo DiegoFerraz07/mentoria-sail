@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\SupplyAddFormRequest;
+use App\Http\Requests\SupplyUpdateFormRequest;
 use App\Interfaces\SupplyRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Supply;
@@ -61,6 +62,37 @@ class SupplyRepository implements SupplyRepositoryInterface
             $supply = new Supply();
             $supply->fillSupply($request);
             return $supply->save();
+        } catch(Exception $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            return false;
+        }
+    }
+
+
+    /**
+     * get a specific supply
+     * @param int $id
+     * 
+     * @return Supply|null
+     */
+    public function get(int $id): Supply|null
+    {
+        return Supply::where('id', $id)->first();
+    }
+
+
+    /**
+     * Store a new supply
+     * @param SupplyAddFormRequest $request
+     * 
+     * @return bool
+     */
+    public function update(SupplyUpdateFormRequest $request): bool
+    {
+        try {
+            $supply = $this->get($request->id);
+            $supply->fillSupply($request);
+            return $supply->update();
         } catch(Exception $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             return false;
