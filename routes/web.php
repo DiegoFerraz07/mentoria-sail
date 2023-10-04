@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\SupplyController;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,8 @@ Route::prefix('fornecedores')->group(function() {
     Route::post('/store', [SupplyController::class, 'store'])->name('supply.store');
     Route::get('/edit/{id}', [SupplyController::class, 'edit'])->name('supply.edit');
     Route::post('/update', [SupplyController::class, 'update'])->name('supply.update');
+});
+
+Route::prefix('clientes')->group( function () {
+    Route::get('/', [ClientController::class, 'index'])->name('client.index');
 });
