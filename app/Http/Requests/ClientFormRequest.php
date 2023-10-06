@@ -32,7 +32,6 @@ class ClientFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'search.required' => "é obrigatório enviar um nome ou CPF para pesquisar",
             'search.string' => "é obrigatório que seja um texto",
         ];
     }

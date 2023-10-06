@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientFormRequest;
 use App\Models\Client;
+use App\Repositories\ClientRepository;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function __construct(private Client $cliente) {}
-
-    public function index(Request $request)
+    public function index(ClientRepository $clientRepository)
     {
-        $pesquisar = $request->pesquisar;
-        $findClient = $this->cliente->getProdutosPesquisarIndex(search: $pesquisar ?? '');
+        $customers = $clientRepository->getAll();
+        return view('pages.clientes.index', compact('customers'));
+    }
 
-        return view('pages.clientes.index', compact('findClient'));
+    public function find(ClientFormRequest $request, ClientRepository $clientRepository)
+    {
+        $search = $request->search;
+        $customers = $clientRepository->find($search);
+        return view('pages.clientes.index',
+            compact('customers', 'search')
+        );
     }
 
     public function delete(Request $request)

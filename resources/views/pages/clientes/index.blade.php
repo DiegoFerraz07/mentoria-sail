@@ -6,21 +6,21 @@
         <h1 class="h2">Client</h1>
     </div>
     <div>
-        <form action="{{ route('supply.find') }}" method="POST">
+        <form action="{{ route('client.find') }}" method="POST">
             @csrf
             <input type="text" required minlength="3" value="{{$search ?? ''}}" name="search" placeholder="Digite o nome" />
             <button> pesquisar </button>
             @if(isset($search))
-                <a href="{{ route('supply.index') }}" class="btn btn-danger btn-sm">
+                <a href="{{ route('client.index') }}" class="btn btn-danger btn-sm">
                     Limpar Pesquisa
                 </a>
             @endif
         </form>
-        <a type="button" href="{{route('supply.add')}}" class="btn btn-success float-end">
+        <a type="button" href="#" class="btn btn-success float-end">
             Adicionar
         </a>
         <div class="table-responsive mt-4">
-            @if ($supplies->isEmpty())
+            @if ($customers->isEmpty())
                 <p> Não existe dados </p>
             @else
                 <table class="table table-striped table-sm">
@@ -28,24 +28,25 @@
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
-                            <th>cpf</th>
-                            <th>date</th>
+                            <th>Cpf</th>
+                            <th>Data</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($supplies as $supply)
+                        @foreach ($customers as $client)
                             <tr>
-                                <td>{{ $supply->id }}</td>
-                                <td>{{ $supply->name }}</td>
-                                <td>{{ $supply->cnpj }}</td>
+                                <td>{{ $client->id }}</td>
+                                <td>{{ $client->name }}</td>
+                                <td>{{ $client->cpf }}</td>
+                                <td>{{ $client->data }}</td>
                                 <td>
-                                    <a href="{{route("supply.edit", ['id' => $supply->id])}}" class="btn btn-light btn-sm">
+                                    <a href="#" class="btn btn-light btn-sm">
                                         Editar
                                     </a>
 
                                     <meta name='csrf-token' content="{{ csrf_token() }}"/>
-                                    <button onclick="confirmDeleteSupply('{{$supply->id}}', '{{$supply->name}}')" class="btn btn-danger btn-sm">
+                                    <button onclick="confirmDeleteClient('{{$client->id}}', '{{$client->name}}')" class="btn btn-danger btn-sm">
                                         Excluir
                                     </button>
                                 </td>
@@ -60,19 +61,19 @@
 
 @section('scripts')
 <script>
-    function confirmDeleteSupply(id, name) {
+    function confirmDeleteClient(id, name) {
         const alertSwal = window.alertSweet;
         alertSwal(
-            `Deseja realmente excluir o fornecedor <b>"${name}"</b>?`,
+            `Deseja realmente excluir o Cliente <b>"${name}"</b>?`,
             'warning',
             success => {
-                this.deleteSupply(id);
+                this.deleteClient(id);
             }
         );
     }
 
-    function deleteSupply(id) {
-        axios.delete('{{route("supply.delete")}}', {
+    function deleteClient(id) {
+        axios.delete('{{route("client.delete")}}', {
             data: {
                 idForne: id,
             }

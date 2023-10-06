@@ -5,31 +5,31 @@
     <form>
         @csrf
         <input type="hidden"
-            id="supply-id"
-            value="{{ isset($supply) ? $supply->id : ''}}">
+            id="client-id"
+            value="{{ isset($client) ? $client->id : ''}}">
         <div class="form-group">
             <label for="name">Nome</label>
             <input type="text"
                 class="form-control"
                 name="name"
                 id="name"
-                value="{{ isset($supply) ? $supply->name : ''}}"
+                value="{{ isset($client) ? $client->name : ''}}"
                 required
                 placeholder="Nome">
         </div>
         <div class="form-group">
-            <label for="cnpj">CNPJ</label>
+            <label for="cpf">CPF</label>
             <input type="text"
                 class="form-control cnpj"
                 name="cnpj"
-                maxlength="18"
-                minlength="18"
-                data-mask="00.000.000/0000-00"
-                id="cnpj"
-                value="{{ isset($supply) ? $supply->cnpj : ''}}"
+                maxlength="14"
+                minlength="14"
+                id="cpf"
+                mask="000.000.000-00"
+                value="{{ isset($client) ? $client->cpf : ''}}"
                 required
-                placeholder="CNPJ">
-            <div id="cnpj-error" class="error"></div>
+                placeholder="CPF">
+            <div id="cpf-error" class="error"></div>
         </div>
         <button type="submit" class="btn btn-success mt-2">Salvar</button>
     </form>
@@ -42,38 +42,38 @@
     // executa tudo que ta aqui dentro quando a página for totalmente carregada
         $(document).ready( function() {
             function setMessageErrorCNPJ(message = '') {
-                $('#cnpj-error')[0].innerHTML = message;
+                $('#cpf-error')[0].innerHTML = message;
             }
 
-            function validityCNPJ() {
-                // pega o valor do input do cnpj
-                const cnpj = $('#cnpj').val();
+            function validityCPF() {
+                // pega o valor do input do cpf
+                const cpf = $('#cpf').val();
                 //limpa a mensagem de erro da div
-                setMessageErrorCNPJ();
+                setMessageErrorCPF();
                 // verificando o tamho do cnpj antes de mostra a mensagem
-                if(cnpj.length == 18) {
+                if(cpf.length == 14) {
                     if(!validity(cnpj)) {
-                        setMessageErrorCNPJ("<p class='text-danger'>CNPJ inválido</p>");
+                        setMessageErrorCPF("<p class='text-danger'>CPF inválido</p>");
                         return false;
                     } else {
-                        setMessageErrorCNPJ("<p class='text-success'>CNPJ válido</p>")
+                        setMessageErrorCPF("<p class='text-success'>CPF válido</p>")
                         return true;
                     }
                 }
                 return false;
             }
 
-            $('#cnpj').keyup(function (event) {
+            $('#cpf').keyup(function (event) {
                 validityCNPJ();
             });
 
-            $('#cnpj').mask('00.000.000/0000-00', {reverse: false});
+            $('#cpf').mask('000.000.000-00', {reverse: false});
             $("form").submit(function(e) {
                 e.preventDefault();
 
-                if(!validityCNPJ()) {
+                if(!validityCPF()) {
                     alertSweet(
-                            'informe um CNPJ válido!',
+                            'informe um CPF válido!',
                             'error'
                         )
                     return;
@@ -85,7 +85,8 @@
                     formData[input.name] = input.value;
                 }
 
-                let route = "{{route('supply.store')}}";
+                /*Rota a criar ainda...*/
+                let route = "{{route('client.store')}}";
                 let messageSuccess = "Adicionado com sucesso";
                 const supplyId = $('#supply-id').val();
                 if(supplyId) {

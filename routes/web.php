@@ -38,4 +38,7 @@ Route::prefix('fornecedores')->group(function() {
 
 Route::prefix('clientes')->group( function () {
     Route::get('/', [ClientController::class, 'index'])->name('client.index');
+    Route::get('/find', [ClientController::class, 'index']);
+    Route::post('/find', [ClientController::class, 'find'])->name('client.find');
+    Route::delete('/delete', [ClientController::class, 'delete'])->name('client.delete');
 });

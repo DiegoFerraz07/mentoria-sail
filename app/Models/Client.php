@@ -18,7 +18,7 @@ class Client extends Model
     ];
 
 
-    public function fillSupply(ClientAddFormRequest $request): Client
+    public function fillClient(ClientAddFormRequest $request): Client
     {
         $this->name = $request->name;
         $this->cpf = $request->cpf;

@@ -36,8 +36,6 @@ class ClientAddFormRequest extends FormRequest
             'name.string' => "é obrigatório que seja um texto",
             'cpf.required' => "é obrigatório enviar um cnpj",
             'cpf.string' => "é obrigatório que o cnpj seja um texto",
-            'data.required' => "é obrigatório enviar um data",
-            'data.string' => "é obrigatório que seja uma data",
         ];
     }
 }
