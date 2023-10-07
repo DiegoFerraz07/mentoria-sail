@@ -40,44 +40,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
     <script type="text/javascript">
     // executa tudo que ta aqui dentro quando a página for totalmente carregada
-        $(document).ready( function() {
-            function setMessageErrorCNPJ(message = '') {
-                $('#cpf-error')[0].innerHTML = message;
-            }
-
-            function validityCPF() {
-                // pega o valor do input do cpf
-                const cpf = $('#cpf').val();
-                //limpa a mensagem de erro da div
-                setMessageErrorCPF();
-                // verificando o tamho do cnpj antes de mostra a mensagem
-                if(cpf.length == 14) {
-                    if(!validity(cnpj)) {
-                        setMessageErrorCPF("<p class='text-danger'>CPF inválido</p>");
-                        return false;
-                    } else {
-                        setMessageErrorCPF("<p class='text-success'>CPF válido</p>")
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            $('#cpf').keyup(function (event) {
-                validityCNPJ();
-            });
+        $(document).ready( function()
 
             $('#cpf').mask('000.000.000-00', {reverse: false});
             $("form").submit(function(e) {
                 e.preventDefault();
 
-                if(!validityCPF()) {
-                    alertSweet(
-                            'informe um CPF válido!',
-                            'error'
-                        )
-                    return;
-                }
 
                 const formInputs = $(this)[0].getElementsByTagName('input');
                 let formData = {};
@@ -92,7 +60,7 @@
                 if(supplyId) {
                     route = "{{route('supply.update')}}";
                     messageSuccess = "Alterado com sucesso";
-                    formData['id'] = supplyId;
+                    formData['id'] = clientId;
                 }
 
                 axios.post(
@@ -104,7 +72,7 @@
                             messageSuccess,
                             'success',
                             success => {
-                                document.location.href = "{{ route('supply.index')}}";
+                                document.location.href = "{{ route('client.index')}}";
                             }
                         );
                     } else {

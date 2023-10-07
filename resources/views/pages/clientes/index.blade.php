@@ -16,7 +16,7 @@
                 </a>
             @endif
         </form>
-        <a type="button" href="#" class="btn btn-success float-end">
+        <a type="button" href="{{route('client.add')}}" class="btn btn-success float-end">
             Adicionar
         </a>
         <div class="table-responsive mt-4">
@@ -75,7 +75,7 @@
     function deleteClient(id) {
         axios.delete('{{route("client.delete")}}', {
             data: {
-                idForne: id,
+                    id,
             }
         })
         .then(response => {
