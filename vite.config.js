@@ -5,10 +5,11 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css', 
+                'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/utils/sweet-alert.js',
-                'resources/js/utils/cnpj-verify.js'
+                'resources/js/utils/cnpj-verify.js',
+                'resources/js/utils/cpf-verify.js'
             ],
             refresh: true,
         }),

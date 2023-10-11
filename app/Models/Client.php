@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Requests\ClientAddFormRequest;
+use App\Http\Requests\Client\ClientAddFormRequest;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
