@@ -75,7 +75,7 @@
     function deleteClient(id) {
         axios.delete('{{route("client.delete")}}', {
             data: {
-                idForne: id,
+                id,
             }
         })
         .then(response => {
