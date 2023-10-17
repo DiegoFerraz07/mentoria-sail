@@ -32,12 +32,12 @@
             <div id="cpf-error" class="error"></div>
         </div>
         <div class="form-group">
-            <label for="data">Data Nascimento</label>
+            <label for="date">Data Nascimento</label>
             <input type="text"
-                class="form-control data"
-                name="data"
-                id="data"
-                value="{{ isset($client) ? $client->data : ''}}"
+                class="form-control date"
+                name="date"
+                id="date"
+                value="{{ isset($client) ? $client->date : ''}}"
                 required
                 readonly
                 placeholder="Data de Nascimento">
@@ -84,7 +84,7 @@
                 validateCPF();
             });
             $('#cpf').mask('000.000.000-00', {reverse: false});
-            $('input[name="data"]').daterangepicker({
+            $('input[name="date"]').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 minYear: 1901,

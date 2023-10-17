@@ -4,6 +4,7 @@ namespace App\Http\Requests\Client;
 
 use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
 
 class ClientAddFormRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class ClientAddFormRequest extends FormRequest
         return [
             'name'=> 'required|string',
             'cpf'=> 'required|string',
-            'data'=> 'required|date',
+            'date'=> 'required|date',
         ];
     }
 
@@ -38,4 +39,14 @@ class ClientAddFormRequest extends FormRequest
             'cpf.string' => "é obrigatório que o cnpj seja um texto",
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $date = Carbon::parse($this->date)->format('Y-m-d');
+        $this->merge([
+            'date' => $date
+        ]);
+    }
+
+
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Client\ClientDeleteFormRequest;
 use App\Http\Requests\Client\ClientAddFormRequest;
 use App\Http\Requests\Client\ClientFormRequest;
-use App\Http\Requests\SupplyDeleteFormRequest;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
 use Illuminate\Http\Request;
