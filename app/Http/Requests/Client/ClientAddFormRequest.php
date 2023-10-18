@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\Client;
 
-use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
+use DateTime;
 
 class ClientAddFormRequest extends FormRequest
 {
@@ -42,7 +41,8 @@ class ClientAddFormRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $date = Carbon::parse($this->date)->format('Y-m-d');
+        $date = DateTime::createFromFormat('d/m/Y', $this->date)
+            ->format("Y-m-d");
         $this->merge([
             'date' => $date
         ]);

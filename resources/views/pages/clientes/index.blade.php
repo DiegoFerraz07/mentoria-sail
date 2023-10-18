@@ -39,7 +39,8 @@
                                 <td>{{ $client->id }}</td>
                                 <td>{{ $client->name }}</td>
                                 <td>{{ $client->cpf }}</td>
-                                <td>{{ $client->data }}</td>
+                                <!--td>{{ $client->date_formatted }}</td-->
+                                <td>@date_ptbr($client->date)</td>
                                 <td>
                                     <a href="#" class="btn btn-light btn-sm">
                                         Editar
