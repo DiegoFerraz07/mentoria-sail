@@ -4,6 +4,9 @@ Tip 1: You can change the color of the sidebar using: data-color="purple | blue 
 
 Tip 2: you can also add an image using data-image tag
 -->
+@php
+ $activeButton = '';   
+@endphp
     <div class="sidebar-wrapper">
         <div class="logo">
             <a href="http://www.creative-tim.com" class="simple-text">

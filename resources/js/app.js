@@ -15,6 +15,10 @@ import { createApp } from 'vue';
 
 const app = createApp({});
 
+import.meta.glob([ 
+    '../icons/**',
+    '../img/**' 
+]);
 import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);
 
