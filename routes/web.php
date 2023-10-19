@@ -43,6 +43,8 @@ Route::prefix('clientes')->group( function () {
     Route::get('/find', [ClientController::class, 'index']);
     Route::post('/find', [ClientController::class, 'find'])->name('client.find');
     Route::delete('/delete', [ClientController::class, 'delete'])->name('client.delete');
+    Route::get('/add', [ClientController::class, 'add'])->name('client.add');
+    Route::post('/store', [ClientController::class, 'store'])->name('client.store');
 });
 
 Auth::routes();

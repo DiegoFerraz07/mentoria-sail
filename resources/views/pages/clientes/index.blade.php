@@ -16,7 +16,7 @@
                 </a>
             @endif
         </form>
-        <a type="button" href="#" class="btn btn-success float-end">
+        <a type="button" href="{{route('client.add')}}" class="btn btn-success float-end">
             Adicionar
         </a>
         <div class="table-responsive mt-4">
@@ -39,7 +39,8 @@
                                 <td>{{ $client->id }}</td>
                                 <td>{{ $client->name }}</td>
                                 <td>{{ $client->cpf }}</td>
-                                <td>{{ $client->data }}</td>
+                                <!--td>{{ $client->date_formatted }}</td-->
+                                <td>@date_ptbr($client->date)</td>
                                 <td>
                                     <a href="#" class="btn btn-light btn-sm">
                                         Editar

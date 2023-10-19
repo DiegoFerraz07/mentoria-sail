@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ClientAddFormRequest;
+use App\Http\Requests\Client\ClientAddFormRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Client;
@@ -19,7 +19,7 @@ class ClientRepository implements ClientRepositoryInterface
     }
 
     /**
-     * find a supply by name or CPf and return first 10
+     * find a client by name or CPf and return first 10
      *
      * @param string $search
      *
@@ -34,7 +34,7 @@ class ClientRepository implements ClientRepositoryInterface
     }
 
     /**
-     * Delete a specific supply
+     * Delete a specific client
      * @param int $id
      *
      * @return bool
@@ -50,7 +50,7 @@ class ClientRepository implements ClientRepositoryInterface
     }
 
     /**
-     * Store a new supply
+     * Store a new client
      * @param ClientAddFormRequest $request
      *
      * @return bool
@@ -68,7 +68,7 @@ class ClientRepository implements ClientRepositoryInterface
     }
 
     /**
-     * get a specific supply
+     * get a specific client
      * @param int $id
      *
      * @return Client|null

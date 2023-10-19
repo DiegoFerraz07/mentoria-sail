@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Client;
 
-use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
+use DateTime;
 
 class ClientAddFormRequest extends FormRequest
 {
@@ -25,7 +25,7 @@ class ClientAddFormRequest extends FormRequest
         return [
             'name'=> 'required|string',
             'cpf'=> 'required|string',
-            'data'=> 'required|date',
+            'date'=> 'required|date',
         ];
     }
 
@@ -38,4 +38,15 @@ class ClientAddFormRequest extends FormRequest
             'cpf.string' => "é obrigatório que o cnpj seja um texto",
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $date = DateTime::createFromFormat('d/m/Y', $this->date)
+            ->format("Y-m-d");
+        $this->merge([
+            'date' => $date
+        ]);
+    }
+
+
 }

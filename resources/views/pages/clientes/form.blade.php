@@ -20,8 +20,8 @@
         <div class="form-group">
             <label for="cpf">CPF</label>
             <input type="text"
-                class="form-control cnpj"
-                name="cnpj"
+                class="form-control cpf"
+                name="cpf"
                 maxlength="14"
                 minlength="14"
                 id="cpf"
@@ -31,28 +31,46 @@
                 placeholder="CPF">
             <div id="cpf-error" class="error"></div>
         </div>
+        <div class="form-group">
+            <label for="date">Data Nascimento</label>
+            <input type="text"
+                class="form-control date"
+                name="date"
+                id="date"
+                value="{{ isset($client) ? $client->date : ''}}"
+                required
+                readonly
+                placeholder="Data de Nascimento">
+            <div id="data-error" class="error"></div>
+        </div>
+
         <button type="submit" class="btn btn-success mt-2">Salvar</button>
     </form>
 @endsection
 
 @section('scripts')
-    <script src="{{ Vite::asset('resources/js/utils/cnpj-verify.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/utils/cpf-verify.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
     <script type="text/javascript">
     // executa tudo que ta aqui dentro quando a página for totalmente carregada
         $(document).ready( function() {
-            function setMessageErrorCNPJ(message = '') {
+
+            function setMessageErrorCPF(message = '') {
                 $('#cpf-error')[0].innerHTML = message;
             }
 
-            function validityCPF() {
-                // pega o valor do input do cpf
+            function validateCPF() {
+                // pegar o valor do input cpf
                 const cpf = $('#cpf').val();
-                //limpa a mensagem de erro da div
+                // Limpar a div
                 setMessageErrorCPF();
-                // verificando o tamho do cnpj antes de mostra a mensagem
+                // verifica o tamanho do cpf
                 if(cpf.length == 14) {
-                    if(!validity(cnpj)) {
+                    if(!validity(cpf)) {
                         setMessageErrorCPF("<p class='text-danger'>CPF inválido</p>");
                         return false;
                     } else {
@@ -60,18 +78,53 @@
                         return true;
                     }
                 }
-                return false;
+                return false
             }
-
             $('#cpf').keyup(function (event) {
-                validityCNPJ();
+                validateCPF();
             });
-
             $('#cpf').mask('000.000.000-00', {reverse: false});
+            $('input[name="date"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 1901,
+                maxDate: moment(),
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    applyLabel: 'Aplicar',
+                    cancelLabel:  'Cancelar',
+                    weekLabel: 'S',
+                    daysOfWeek: [
+                        "D",
+                        "S",
+                        "T",
+                        "Q",
+                        "Q",
+                        "S",
+                        "S"
+                    ],
+                    monthNames: [
+                        "Janeiro",
+                        "Fevereiro",
+                        "Março",
+                        "Abril",
+                        "Maio",
+                        "Junho",
+                        "Julho",
+                        "Agosto",
+                        "Setembro",
+                        "Outubro",
+                        "Novembro",
+                        "Dezembro"
+                    ],
+                }
+            }, function(start, end, label) {
+                console.log(start.format('YYYY-MM-DD'));
+            });
             $("form").submit(function(e) {
                 e.preventDefault();
 
-                if(!validityCPF()) {
+                if(!validateCPF()) {
                     alertSweet(
                             'informe um CPF válido!',
                             'error'
@@ -84,15 +137,14 @@
                 for (let input of formInputs) {
                     formData[input.name] = input.value;
                 }
-
                 /*Rota a criar ainda...*/
                 let route = "{{route('client.store')}}";
                 let messageSuccess = "Adicionado com sucesso";
-                const supplyId = $('#supply-id').val();
-                if(supplyId) {
+                const clientId = $('#client-id').val();
+                if(clientId) {
                     route = "{{route('supply.update')}}";
                     messageSuccess = "Alterado com sucesso";
-                    formData['id'] = supplyId;
+                    formData['id'] = clientId;
                 }
 
                 axios.post(
@@ -104,11 +156,11 @@
                             messageSuccess,
                             'success',
                             success => {
-                                document.location.href = "{{ route('supply.index')}}";
+                                document.location.href = "{{ route('client.index')}}";
                             }
                         );
                     } else {
-                        let message = 'Não foi possivel excluir!!';
+                        let message = 'Não foi possivel Salvar!!';
                         if(response.data.message) {
                             message = response.data.message;
                         }
@@ -121,7 +173,7 @@
                 })
                 .catch(error => {
                     alertSweet(
-                        'Não foi possivel excluir!!',
+                        'Não foi possivel Salvar!!',
                         'error'
                     )
                 });

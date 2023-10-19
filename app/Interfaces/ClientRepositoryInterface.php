@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-use App\Http\Requests\ClientAddFormRequest;
+use App\Http\Requests\Client\ClientAddFormRequest;
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Collection;
 
