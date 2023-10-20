@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Blade::directive('date_ptbr', function (string $expression) {
+            return "<?php echo DateTime::createFromFormat('Y-m-d', $expression)->format('d/m/Y') ?>";
+        });
     }
 }

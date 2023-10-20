@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\SupplyController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
 
 Route::prefix('produtos')->group( function () {
@@ -34,3 +37,31 @@ Route::prefix('fornecedores')->group(function() {
     Route::get('/edit/{id}', [SupplyController::class, 'edit'])->name('supply.edit');
     Route::post('/update', [SupplyController::class, 'update'])->name('supply.update');
 });
+
+Route::prefix('clientes')->group( function () {
+    Route::get('/', [ClientController::class, 'index'])->name('client.index');
+    Route::get('/find', [ClientController::class, 'index']);
+    Route::post('/find', [ClientController::class, 'find'])->name('client.find');
+    Route::delete('/delete', [ClientController::class, 'delete'])->name('client.delete');
+    Route::get('/add', [ClientController::class, 'add'])->name('client.add');
+    Route::post('/store', [ClientController::class, 'store'])->name('client.store');
+});
+
+Auth::routes();
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+Auth::routes();
+
+
+Route::group(['middleware' => 'auth'], function () {
+	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
+	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
+	Route::patch('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
+	Route::patch('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+});
+
+Route::group(['middleware' => 'auth'], function () {
+	Route::get('{page}', ['as' => 'page.index', 'uses' => 'App\Http\Controllers\PageController@index']);
+});
+

@@ -1,10 +1,9 @@
-{{-- Extends da index --}}
-@extends('index')
+@extends('layouts.app', ['activePage' => 'dashboard', 'title' => 'Light Bootstrap Dashboard Laravel by Creative Tim & UPDIVISION', 'navName' => 'Dashboard', 'activeButton' => 'laravel'])
 
 @section('content')
     <form>
         @csrf
-        <input type="hidden" 
+        <input type="hidden"
             id="supply-id"
             value="{{ isset($supply) ? $supply->id : ''}}">
         <div class="form-group">
@@ -44,9 +43,9 @@
             function setMessageErrorCNPJ(message = '') {
                 $('#cnpj-error')[0].innerHTML = message;
             }
-            
+
             function validityCNPJ() {
-                // pega o valor do input do cnpj 
+                // pega o valor do input do cnpj
                 const cnpj = $('#cnpj').val();
                 //limpa a mensagem de erro da div
                 setMessageErrorCNPJ();
@@ -62,15 +61,15 @@
                 }
                 return false;
             }
-            
+
             $('#cnpj').keyup(function (event) {
                 validityCNPJ();
             });
-            
+
             $('#cnpj').mask('00.000.000/0000-00', {reverse: false});
             $("form").submit(function(e) {
                 e.preventDefault();
-                
+
                 if(!validityCNPJ()) {
                     alertSweet(
                             'informe um CNPJ válido!',
@@ -95,19 +94,19 @@
                 }
 
                 axios.post(
-                    route, 
+                    route,
                     formData
                 ).then(response => {
                     if(response.data.success) {
                         alertSweet(
-                            messageSuccess, 
+                            messageSuccess,
                             'success',
                             success => {
                                 document.location.href = "{{ route('supply.index')}}";
                             }
                         );
                     } else {
-                        let message = 'Não foi possivel excluir!!';
+                        let message = 'Não foi possivel Salvar!!';
                         if(response.data.message) {
                             message = response.data.message;
                         }
@@ -120,7 +119,7 @@
                 })
                 .catch(error => {
                     alertSweet(
-                        'Não foi possivel excluir!!',
+                        'Não foi possivel Salvar!!',
                         'error'
                     )
                 });
