@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Client\ClientDeleteFormRequest;
 use App\Http\Requests\Client\ClientAddFormRequest;
 use App\Http\Requests\Client\ClientFormRequest;
+use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
 use Illuminate\Http\Request;
@@ -47,14 +48,6 @@ class ClientController extends Controller
     public function store(ClientAddFormRequest $request, ClientRepository $clientRepository)
     {
         $saved = $clientRepository->store($request);
-        if ($saved){
-            return response()->json([
-                'success' => true
-            ]);
-        }
-        return response()->json([
-            'success' => false,
-            'message' => 'Erro ao tentar salvar'
-        ]);
+        return new ClientResource(['success' => $saved]);
     }
 }

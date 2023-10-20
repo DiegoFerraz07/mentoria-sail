@@ -1,5 +1,4 @@
-{{-- Extends da index --}}
-@extends('index')
+@extends('layouts.app', ['activePage' => 'dashboard', 'title' => 'Light Bootstrap Dashboard Laravel by Creative Tim & UPDIVISION', 'navName' => 'Dashboard', 'activeButton' => 'laravel'])
 
 @section('content')
     <form>
@@ -151,7 +150,9 @@
                     route,
                     formData
                 ).then(response => {
-                    if(response.data.success) {
+                    console.log(response);
+                    const apiResponse = response.data;
+                    if(apiResponse.data.success) {
                         alertSweet(
                             messageSuccess,
                             'success',
@@ -161,8 +162,8 @@
                         );
                     } else {
                         let message = 'Não foi possivel Salvar!!';
-                        if(response.data.message) {
-                            message = response.data.message;
+                        if(apiResponse.data.message) {
+                            message = apiResponse.data.message;
                         }
                         alertSweet(
                             message,

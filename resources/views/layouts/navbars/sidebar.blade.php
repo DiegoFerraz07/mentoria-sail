@@ -31,18 +31,19 @@ Tip 2: you can also add an image using data-image tag
                 </a>
                 <div class="collapse @if($activeButton =='store') show @endif" id="store">
                     <ul class="nav">
-                        <li class="nav-item @if($activePage == 'client') active @endif">
+                        <li class="nav-item sub-nav @if($activePage == 'client') active @endif">
                             <a class="nav-link" href="{{route('client.index')}}">
                                 <i class="nc-icon nc-single-02"></i>
                                 <p>{{ __("Client") }}</p>
                             </a>
                         </li>
-                        <li class="nav-item @if($activePage == 'user-management') active @endif">
-                            <a class="nav-link" href="{{route('user.index')}}">
-                                <i class="nc-icon nc-circle-09"></i>
-                                <p>{{ __("User Management") }}</p>
+                        <li class="nav-item sub-nav @if($activePage == 'supply') active @endif">
+                            <a class="nav-link" href="{{route('supply.index')}}">
+                                <i class="nc-icon nc-single-02"></i>
+                                <p>{{ __("Supply") }}</p>
                             </a>
                         </li>
+                        
                     </ul>
                 </div>
             </li>
@@ -58,57 +59,56 @@ Tip 2: you can also add an image using data-image tag
                 </a>
                 <div class="collapse @if($activeButton =='laravel') show @endif" id="laravelExamples">
                     <ul class="nav">
-                        <li class="nav-item @if($activePage == 'user') active @endif">
+                        <li class="nav-item sub-nav @if($activePage == 'user') active @endif">
                             <a class="nav-link" href="{{route('profile.edit')}}">
                                 <i class="nc-icon nc-single-02"></i>
                                 <p>{{ __("User Profile") }}</p>
                             </a>
                         </li>
-                        <li class="nav-item @if($activePage == 'user-management') active @endif">
+                        <li class="nav-item sub-nav @if($activePage == 'user-management') active @endif">
                             <a class="nav-link" href="{{route('user.index')}}">
                                 <i class="nc-icon nc-circle-09"></i>
                                 <p>{{ __("User Management") }}</p>
                             </a>
                         </li>
+                        <li class="nav-item sub-nav @if($activePage == 'table') active @endif">
+                            <a class="nav-link" href="{{route('page.index', 'table')}}">
+                                <i class="nc-icon nc-notes"></i>
+                                <p>{{ __("Table List") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item sub-nav @if($activePage == 'typography') active @endif">
+                            <a class="nav-link" href="{{route('page.index', 'typography')}}">
+                                <i class="nc-icon nc-paper-2"></i>
+                                <p>{{ __("Typography") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item sub-nav @if($activePage == 'icons') active @endif">
+                            <a class="nav-link" href="{{route('page.index', 'icons')}}">
+                                <i class="nc-icon nc-atom"></i>
+                                <p>{{ __("Icons") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item sub-nav @if($activePage == 'maps') active @endif">
+                            <a class="nav-link" href="{{route('page.index', 'maps')}}">
+                                <i class="nc-icon nc-pin-3"></i>
+                                <p>{{ __("Maps") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item sub-nav @if($activePage == 'notifications') active @endif">
+                            <a class="nav-link" href="{{route('page.index', 'notifications')}}">
+                                <i class="nc-icon nc-bell-55"></i>
+                                <p>{{ __("Notifications") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item sub-nav ">
+                            <a class="nav-link active bg-danger" href="{{route('page.index', 'upgrade')}}">
+                                <i class="nc-icon nc-alien-33"></i>
+                                <p>{{ __("Upgrade to PRO") }}</p>
+                            </a>
+                        </li>
                     </ul>
                 </div>
-            </li>
-
-            <li class="nav-item @if($activePage == 'table') active @endif">
-                <a class="nav-link" href="{{route('page.index', 'table')}}">
-                    <i class="nc-icon nc-notes"></i>
-                    <p>{{ __("Table List") }}</p>
-                </a>
-            </li>
-            <li class="nav-item @if($activePage == 'typography') active @endif">
-                <a class="nav-link" href="{{route('page.index', 'typography')}}">
-                    <i class="nc-icon nc-paper-2"></i>
-                    <p>{{ __("Typography") }}</p>
-                </a>
-            </li>
-            <li class="nav-item @if($activePage == 'icons') active @endif">
-                <a class="nav-link" href="{{route('page.index', 'icons')}}">
-                    <i class="nc-icon nc-atom"></i>
-                    <p>{{ __("Icons") }}</p>
-                </a>
-            </li>
-            <li class="nav-item @if($activePage == 'maps') active @endif">
-                <a class="nav-link" href="{{route('page.index', 'maps')}}">
-                    <i class="nc-icon nc-pin-3"></i>
-                    <p>{{ __("Maps") }}</p>
-                </a>
-            </li>
-            <li class="nav-item @if($activePage == 'notifications') active @endif">
-                <a class="nav-link" href="{{route('page.index', 'notifications')}}">
-                    <i class="nc-icon nc-bell-55"></i>
-                    <p>{{ __("Notifications") }}</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active bg-danger" href="{{route('page.index', 'upgrade')}}">
-                    <i class="nc-icon nc-alien-33"></i>
-                    <p>{{ __("Upgrade to PRO") }}</p>
-                </a>
             </li>
         </ul>
     </div>

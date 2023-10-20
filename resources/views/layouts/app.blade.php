@@ -30,6 +30,7 @@
         <link href="{{ asset('light-bootstrap/css/light-bootstrap-dashboard.css?v=2.0.0') }} " rel="stylesheet" />
         <!-- CSS Just for demo purpose, don't include it in your project -->
         <link href="{{ asset('light-bootstrap/css/demo.css') }}" rel="stylesheet" />
+        <link href="{{ asset('light-bootstrap/css/custom.css') }}" rel="stylesheet" />
     </head>
 
     <body>
@@ -42,7 +43,9 @@
 
             <div class="@if (auth()->check() && request()->route()->getName() != "") main-panel @endif">
                 @include('layouts.navbars.navbar')
-                @yield('content')
+                <div class="container">
+                  @yield('content')
+                </div>
                 @include('layouts.footer.nav')
             </div>
 
@@ -70,6 +73,28 @@
     <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
     <script src="{{ asset('light-bootstrap/js/demo.js') }}"></script>
     @stack('js')
+    @yield('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.js"></script>
+    <script src="/js/projeto.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ Vite::asset('resources/js/utils/sweet-alert.js') }}"></script>
+
+    @yield('scripts')
+
+    <script>
+        function getTime() {
+            setInterval(function () {
+                let hora = new Date().toLocaleTimeString();
+                const elements = [...document.getElementsByClassName('timeHour')];
+                elements.map(element => {
+                    element.innerHTML = hora;
+                })
+            }, 1000);
+        }
+
+        getTime();
+    </script>
     <script>
       $(document).ready(function () {
         
