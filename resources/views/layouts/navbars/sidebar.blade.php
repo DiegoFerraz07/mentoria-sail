@@ -29,15 +29,16 @@ Tip 2: you can also add an image using data-image tag
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse @if($activeButton =='store') show @endif" id="store">
+                
+                <div class="collapse @showMenu(["client", "supply"])" id="store">
                     <ul class="nav">
-                        <li class="nav-item sub-nav @if($activePage == 'client') active @endif">
+                        <li class="nav-item sub-nav @active('client')">
                             <a class="nav-link" href="{{route('client.index')}}">
                                 <i class="nc-icon nc-single-02"></i>
                                 <p>{{ __("Client") }}</p>
                             </a>
                         </li>
-                        <li class="nav-item sub-nav @if($activePage == 'supply') active @endif">
+                        <li class="nav-item sub-nav @active('supply')">
                             <a class="nav-link" href="{{route('supply.index')}}">
                                 <i class="nc-icon nc-single-02"></i>
                                 <p>{{ __("Supply") }}</p>
@@ -57,9 +58,9 @@ Tip 2: you can also add an image using data-image tag
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse @if($activeButton =='laravel') show @endif" id="laravelExamples">
+                <div class="collapse @showMenu(["profile", "table"])" id="laravelExamples">
                     <ul class="nav">
-                        <li class="nav-item sub-nav @if($activePage == 'user') active @endif">
+                        <li class="nav-item sub-nav @active('profile')">
                             <a class="nav-link" href="{{route('profile.edit')}}">
                                 <i class="nc-icon nc-single-02"></i>
                                 <p>{{ __("User Profile") }}</p>

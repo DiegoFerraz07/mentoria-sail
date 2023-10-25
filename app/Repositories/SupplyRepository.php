@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\SupplyAddFormRequest;
-use App\Http\Requests\SupplyUpdateFormRequest;
+use App\Http\Requests\Supply\SupplyAddFormRequest;
+use App\Http\Requests\Supply\SupplyUpdateFormRequest;
 use App\Interfaces\SupplyRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Supply;

@@ -11,7 +11,7 @@ use App\Repositories\ClientRepository;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
-{
+{   
     public function index(ClientRepository $clientRepository)
     {
         $customers = $clientRepository->getAll();

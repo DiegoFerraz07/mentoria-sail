@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Http\Requests\SupplyAddFormRequest;
-use App\Http\Requests\SupplyUpdateFormRequest;
+use App\Http\Requests\Supply\SupplyAddFormRequest;
+use App\Http\Requests\Supply\SupplyUpdateFormRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

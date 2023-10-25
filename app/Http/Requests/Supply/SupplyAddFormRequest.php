@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Supply;
 
 use App\Models\Supply;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SupplyUpdateFormRequest extends FormRequest
+class SupplyAddFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,6 @@ class SupplyUpdateFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'=> 'required|integer',
             'name'=> 'required|string',
             'cnpj'=> 'required|string',
         ];
@@ -32,8 +31,6 @@ class SupplyUpdateFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => "é obrigatório enviar o id",
-            'id.integer' => "é obrigatório que seja um número",
             'name.required' => "é obrigatório enviar um nome",
             'name.string' => "é obrigatório que seja um texto",
             'cnpj.required' => "é obrigatório enviar um cnpj",

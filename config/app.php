@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Arcanedev\LogViewer\LogViewerServiceProvider::class,
+        App\Providers\BladeServiceProvider::class,
     ])->toArray(),
 
     /*

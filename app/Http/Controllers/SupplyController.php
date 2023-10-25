@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SupplyAddFormRequest;
-use App\Http\Requests\SupplyDeleteFormRequest;
-use App\Http\Requests\SupplyEditFormRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Supply\SupplyAddFormRequest;
+use App\Http\Requests\Supply\SupplyDeleteFormRequest;
+use App\Http\Requests\Supply\SupplyEditFormRequest;
 use App\Repositories\SupplyRepository;
-use App\Http\Requests\SupplyFormRequest;
-use App\Http\Requests\SupplyUpdateFormRequest;
-use App\Models\Supply;
+use App\Http\Requests\Supply\SupplyFormRequest;
+use App\Http\Requests\Supply\SupplyUpdateFormRequest;
 
 class SupplyController extends Controller
 {

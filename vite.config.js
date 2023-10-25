@@ -8,6 +8,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/assets/css/custom.css',
                 'resources/js/utils/sweet-alert.js',
                 'resources/js/utils/cnpj-verify.js',
                 'resources/js/utils/cpf-verify.js'

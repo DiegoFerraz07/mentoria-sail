@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Supply;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistSupplyRule;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Foundation\Http\FormRequest;
 
-class SupplyFormRequest extends FormRequest
+class SupplyEditFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,11 @@ class SupplyFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search' => 'required|string',
+            'id' => [
+                'required', 
+                'integer', /* 'exists:fornecedores' */  
+                new ExistSupplyRule($this->id)
+            ],
         ];
     }
 
@@ -45,10 +49,10 @@ class SupplyFormRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $search = trim($this->search);
+        $id = $this->id;
 
         $this->merge([
-            'search' => $search
+            'id' => $id
         ]);
     }
 
@@ -58,21 +62,8 @@ class SupplyFormRequest extends FormRequest
      * 
      * @return Json
      */
-    /*protected function failedValidation(Validator $validator) 
+    protected function failedValidation(Validator $validator) 
     {   
-
-        // Pega as mensagens de erro     
-        $error_messages = $validator->errors()->all();
-
-        // Exibe os parâmetros de erro
-        throw new HttpResponseException(
-        response()->json(
-            [
-                'success' => false,
-                'error' => $error_messages[0],
-                'error_code' => 404,
-                'error_messages' => $error_messages,
-            ]
-        ));
-    }  */
+        abort(404);
+    }
 }
