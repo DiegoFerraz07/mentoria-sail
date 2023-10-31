@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Client;
 
-use App\Rules\ExistClientRule;
+use App\Rules\IsLegalAgeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use DateTime;
 
@@ -29,7 +29,7 @@ class ClientAddFormRequest extends FormRequest
             'date'=> [
                 'required',
                 'date',
-                new ExistClientRule($this->date)
+                new IsLegalAgeRule($this->date)
                 ]
         ];
     }
