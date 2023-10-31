@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
     use HasFactory;
+    
+    const LEGAL_AGE = 18;
+    
     protected $table = 'cliente';
     protected $fillable = [
         'name',

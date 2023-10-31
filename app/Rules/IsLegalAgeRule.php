@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Models\Client;
 use App\Repositories\ClientRepository;
 use Carbon\Carbon;
 use Closure;
@@ -19,9 +20,8 @@ class IsLegalAgeRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $age = Carbon::parse($value) -> age;
-
-        if($age < 18 ){
+        $age = Carbon::parse($value)->age;
+        if($age < Client::LEGAL_AGE ){
             $fail('Idade não permitidade');
         }
     }
