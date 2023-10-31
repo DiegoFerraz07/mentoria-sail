@@ -19,6 +19,7 @@
         </div>
         <div class="form-group">
             <label for="cpf">CPF</label>
+            <input type="hidden" id="isLegalAge" name="is_legal_age" value="0">
             <input type="text"
                 class="form-control cpf"
                 name="cpf"
@@ -50,6 +51,7 @@
 
 @section('scripts')
     <script src="{{ Vite::asset('resources/js/utils/cpf-verify.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/utils/utils.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -61,6 +63,14 @@
 
             function setMessageErrorCPF(message = '') {
                 $('#cpf-error')[0].innerHTML = message;
+            }
+
+            function validateIsLegalAge() {
+                const isLegalAge = $('#isLegalAge').val();
+                if(isLegalAge == 1) {
+                    return true;
+                }
+                return false;
             }
 
             function validateCPF() {
@@ -89,37 +99,14 @@
                 showDropdowns: true,
                 minYear: 1901,
                 maxDate: moment(),
-                locale: {
-                    format: 'DD/MM/YYYY',
-                    applyLabel: 'Aplicar',
-                    cancelLabel:  'Cancelar',
-                    weekLabel: 'S',
-                    daysOfWeek: [
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S"
-                    ],
-                    monthNames: [
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro"
-                    ],
-                }
+                locale: localePtBR()
             }, function(start, end, label) {
-                console.log(start.format('YYYY-MM-DD'));
+                var years = moment().diff(start, 'years');
+                if(years >= 18) {
+                    $('#isLegalAge').val(1);
+                } else {
+                    $('#isLegalAge').val(0);
+                }
             });
             $("form").submit(function(e) {
                 e.preventDefault();
@@ -127,6 +114,14 @@
                 if(!validateCPF()) {
                     alertSweet(
                             'informe um CPF válido!',
+                            'error'
+                        )
+                    return;
+                }
+
+                if(!validateIsLegalAge()) {
+                    alertSweet(
+                            'Você não possui idade minima para se cadastrar!',
                             'error'
                         )
                     return;
