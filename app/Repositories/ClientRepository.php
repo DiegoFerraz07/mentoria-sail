@@ -53,17 +53,28 @@ class ClientRepository implements ClientRepositoryInterface
      * Store a new client
      * @param ClientAddFormRequest $request
      *
-     * @return bool
+     * @return array
      */
-    public function store(ClientAddFormRequest $request): bool
+    public function store(ClientAddFormRequest $request): array
     {
         try {
             $client = new Client();
             $client->fillClient($request);
-            return $client->save();
+            $saved = $client->save();
+            return array(
+                'success' => $saved,
+                'message' => ''
+            );
         } catch(Exception $e) {
+            $message = 'Houve um erro';
+            if($e->getMessage() && str_contains($e->getMessage(), 'cliente_cpf_unique')) {
+                $message = 'Já existe um cliente com esse CPF';
+            }
             Log::error($e->getMessage() . $e->getTraceAsString());
-            return false;
+            return array(
+                'success' => false,
+                'message' => $message
+            );
         }
     }
 

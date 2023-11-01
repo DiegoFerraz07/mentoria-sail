@@ -48,6 +48,6 @@ class ClientController extends Controller
     public function store(ClientAddFormRequest $request, ClientRepository $clientRepository)
     {
         $saved = $clientRepository->store($request);
-        return new ClientResource(['success' => $saved]);
+        return new ClientResource(['saved' => $saved]);
     }
 }

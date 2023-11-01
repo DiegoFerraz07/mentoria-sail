@@ -18,8 +18,8 @@ class ClientSeeder extends Seeder
             Client::create(
                 [
                     'name' => $faker->name(),
-                    'cpf' => $faker->cpf(),
-                    'data' => $faker->date()
+                    'cpf' => $faker->unique()->cpf(),
+                    'date' => $faker->date()
                 ]
             );
         }

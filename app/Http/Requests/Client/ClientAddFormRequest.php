@@ -5,6 +5,8 @@ namespace App\Http\Requests\Client;
 use App\Rules\IsLegalAgeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use DateTime;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ClientAddFormRequest extends FormRequest
 {
@@ -25,7 +27,7 @@ class ClientAddFormRequest extends FormRequest
     {
         return [
             'name'=> 'required|string',
-            'cpf'=> 'required|string',
+            'cpf'=> 'required|string|unique:cliente,cpf',
             'date'=> [
                 'required',
                 'date',
@@ -39,8 +41,9 @@ class ClientAddFormRequest extends FormRequest
         return [
             'name.required' => "é obrigatório enviar um nome",
             'name.string' => "é obrigatório que seja um texto",
-            'cpf.required' => "é obrigatório enviar um cnpj",
-            'cpf.string' => "é obrigatório que o cnpj seja um texto",
+            'cpf.required' => "é obrigatório enviar um CPF",
+            'cpf.string' => "é obrigatório que o CPF seja um texto",
+            'cpf.unique' => "este CPF já está cadastrado",
         ];
     }
 
@@ -53,5 +56,24 @@ class ClientAddFormRequest extends FormRequest
         ]);
     }
 
+    /**
+     * failed validation
+     */
+    protected function failedValidation(Validator $validator)
+    {
+         
+        // Pega as mensagens de erro     
+        $error_messages = $validator->errors()->all();
+
+        // Exibe os parâmetros de erro
+        throw new HttpResponseException(
+        response()->json([
+                'success' => false,
+                'message' => $error_messages[0],
+                'all_messages' => $error_messages,
+            ])
+        );      
+
+    }
 
 }

@@ -12,6 +12,6 @@ interface ClientRepositoryInterface
     public function get(int $id): Client|null;
     public function find(string $search): Collection;
     public function delete(int $id): bool;
-    public function store(ClientAddFormRequest $request): bool;
+    public function store(ClientAddFormRequest $request): array;
 
 }

@@ -14,13 +14,10 @@ class ClientResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $message = '';
-        if(!$this['success']) {
-            $message = 'Erro ao tentar salvar';
-        }
+        $saved = $this['saved'];
         return array(
-            'success' => $this['success'],
-            'message' => $message
+            'success' => $saved['success'],
+            'message' => $saved['message']
         );
     }
 }
