@@ -11,7 +11,8 @@ export default defineConfig({
                 'resources/assets/css/custom.css',
                 'resources/js/utils/sweet-alert.js',
                 'resources/js/utils/cnpj-verify.js',
-                'resources/js/utils/cpf-verify.js'
+                'resources/js/utils/cpf-verify.js',
+                'resources/js/utils/utils.js'
             ],
             refresh: true,
         }),

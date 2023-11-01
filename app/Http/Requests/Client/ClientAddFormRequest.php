@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Client;
 
+use App\Rules\IsLegalAgeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use DateTime;
 
@@ -25,7 +26,11 @@ class ClientAddFormRequest extends FormRequest
         return [
             'name'=> 'required|string',
             'cpf'=> 'required|string',
-            'date'=> 'required|date',
+            'date'=> [
+                'required',
+                'date',
+                new IsLegalAgeRule($this->date)
+                ]
         ];
     }
 
