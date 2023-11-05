@@ -45,6 +45,8 @@ Route::prefix('clientes')->group( function () {
     Route::delete('/delete', [ClientController::class, 'delete'])->name('client.delete');
     Route::get('/add', [ClientController::class, 'add'])->name('client.add');
     Route::post('/store', [ClientController::class, 'store'])->name('client.store');
+    Route::get('/edit/{id}', [ClientController::class, 'edit'])->name('client.edit');
+    Route::post('/update', [ClientController::class, 'update'])->name('client.update');
 });
 
 Auth::routes();

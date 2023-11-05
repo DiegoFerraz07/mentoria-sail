@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Requests\Client;
+
+use App\Models\Client;
+use App\Rules\IsLegalAgeRule;
+use Illuminate\Foundation\Http\FormRequest;
+
+class ClientUpdateFormRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'name'=> 'required|string',
+            'cpf'=> 'required|string|unique:cliente,cpf',
+            'date'=> [
+                'required',
+                'date',
+                new IsLegalAgeRule($this->date)
+                ]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => "é obrigatório enviar um nome",
+            'name.string' => "é obrigatório que seja um texto",
+            'cpf.required' => "é obrigatório enviar um CPF",
+            'cpf.string' => "é obrigatório que o CPF seja um texto",
+            'cpf.unique' => "este CPF já está cadastrado",
+        ];
+    }
+}

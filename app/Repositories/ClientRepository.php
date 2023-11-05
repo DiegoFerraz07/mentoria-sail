@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\Client\ClientAddFormRequest;
+use App\Http\Requests\Client\ClientUpdateFormRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Client;
@@ -89,4 +90,21 @@ class ClientRepository implements ClientRepositoryInterface
         return Client::where('id', $id)->first();
     }
 
+      /**
+     * Store a new Client
+     * @param ClientAddFormRequest $request
+     *
+     * @return bool
+     */
+    public function update(ClientUpdateFormRequest $request): bool
+    {
+        try {
+            $client = $this->get($request->id);
+            $client->fillClient($request);
+            return $client->update();
+        } catch(Exception $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            return false;
+        }
+    }
 }
