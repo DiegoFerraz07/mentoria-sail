@@ -42,7 +42,7 @@
                                 <!--td>{{ $client->date_formatted }}</td-->
                                 <td>@date_ptbr($client->date)</td>
                                 <td>
-                                    <a href="#" class="btn btn-light btn-sm">
+                                    <a href="{{route("client.edit", ['id' => $client->id])}}" class="btn btn-light btn-sm">
                                         Editar
                                     </a>
 
