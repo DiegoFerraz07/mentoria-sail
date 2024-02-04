@@ -145,9 +145,8 @@
                     route,
                     formData
                 ).then(response => {
-                    console.log(response);
                     const apiResponse = response.data;
-                    if(apiResponse.data.success) {
+                    if(apiResponse.success) {
                         alertSweet(
                             messageSuccess,
                             'success',
@@ -157,8 +156,8 @@
                         );
                     } else {
                         let message = 'Não foi possivel Salvar!!';
-                        if(apiResponse.data.message) {
-                            message = apiResponse.data.message;
+                        if(apiResponse.message) {
+                            message = apiResponse.message;
                         }
                         alertSweet(
                             message,

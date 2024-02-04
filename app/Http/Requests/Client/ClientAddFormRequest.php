@@ -39,11 +39,11 @@ class ClientAddFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => "é obrigatório enviar um nome",
-            'name.string' => "é obrigatório que seja um texto",
-            'cpf.required' => "é obrigatório enviar um CPF",
-            'cpf.string' => "é obrigatório que o CPF seja um texto",
-            'cpf.unique' => "este CPF já está cadastrado",
+            'name.required' => "É obrigatório enviar um nome",
+            'name.string' => "É obrigatório que seja um texto",
+            'cpf.required' => "É obrigatório enviar um CPF",
+            'cpf.string' => "É obrigatório que o CPF seja um texto",
+            'cpf.unique' => "Este CPF já está cadastrado",
         ];
     }
 
