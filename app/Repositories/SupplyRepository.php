@@ -8,15 +8,18 @@ use App\Interfaces\SupplyRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Supply;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 class SupplyRepository implements SupplyRepositoryInterface
 {
 
-    public function getAll(): Collection
+    public function getAll(): LengthAwarePaginator
     {
         return Supply::all()
-            ->sortByDesc('id');
+            ->sortByDesc('id')
+            ->toQuery()
+            ->paginate(10);
     }
 
     /**
