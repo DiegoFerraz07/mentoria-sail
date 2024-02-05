@@ -4,6 +4,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\SupplyController;
+use App\Http\Controllers\TypesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,17 @@ Route::prefix('clientes')->group( function () {
     Route::delete('/delete', [ClientController::class, 'delete'])->name('client.delete');
     Route::get('/add', [ClientController::class, 'add'])->name('client.add');
     Route::post('/store', [ClientController::class, 'store'])->name('client.store');
+});
+
+Route::prefix('types')->group( function () {
+    Route::get('/', [TypesController::class, 'index'])->name('types.index');
+    Route::get('/find', [TypesController::class, 'index']);
+    Route::post('/find', [TypesController::class, 'find'])->name('types.find');
+    Route::get('/edit/{id}', [TypesController::class, 'edit'])->name('types.edit');
+    Route::delete('/delete', [TypesController::class, 'delete'])->name('types.delete');
+    Route::get('/add', [TypesController::class, 'add'])->name('types.add');
+    Route::post('/store', [TypesController::class, 'store'])->name('types.store');
+    Route::post('/update', [TypesController::class, 'update'])->name('types.update');
 });
 
 Auth::routes();
