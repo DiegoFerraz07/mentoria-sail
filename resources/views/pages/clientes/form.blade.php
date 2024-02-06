@@ -136,7 +136,7 @@
                 let messageSuccess = "Adicionado com sucesso";
                 const clientId = $('#client-id').val();
                 if(clientId) {
-                    route = "{{route('supply.update')}}";
+                    route = "{{route('client.update')}}";
                     messageSuccess = "Alterado com sucesso";
                     formData['id'] = clientId;
                 }

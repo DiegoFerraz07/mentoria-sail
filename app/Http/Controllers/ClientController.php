@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Client\ClientDeleteFormRequest;
 use App\Http\Requests\Client\ClientAddFormRequest;
+use App\Http\Requests\Client\ClientEditFormRequest;
 use App\Http\Requests\Client\ClientFormRequest;
+use App\Http\Requests\Client\ClientUpdateFormRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
@@ -49,5 +51,39 @@ class ClientController extends Controller
     {
         $saved = $clientRepository->store($request);
         return new ClientResource(['saved' => $saved]);
+    }
+
+    /**
+     * Open view to edit a specific Client 
+     * 
+     * @return View
+     */
+    public function edit(ClientEditFormRequest $request, ClientRepository $clientRepository)
+    {
+        $client = $clientRepository->get($request->id);
+        return view('pages.clientes.form', compact('client'));
+    }
+
+
+    /**
+     * Update a supply
+     * 
+     * @param SupplyUpdateFormRequest $request, 
+     * @param SupplyRepository $supplyRepository
+     * 
+     * @return Json
+     */
+    public function update(ClientUpdateFormRequest $request, ClientRepository $clientRepository)
+    {
+        $updated = $clientRepository->update($request);
+        if($updated) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Erro ao tentar salvar'
+        ]);
     }
 }
