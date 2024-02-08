@@ -25,7 +25,7 @@ class SupplyUpdateFormRequest extends FormRequest
         return [
             'id'=> 'required|integer',
             'name'=> 'required|string',
-            'cnpj'=> 'required|string',
+            'cnpj'=> 'required|string|unique:fornecedores,cnpj',
         ];
     }
 
@@ -38,6 +38,7 @@ class SupplyUpdateFormRequest extends FormRequest
             'name.string' => "é obrigatório que seja um texto",
             'cnpj.required' => "é obrigatório enviar um cnpj",
             'cnpj.string' => "é obrigatório que o cnpj seja um texto",
+            'cnpj.unique' => "Esse CNPJ já está cadastrado",
         ];
     }
 }

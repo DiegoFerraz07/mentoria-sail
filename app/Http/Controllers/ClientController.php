@@ -10,6 +10,7 @@ use App\Http\Requests\Client\ClientUpdateFormRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -66,10 +67,10 @@ class ClientController extends Controller
 
 
     /**
-     * Update a supply
+     * Update a Client
      * 
-     * @param SupplyUpdateFormRequest $request, 
-     * @param SupplyRepository $supplyRepository
+     * @param ClientUpdateFormRequest $request, 
+     * @param ClientRepository $supplyRepository
      * 
      * @return Json
      */

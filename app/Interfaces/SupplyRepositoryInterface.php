@@ -14,6 +14,6 @@ interface SupplyRepositoryInterface
     public function get(int $id): Supply|null;
     public function find(string $search): Collection;
     public function delete(int $id): bool;
-    public function store(SupplyAddFormRequest $request): bool;
+    public function store(SupplyAddFormRequest $request): array;
     public function update(SupplyUpdateFormRequest $request): bool;
 }

@@ -37,10 +37,10 @@
                 class="form-control date"
                 name="date"
                 id="date"
-                value="{{ isset($client) ? $client->date : ''}}"
+                value="{{isset($client) ? $client->date : ''}} "
                 required
                 readonly
-                placeholder="Data de Nascimento">
+                placeholder="Data de Nascimento"/>
             <div id="data-error" class="error"></div>
         </div>
 
@@ -131,7 +131,6 @@
                 for (let input of formInputs) {
                     formData[input.name] = input.value;
                 }
-                /*Rota a criar ainda...*/
                 let route = "{{route('client.store')}}";
                 let messageSuccess = "Adicionado com sucesso";
                 const clientId = $('#client-id').val();

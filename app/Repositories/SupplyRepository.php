@@ -59,15 +59,26 @@ class SupplyRepository implements SupplyRepositoryInterface
      * 
      * @return bool
      */
-    public function store(SupplyAddFormRequest $request): bool
+    public function store(SupplyAddFormRequest $request): array
     {
         try {
             $supply = new Supply();
             $supply->fillSupply($request);
-            return $supply->save();
+            $saved = $supply->save();
+            return array(
+                'success' => $saved,
+                'message' => ''
+            );
         } catch(Exception $e) {
+            $message = 'Houve um erro';
+            if($e->getMessage() && str_contains($e->getMessage(), 'fornecedores_cnpj_unique')) {
+                $message = 'Já existe um fornecedor com esse CNPJ';
+            }
             Log::error($e->getMessage() . $e->getTraceAsString());
-            return false;
+            return array(
+                'success' => false,
+                'message' => $message
+            );
         }
     }
 

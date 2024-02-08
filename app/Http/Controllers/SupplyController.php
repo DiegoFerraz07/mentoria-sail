@@ -8,6 +8,8 @@ use App\Http\Requests\Supply\SupplyEditFormRequest;
 use App\Repositories\SupplyRepository;
 use App\Http\Requests\Supply\SupplyFormRequest;
 use App\Http\Requests\Supply\SupplyUpdateFormRequest;
+use App\Http\Resources\SupplyResource;
+use App\Models\Supply;
 
 class SupplyController extends Controller
 {
@@ -61,15 +63,7 @@ class SupplyController extends Controller
     public function store(SupplyAddFormRequest $request, SupplyRepository $supplyRepository)
     {
         $saved = $supplyRepository->store($request);
-        if($saved) {
-            return response()->json([
-                'success' => true
-            ]);
-        }
-        return response()->json([
-            'success' => false,
-            'message' => 'Erro ao tentar salvar'
-        ]);
+        return new SupplyResource(['saved' => $saved]);
     }
 
 
