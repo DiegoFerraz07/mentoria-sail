@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Supply;
 
 use App\Models\Supply;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SupplyAddFormRequest extends FormRequest
 {
@@ -37,5 +39,21 @@ class SupplyAddFormRequest extends FormRequest
             'cnpj.string' => "é obrigatório que o cnpj seja um texto",
             'cnpj.unique' => "Esse CNPJ já está cadastrado",
         ];
+    }
+
+    
+    protected function failedValidation(Validator $validator)
+    {
+        // Pega as mensagens de erro     
+        $errorMessages = $validator->errors()->all();
+
+        // Exibe os parâmetros de erro
+        throw new HttpResponseException(
+        response()->json([
+                'success' => false,
+                'message' => $errorMessages[0],
+                'all_messages' => $errorMessages,
+            ])
+        );      
     }
 }

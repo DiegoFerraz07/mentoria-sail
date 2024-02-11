@@ -14,10 +14,10 @@ class SupplyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $saved = $this['saved'];
+        $saveAndMessage = $this['saveAndMessage'];
         return array(
-            'success' => $saved['success'],
-            'message' => $saved['message']
+            'success' => $saveAndMessage['success'],
+            'message' => $saveAndMessage['message']
         );
     }
 }

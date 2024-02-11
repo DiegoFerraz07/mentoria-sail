@@ -97,7 +97,10 @@
                     route,
                     formData
                 ).then(response => {
-                    const apiResponse = response.data;
+                    let apiResponse = response.data;
+                    if(apiResponse.data != undefined) {
+                        apiResponse = apiResponse.data;
+                    }
                     if(apiResponse.success) {
                         alertSweet(
                             messageSuccess,

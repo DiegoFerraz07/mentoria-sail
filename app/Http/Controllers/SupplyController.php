@@ -62,8 +62,8 @@ class SupplyController extends Controller
      */
     public function store(SupplyAddFormRequest $request, SupplyRepository $supplyRepository)
     {
-        $saved = $supplyRepository->store($request);
-        return new SupplyResource(['saved' => $saved]);
+        $saveAndMessage = $supplyRepository->store($request);
+        return new SupplyResource(['saveAndMessage' => $saveAndMessage]);
     }
 
 
