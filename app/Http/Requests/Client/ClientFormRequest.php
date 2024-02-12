@@ -28,6 +28,8 @@ class ClientFormRequest extends FormRequest
             $min = intval($this->search);
             if (!$min) {
                 $min = "|min:3";
+            }else{
+                $min = "";
             }
             
         } catch(\Exception $e) {

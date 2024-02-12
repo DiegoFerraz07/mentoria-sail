@@ -8,7 +8,7 @@
     <div>
         <form action="{{ route('client.find') }}" method="POST">
             @csrf
-            <input type="text" required minlength="3" value="{{$search ?? ''}}" name="search" placeholder="Digite o nome" />
+            <input type="text" required minlength="1" value="{{$search ?? ''}}" name="search" placeholder="Digite o nome" />
             <button> pesquisar </button>
             @if(isset($search))
                 <a href="{{ route('client.index') }}" class="btn btn-danger btn-sm">
