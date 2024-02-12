@@ -30,8 +30,10 @@ class ClientRepository implements ClientRepositoryInterface
     {
         return Client::where(function($q) use ($search) {
             $q->where("name", "LIKE", "%$search%")
+                ->orWhere("id", $search)
                 ->orWhere("cpf", $search);
-        })->limit(10)->get();
+        })->limit(10)
+        ->get();
     }
 
     /**
