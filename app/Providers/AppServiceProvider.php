@@ -13,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $models = array(
-            'Supply'
+            'Supply',
+            'Types'
         );
 
         foreach ($models as $model) {
@@ -28,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::directive('date_ptbr', function (string $expression) {
             return "<?php echo DateTime::createFromFormat('Y-m-d', $expression)->format('d/m/Y') ?>";
+        });
+        Blade::directive('datetime_ptbr', function (string $expression) {
+            return "<?php echo DateTime::createFromFormat('Y-m-d H:i:s', $expression)->format('d/m/Y H:i:s') ?>";
         });
     }
 }
