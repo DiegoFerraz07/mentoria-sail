@@ -44,6 +44,12 @@ Tip 2: you can also add an image using data-image tag
                                 <p>{{ __("Supply") }}</p>
                             </a>
                         </li>
+                        <li class="nav-item sub-nav @active('types')">
+                            <a class="nav-link" href="{{route('types.index')}}">
+                                <i class="nc-icon nc-single-02"></i>
+                                <p>{{ __("Types") }}</p>
+                            </a>
+                        </li>
                         
                     </ul>
                 </div>
