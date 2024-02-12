@@ -23,8 +23,20 @@ class ClientFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        $min = '';
+        try {
+            $min = intval($this->search);
+            if (!$min) {
+                $min = "|min:3";
+            }
+            
+        } catch(\Exception $e) {
+            $min = "|min:3";
+
+        }
+
         return [
-            'search' => 'required|string',
+            'search' => "required|string$min"
         ];
     }
 
@@ -33,6 +45,8 @@ class ClientFormRequest extends FormRequest
     {
         return [
             'search.string' => "é obrigatório que seja um texto",
+            'search.required' => 'é obrigatório que seja preenchido',
+            'search.min' => 'deve ter no mínimo 3 caracteres'
         ];
     }
 
