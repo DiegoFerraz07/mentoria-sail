@@ -92,7 +92,7 @@ class ClientRepository implements ClientRepositoryInterface
 
     /**
      * Store a new client
-     * @param ClientAddFormRequest $request
+     * @param ClientUpdateFormRequest $request
      * 
      * @return bool
      */
@@ -106,6 +106,45 @@ class ClientRepository implements ClientRepositoryInterface
             Log::error($e->getMessage() . $e->getTraceAsString());
             return false;
         }
+    }
+
+    /**
+     * get cpf attribute by od
+     * @param int $id
+     * 
+     * @return string
+     * 
+     */
+    public static function getCPFById(int $id): string
+    {
+        $client = Client::select('cpf')
+            ->where(['id' => $id])
+            ->first();
+
+        if($client) {
+            return $client->cpf;
+        }
+        return "";
+    }
+
+    /**
+     * Verify exist cpf in diferents $ids
+     * @param int $id
+     * @param string $newCpf
+     * 
+     * @return bool
+     * 
+     */
+    public static function isOthersCPFById(int $id, string $newCpf): bool
+    {
+        $exist = Client::where(['cpf' => $newCpf])
+            ->where('id', '!=', $id)
+            ->first();
+
+        if($exist) {
+            return true;
+        }
+        return false;
     }
 
 }

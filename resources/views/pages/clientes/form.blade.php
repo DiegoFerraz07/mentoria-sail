@@ -18,7 +18,10 @@
         </div>
         <div class="form-group">
             <label for="cpf">CPF</label>
-            <input type="hidden" id="isLegalAge" name="is_legal_age" value="0">
+            <input type="hidden" 
+                id="isLegalAge" 
+                name="is_legal_age" 
+                value="{{ isset($client) && isset($client->is_legal_age) ? $client->is_legal_age : '0'}}">
             <input type="text"
                 class="form-control cpf"
                 name="cpf"
@@ -37,10 +40,10 @@
                 class="form-control date"
                 name="date"
                 id="date"
-                value="{{isset($client) ? $client->date : ''}} "
+                value="{{ isset($client) ? $client->date_formatted : ''}}"
                 required
                 readonly
-                placeholder="Data de Nascimento"/>
+                placeholder="Data de Nascimento">
             <div id="data-error" class="error"></div>
         </div>
 
@@ -145,6 +148,9 @@
                     formData
                 ).then(response => {
                     const apiResponse = response.data;
+                    if(apiResponse.data != undefined) {
+                        apiResponse = apiResponse.data;
+                    }
                     if(apiResponse.success) {
                         alertSweet(
                             messageSuccess,
@@ -175,4 +181,3 @@
         });
     </script>
 @endsection
-

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Client;
 
 use App\Rules\IsLegalAgeRule;
+use App\Rules\UpdateExistCPF;
 use Illuminate\Foundation\Http\FormRequest;
 use DateTime;
 use Illuminate\Contracts\Validation\Validator;
@@ -28,11 +29,15 @@ class ClientUpdateFormRequest extends FormRequest
         return [
             'id'=> 'required|integer',
             'name'=> 'required|string',
-            'cpf'=> 'required|string|unique:cliente,cpf',
+            'cpf'=> [
+                'required',
+                'string',
+                new UpdateExistCPF($this->id, $this->cpf)
+            ],
             'date'=> [
                 'required',
                 'date',
-                new IsLegalAgeRule($this->date)
+                new IsLegalAgeRule($this->date),
                 ]
         ];
     }

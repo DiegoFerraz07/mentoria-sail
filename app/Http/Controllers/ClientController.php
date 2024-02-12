@@ -48,6 +48,14 @@ class ClientController extends Controller
         return view('pages.clientes.form');
     }
 
+     /**
+     * Store a new client
+     * 
+     * @param ClientAddFormRequest $request, 
+     * @param ClientRepository $clientRepository
+     * 
+     * @return View
+     */
     public function store(ClientAddFormRequest $request, ClientRepository $clientRepository)
     {
         $saved = $clientRepository->store($request);
