@@ -54,6 +54,7 @@
 @section('scripts')
     <script src="{{ Vite::asset('resources/js/utils/cpf-verify.js') }}"></script>
     <script src="{{ Vite::asset('resources/js/utils/utils.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/utils/handle-axios.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -110,8 +111,11 @@
                     $('#isLegalAge').val(0);
                 }
             });
-            $("form").submit(function(e) {
+
+            $("form").submit(async function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
 
                 if(!validateCPF()) {
                     alertSweet(
@@ -137,45 +141,34 @@
                 let route = "{{route('client.store')}}";
                 let messageSuccess = "Adicionado com sucesso";
                 const clientId = $('#client-id').val();
+                
                 if(clientId) {
                     route = "{{route('client.update')}}";
                     messageSuccess = "Alterado com sucesso";
                     formData['id'] = clientId;
                 }
 
-                axios.post(
-                    route,
-                    formData
-                ).then(response => {
-                    const apiResponse = response.data;
-                    if(apiResponse.data != undefined) {
-                        apiResponse = apiResponse.data;
-                    }
-                    if(apiResponse.success) {
+                return await handleAxios({
+                    url: route,
+                    data: formData,
+                    method: clientId ? 'put' : 'post',
+                    successCallback: successCallback = () => {
                         alertSweet(
-                            messageSuccess,
+                            '',
                             'success',
                             success => {
                                 document.location.href = "{{ route('client.index')}}";
                             }
                         );
-                    } else {
-                        let message = 'Não foi possivel Salvar!!';
-                        if(apiResponse.message) {
-                            message = apiResponse.message;
-                        }
+                        return true;
+                    },
+                    errorCallback: errorCallback = () => {
                         alertSweet(
-                            message,
+                            'Erro ao salvar',
                             'error'
-                        )
-                    }
-
-                })
-                .catch(error => {
-                    alertSweet(
-                        'Não foi possivel Salvar!!',
-                        'error'
-                    )
+                        );
+                        return false;
+                    },
                 });
             });
         });

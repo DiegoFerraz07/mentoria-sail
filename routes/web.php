@@ -38,7 +38,7 @@ Route::prefix('fornecedores')->group(function() {
     Route::post('/update', [SupplyController::class, 'update'])->name('supply.update');
 });
 
-Route::prefix('clientes')->group( function () {
+Route::prefix('clientes')->middleware('cors')->group( function () {
     Route::get('/', [ClientController::class, 'index'])->name('client.index');
     Route::get('/find', [ClientController::class, 'index']);
     Route::post('/find', [ClientController::class, 'find'])->name('client.find');
@@ -46,7 +46,7 @@ Route::prefix('clientes')->group( function () {
     Route::get('/add', [ClientController::class, 'add'])->name('client.add');
     Route::post('/store', [ClientController::class, 'store'])->name('client.store');
     Route::get('/edit/{id}', [ClientController::class, 'edit'])->name('client.edit');
-    Route::post('/update', [ClientController::class, 'update'])->name('client.update');
+    Route::put('/update', [ClientController::class, 'update'])->name('client.update');
 });
 
 Auth::routes();
