@@ -2,17 +2,17 @@
 
 namespace App\Rules;
 
-use App\Repositories\ClientRepository;
+use App\Repositories\ProductRepository;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class ExistClientRule implements ValidationRule
+class ExistProductRule implements ValidationRule
 {
-    protected ClientRepository $clientRepository;
+    protected ProductRepository $productRepository;
 
     public function __construct()
     {
-        $this->clientRepository = new ClientRepository();
+        $this->productRepository = new ProductRepository();
     }
 
     /**
@@ -22,9 +22,9 @@ class ExistClientRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $isClient = $this->clientRepository->get($value);
-        if(!$isClient) {
-            $fail('Cliente não encontrado!');
+        $isProduct = $this->productRepository->get($value);
+        if(!$isProduct) {
+            $fail('Produto não encontrado!');
         }
     }
 }

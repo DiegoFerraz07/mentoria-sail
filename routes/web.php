@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProdutosController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\TypesController;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +24,14 @@ Route::get('/', function () {
 });
 
 Route::prefix('produtos')->group( function () {
-    Route::get('/', [ProdutosController::class, 'index'])->name('produto.index');
-    Route::delete('/delete', [ProdutosController::class, 'delete'])->name('produto.delete');
+    Route::get('/', [ProductController::class, 'index'])->name('product.index');
+    Route::get('/find', [ProductController::class, 'index']);
+    Route::post('/find', [ProductController::class, 'find'])->name('product.find');
+    Route::delete('/delete', [ProductController::class, 'delete'])->name('product.delete');
+    Route::get('/add', [ProductController::class, 'add'])->name('product.add');
+    Route::post('/store', [ProductController::class, 'store'])->name('product.store');
+    Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::post('/update', [ProductController::class, 'update'])->name('product.update');
 });
 
 Route::prefix('fornecedores')->group(function() {

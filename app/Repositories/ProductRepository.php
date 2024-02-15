@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\Product\ProductAddFormRequest;
+use App\Http\Requests\Product\ProductUpdateFormRequest;
 use App\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Product;
@@ -30,7 +31,7 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * find a client by nome or id and return first 10
+     * find a product by nome or id and return first 10
      *
      * @param string $search
      *
@@ -62,7 +63,7 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
      /**
-     * Store a new client
+     * Store a new Product
      * @param ProductAddFormRequest $request
      *
      * @return array
@@ -89,6 +90,25 @@ class ProductRepository implements ProductRepositoryInterface
             );
         }
     }
+
+     /**
+     * Update a product
+     * @param ProductUpdateFormRequest $request
+     * 
+     * @return bool
+     */
+    public function update(ProductUpdateFormRequest $request): bool
+    {
+        try {
+            $product = $this->get($request->id);
+            $product->fillProduct($request);
+            return $product->update();
+        } catch(Exception $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            return false;
+        }
+    }
+
 
 
 }

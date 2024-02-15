@@ -2,13 +2,11 @@
 
 namespace App\Http\Requests\Product;
 
-use App\Rules\IsLegalAgeRule;
 use Illuminate\Foundation\Http\FormRequest;
-use DateTime;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ProductAddFormRequest extends FormRequest
+class ProductUpdateFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,24 +24,27 @@ class ProductAddFormRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id'=> 'required|integer',
             'nome'=> 'required|string',
-            'valor'=> 'required|decimal',
+            'valor'=> 'required|decimal'
         ];
     }
 
     public function messages()
     {
         return [
+            'id.required' => "é obrigatório enviar o id",
+            'id.integer' => "é obrigatório que seja um número",
             'nome.required' => "É obrigatório enviar um nome",
             'nome.string' => "É obrigatório que seja um texto",
-            'valor.required' => "É obrigatório enviar um valor",
-            'valor.decimal' => "É obrigatório que seja um número decimal",
+            'valor.required'=> "É obrigatorio enviar um valor",
+            'valor.decimal'=> "É obrigatorio que seja um número em decimal"
         ];
     }
 
     protected function prepareForValidation()
     {
-    
+        
     }
 
     /**

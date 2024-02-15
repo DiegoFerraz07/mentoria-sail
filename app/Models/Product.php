@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Requests\Product\ProductAddFormRequest;
+use App\Http\Requests\Product\ProductUpdateFormRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,7 +28,7 @@ class Product extends Model
         return $Product;
     }
 
-    public function fillProduct(ProductAddFormRequest $request): Product
+    public function fillProduct(ProductAddFormRequest|ProductUpdateFormRequest $request): Product
     {
         $this->nome = $request->nome;
         $this->valor = $request->valor;

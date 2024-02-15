@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\ProductAddFormRequest;
 use App\Http\Requests\Product\ProductDeleteFormRequest;
+use App\Http\Requests\Product\ProductEditFormRequest;
 use App\Http\Requests\Product\ProductFormRequest;
+use App\Http\Requests\Product\ProductUpdateFormRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
@@ -65,6 +67,39 @@ class ProductController extends Controller
     {
         $saved = $productRepository->store($request);
         return new ProductResource(['saved' => $saved]);
+    }
+
+    /**
+     * Open view to edit a specific Product
+     * 
+     * @return View
+     */
+    public function edit(ProductEditFormRequest $request, ProductRepository $productRepository)
+    {
+        $produtc = $productRepository->get($request->id);
+        return view('pages.produtos.form', compact('product'));
+    }
+
+      /**
+     * Update a Product
+     * 
+     * @param ProductUpdateFormRequest $request, 
+     * @param ProductRepository $productRepository
+     * 
+     * @return Json
+     */
+    public function update(ProductUpdateFormRequest $request, ProductRepository $productRepository)
+    {
+        $updated = $productRepository->update($request);
+        if($updated) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Erro ao tentar salvar'
+        ]);
     }
 
 }
