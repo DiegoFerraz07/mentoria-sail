@@ -76,8 +76,8 @@ class ProductController extends Controller
      */
     public function edit(ProductEditFormRequest $request, ProductRepository $productRepository)
     {
-        $produto = $productRepository->get($request->id);
-        return view('pages.produtos.form', compact('produto'));
+        $product = $productRepository->get($request->id);
+        return view('pages.produtos.form', compact('product'));
     }
 
       /**

@@ -3,16 +3,17 @@
 @section('content')
     <form>
         @csrf
+        
         <input type="hidden"
             id="product-id"
-            value="{{ isset($produdo) ? $produto->id : ''}}">
+            value="{{ isset($product) ? $product->id : ''}}">
         <div class="form-group">
             <label for="nome">Nome</label>
             <input type="text"
                 class="form-control"
                 name="nome"
                 id="nome"
-                value="{{ isset($produto) ? $produto->nome : ''}}"
+                value="{{ isset($product) ? $product->nome : ''}}"
                 required
                 placeholder="Nome">
         </div>
@@ -22,7 +23,7 @@
                 class="form-control valor"
                 name="valor"
                 id="valor"
-                value="{{ isset($produto) ? $produto->valor : ''}}"
+                value="{{ isset($product) ? $product->valor : ''}}"
                 required
                 placeholder="Valor">
             <div id="valor-error" class="error"></div>
@@ -89,7 +90,6 @@
                     )
                 });
             });
-        });
     </script>
 @endsection
 
