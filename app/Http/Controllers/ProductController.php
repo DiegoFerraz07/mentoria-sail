@@ -9,7 +9,9 @@ use App\Http\Requests\Product\ProductFormRequest;
 use App\Http\Requests\Product\ProductUpdateFormRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\Types;
 use App\Repositories\ProductRepository;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -52,7 +54,9 @@ class ProductController extends Controller
 
     public function add()
     {
-        return view('pages.produtos.form');
+        // TODO: corrigir para coloca repositories para trazer somente o name e o id
+        $types = Types::all();
+        return view('pages.produtos.form', compact('types'));
     }
 
      /**
@@ -65,7 +69,13 @@ class ProductController extends Controller
      */
     public function store(ProductAddFormRequest $request, ProductRepository $productRepository)
     {
+        // TODO: salvei um produto eu tenho que retornar nesse save o id desse produto
         $saved = $productRepository->store($request);
+
+        
+        // TODO: pegar o id do type na request salvar com o id do produto e do type na tabela  ProductType
+        // TODO: criar product type repository para salvar
+
         return new ProductResource(['saved' => $saved]);
     }
 
@@ -76,8 +86,10 @@ class ProductController extends Controller
      */
     public function edit(ProductEditFormRequest $request, ProductRepository $productRepository)
     {
+        // TODO: corrigir para coloca rrepositories
+        $types = Types::all();
         $product = $productRepository->get($request->id);
-        return view('pages.produtos.form', compact('product'));
+        return view('pages.produtos.form', compact('product', 'types'));
     }
 
       /**

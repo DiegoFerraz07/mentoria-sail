@@ -26,6 +26,7 @@ class ProductAddFormRequest extends FormRequest
         return [
             'nome'=> 'required|string',
             'valor'=> 'required|decimal',
+            'types' => 'required|array',
         ];
     }
 
@@ -36,11 +37,18 @@ class ProductAddFormRequest extends FormRequest
             'nome.string' => "É obrigatório que seja um texto",
             'valor.required' => "É obrigatório enviar um valor",
             'valor.decimal' => "É obrigatório que seja um número decimal",
+            'types.required' => "É obrigatório enviar um tipo",
+            'types.array' => "É obrigatório que seja um array",
         ];
     }
 
     protected function prepareForValidation()
     {
+        //TODO: remover mascara e deixar com padrão americano para salvar no banco
+        // TODO: 10.000,12 => 10000.12 
+        // TODO: remover cifra RS$ US$ 
+
+
     
     }
 
@@ -52,7 +60,6 @@ class ProductAddFormRequest extends FormRequest
          
         // Pega as mensagens de erro     
         $error_messages = $validator->errors()->all();
-
         // Exibe os parâmetros de erro
         throw new HttpResponseException(
         response()->json([
