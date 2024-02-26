@@ -7,12 +7,15 @@ use App\Http\Requests\Product\ProductDeleteFormRequest;
 use App\Http\Requests\Product\ProductEditFormRequest;
 use App\Http\Requests\Product\ProductFormRequest;
 use App\Http\Requests\Product\ProductUpdateFormRequest;
+use App\Http\Requests\Type\TypesGetAllFormRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Types;
 use App\Repositories\ProductRepository;
+use App\Repositories\TypesRepository;
 use Exception;
 use Illuminate\Http\Request;
+
 
 class ProductController extends Controller
 {
@@ -52,10 +55,9 @@ class ProductController extends Controller
         ]);
     }
 
-    public function add()
+    public function add( TypesRepository $typesRepository)
     {
-        // TODO: corrigir para coloca repositories para trazer somente o name e o id
-        $types = Types::all();
+        $types = $typesRepository->all(); 
         return view('pages.produtos.form', compact('types'));
     }
 
@@ -84,10 +86,9 @@ class ProductController extends Controller
      * 
      * @return View
      */
-    public function edit(ProductEditFormRequest $request, ProductRepository $productRepository)
+    public function edit(ProductEditFormRequest $request, ProductRepository $productRepository,TypesRepository $typesRepository)
     {
-        // TODO: corrigir para coloca rrepositories
-        $types = Types::all();
+        $types = $typesRepository->all(); 
         $product = $productRepository->get($request->id);
         return view('pages.produtos.form', compact('product', 'types'));
     }

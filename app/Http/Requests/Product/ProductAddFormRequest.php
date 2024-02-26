@@ -47,9 +47,11 @@ class ProductAddFormRequest extends FormRequest
         //TODO: remover mascara e deixar com padrão americano para salvar no banco
         // TODO: 10.000,12 => 10000.12 
         // TODO: remover cifra RS$ US$ 
-
-
-    
+        $valor = str_replace('R$', '', $this->valor); // remove o ponto
+        $valor = setlocale(LC_MONETARY, 'en_US');
+        $this->merge([
+            'valor' => $valor
+        ]);
     }
 
     /**
