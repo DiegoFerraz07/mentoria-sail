@@ -76,7 +76,8 @@ class ProductRepository implements ProductRepositoryInterface
             $saved = $product->save();
             return array(
                 'success' => $saved,
-                'message' => ''
+                'message' => '',
+                //'id' => $product->id
             );
         } catch(Exception $e) {
             $message = 'Houve um erro';
