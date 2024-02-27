@@ -6,6 +6,8 @@ use App\Http\Requests\Product\ProductAddFormRequest;
 use App\Http\Requests\Product\ProductUpdateFormRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -15,6 +17,11 @@ class Product extends Model
         'nome',
         'valor',
     ];
+
+    public function types(): BelongsToMany
+    {
+        return $this->belongsToMany(Types::class, 'product_types', 'product_id', 'type_id');
+    }
 
     public function getProductPesquisarIndex(string $search = '')
     {

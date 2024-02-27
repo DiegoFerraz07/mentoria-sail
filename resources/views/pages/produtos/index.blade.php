@@ -28,6 +28,7 @@
                             <th>ID</th>
                             <th>Nome</th>
                             <th>Valor</th>
+                            <th>Tipos</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -37,6 +38,11 @@
                                 <td>{{ $product->id }}</td>
                                 <td>{{ $product->nome }}</td>
                                 <td>{{ 'R$' . ' ' . number_format($product->valor, 2, ',', '.') }}</td>
+                                <td>
+                                    @foreach($product->types as $type)
+                                        <span class="badge badge-primary">{{ $type->name }}</span>
+                                    @endforeach
+                                </td>
                                 <td>
                                     <a href="{{route("product.edit", ['id' => $product->id])}}" class="btn btn-light btn-sm">
                                         Editar

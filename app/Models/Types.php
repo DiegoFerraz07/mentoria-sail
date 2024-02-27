@@ -11,6 +11,7 @@ class Types extends Model
 {
     use HasFactory;
 
+    protected $table = 'types';
 
     public function fillType(TypesAddFormRequest|TypesUpdateFormRequest $request): Types
     {

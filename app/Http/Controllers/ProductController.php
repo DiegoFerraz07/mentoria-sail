@@ -7,15 +7,11 @@ use App\Http\Requests\Product\ProductDeleteFormRequest;
 use App\Http\Requests\Product\ProductEditFormRequest;
 use App\Http\Requests\Product\ProductFormRequest;
 use App\Http\Requests\Product\ProductUpdateFormRequest;
-use App\Http\Requests\Type\TypesGetAllFormRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Product;
-use App\Models\Types;
 use App\Repositories\ProductRepository;
+use App\Repositories\ProductTypesRepository;
 use App\Repositories\TypesRepository;
-use Exception;
-use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -69,14 +65,37 @@ class ProductController extends Controller
      * 
      * @return View
      */
-    public function store(ProductAddFormRequest $request, ProductRepository $productRepository)
+    public function store(
+        ProductAddFormRequest $request, 
+        ProductRepository $productRepository,
+        ProductTypesRepository $productTypesRepository
+    )
     {
-        // TODO: salvei um produto eu tenho que retornar nesse save o id desse produto
-        $saved = $productRepository->store($request);
-        // TODO: pegar o id do type na request salvar com o id do produto e do type na tabela  ProductType
-        // TODO: criar product type repository para salvar
+        DB::beginTransaction();
+        
+        try {
+            $saved = $productRepository->store($request);
+            if($saved['success'] && $saved['id'] &&  $request['types']) {
+                $saved = $productTypesRepository->store($saved['id'], $request['types']);
+            }
+            
+            if(!$saved || !$saved['success']) {
+                DB::rollBack();
+            } else {
+                DB::commit();
+            }
+            
+            return new ProductResource(['saved' => $saved]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $saved = array(
+                'success' => false,
+                'message' => $e->getMessage()
+            );
+            return new ProductResource(['saved' => $saved]);
+        }
 
-        return new ProductResource(['saved' => $saved]);
+
     }
 
     /**

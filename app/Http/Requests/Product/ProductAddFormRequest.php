@@ -25,7 +25,7 @@ class ProductAddFormRequest extends FormRequest
     {
         return [
             'nome'=> 'required|string',
-            'valor'=> 'required|decimal',
+            'valor'=> 'required|decimal:2',
             'types' => 'required|array',
         ];
     }
@@ -44,11 +44,10 @@ class ProductAddFormRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        //TODO: remover mascara e deixar com padrão americano para salvar no banco
-        // TODO: 10.000,12 => 10000.12 
-        // TODO: remover cifra RS$ US$ 
-        $valor = str_replace('R$', '', $this->valor); // remove o ponto
-        $valor = setlocale(LC_MONETARY, 'en_US');
+        $valor = trim(str_replace('R$', '', $this->valor)); // remove o ponto
+        $valor = str_replace('.', '', $valor);
+        $valor = str_replace(',', '.', $valor);
+
         $this->merge([
             'valor' => $valor
         ]);

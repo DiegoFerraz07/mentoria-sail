@@ -46,6 +46,7 @@
         integrity="sha512-efAcjYoYT0sXxQRtxGY37CKYmqsFVOIwMApaEbrxJr4RwqVVGw8o+Lfh/+59TU07+suZn1BWq4fDl5fdgyCNkw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="{{ Vite::asset('resources/js/utils/handle-axios.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('#types').select2();
@@ -94,8 +95,10 @@
 
             $('#valor').mask("000.000.000.000.000,00", MoneyOptsPrefix).keydown().keyup();
 
-            $("form").submit(function(e) {
+            $("form").submit(async function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
 
                 // remover mascara do valor R$ ou US$
 
@@ -118,45 +121,28 @@
                     formData['id'] = productId;
                 }
 
-
-                axios.post(
-                        route,
-                        formData
-                    ).then(response => {
-                        let apiResponse = response.data;
-                        if (apiResponse.data != undefined) {
-                            apiResponse = apiResponse.data;
-                        }
-                        return apiResponse;
-                    })
-                    .then(response => {
-                        if (response.success) {
-                            alertSweet(
-                                messageSuccess,
-                                'success',
-                                success => {
-                                    document.location.href = "{{ route('product.index') }}";
-                                }
-                            );
-                        } else {
-                            let message = 'Não foi possivel Salvar!!';
-                            if (response.message) {
-                                message = response.message;
-                            }
-                            alertSweet(
-                                message,
-                                'error'
-                            )
-                        }
-
-                    })
-                    .catch(error => {
-                        console.log(error)
+                return await handleAxios({
+                    url: route,
+                    data: formData,
+                    method: productId ? 'put' : 'post',
+                    successCallback: successCallback = () => {
                         alertSweet(
-                            'Não foi possivel Salvar!!',
+                            '',
+                            'success',
+                            success => {
+                                document.location.href = "{{ route('product.index') }}"
+                            }
+                        );
+                        return true;
+                    },
+                    errorCallback: errorCallback = () => {
+                        alertSweet(
+                            'Erro ao salvar',
                             'error'
-                        )
-                    });
+                        );
+                        return false;
+                    },
+                });
             });
         });
     </script>

@@ -8,6 +8,6 @@ use Exception;
 
 interface ProductTypesRepositoryInterface
 {
-    public function store( ProductTypesAddFormRequest $request): array;
+    public function store(int $productId, array $typesId): array;
 
 }    

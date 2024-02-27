@@ -10,21 +10,28 @@ use Illuminate\Support\Facades\Log;
 
 class ProductTypesRepository implements ProductTypesRepositoryInterface
 {
-    public function store( ProductTypesAddFormRequest $request): array
+    public function store(int $productId, array $typesId): array
     {
         try {
-            $productTypes = new ProductTypes();
-            $productTypes->fillProductTypes($request);
-            $saved = $productTypes->save();
+            foreach($typesId as $typeId) {
+                $productTypes = new ProductTypes();
+                $productTypes->fillProductTypes($productId, $typeId);
+                $saved = $productTypes->save();
+
+                if(!$saved) {
+                    throw new Exception('Erro ao tetar salvar o tipo do produto: ' . $typeId . ' para o produto: ' . $productId . ' na tabela produtos_types');
+                }
+            }
+
             return array(
                 'success' => $saved,
                 'message' => '',
             );
         } catch(Exception $e) {
             $message = 'Houve um erro';
-            /*if($e->getMessage() && str_contains($e->getMessage(), 'cliente_cpf_unique')) {
-                $message = 'Já existe um cliente com esse CPF';
-            }*/
+            if($e->getMessage()) {
+                $message = $e->getMessage();
+            }
             Log::error($e->getMessage() . $e->getTraceAsString());
             return array(
                 'success' => false,
