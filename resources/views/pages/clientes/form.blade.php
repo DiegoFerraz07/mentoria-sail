@@ -147,7 +147,6 @@
                     messageSuccess = "Alterado com sucesso";
                     formData['id'] = clientId;
                 }
-
                 return await handleAxios({
                     url: route,
                     data: formData,
