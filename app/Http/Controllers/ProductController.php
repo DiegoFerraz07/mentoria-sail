@@ -73,8 +73,6 @@ class ProductController extends Controller
     {
         // TODO: salvei um produto eu tenho que retornar nesse save o id desse produto
         $saved = $productRepository->store($request);
-
-        
         // TODO: pegar o id do type na request salvar com o id do produto e do type na tabela  ProductType
         // TODO: criar product type repository para salvar
 

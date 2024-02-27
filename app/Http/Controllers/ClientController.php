@@ -10,6 +10,7 @@ use App\Http\Requests\Client\ClientUpdateFormRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
+use Arcanedev\LogViewer\Entities\Log;
 use DateTime;
 use Illuminate\Http\Request;
 
