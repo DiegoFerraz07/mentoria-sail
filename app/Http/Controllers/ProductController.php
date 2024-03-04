@@ -109,9 +109,9 @@ class ProductController extends Controller
     {
         $types = $typesRepository->all(); 
         $product = $productRepository->get($request->id);
-        $productTypes = $productTypesRepository->getID($request->id);
+        $productTypes = $productTypesRepository->getTypeIdByProductId($request->id);
         
-        return view('pages.produtos.form', compact('product', 'types'));
+        return view('pages.produtos.form', compact('product', 'types', 'productTypes'));
     }
 
       /**
@@ -124,11 +124,20 @@ class ProductController extends Controller
      */
     public function update(ProductUpdateFormRequest $request, ProductRepository $productRepository, ProductTypesRepository $productTypesRepository)
     {
-        DB::beginTransaction();
+
+        //pegar todos da tabela product_types onde 
+        // o product_id é o que vocês está editando
+        // remove todos e 
+        // depois salva de novo os que vieram na request
+
+
+
+       /* DB::beginTransaction();
         
         try {
             $updated = $productRepository->update($request);
             if($updated['success'] && $updated['id'] &&  $request['types']) {
+                //TODO:  aqui remove todos os tipos do produto
                 $updated = $productTypesRepository->store($updated['id'], $request['types']);
             }
             
@@ -146,7 +155,7 @@ class ProductController extends Controller
                 'message' => $e->getMessage()
             );
             return new ProductResource(['updated' => $updated]);
-        }
+        }*/
     }
 
 }

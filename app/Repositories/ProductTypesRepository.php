@@ -41,10 +41,27 @@ class ProductTypesRepository implements ProductTypesRepositoryInterface
         }
     }
 
-     
-    public function getID(int $productId): ProductTypes|null
+    /**
+     * retorna uma lista de tipos de produtos
+     * @param int $productId
+     * 
+     * @return array
+     */
+    public function getTypeIdByProductId(int $productId): array
     {
-        return ProductTypes::select('product_id', $productId);
+        /* select product_id  --- ->selec('')
+        from  product_types ---- model
+        join        ---- ->join('product_types', 'product_types.type_id', '=', 'types.id')
+        where    ---- ->where('product_id', $productId) 
+        orderby ---- ->orderBy('id', 'desc')
+        */
         
+        $types = ProductTypes::select('type_id')
+            ->where('product_id', $productId)
+            ->get()
+            ->toArray();
+
+        $types = array_column($types, 'type_id');
+        return $types;
     }
 }   

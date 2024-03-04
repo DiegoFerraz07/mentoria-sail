@@ -26,7 +26,11 @@
                 @endempty
 
                 @foreach ($types as $type)
-                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @if($productTypes && in_array($type->id, $productTypes))
+                        <option value="{{ $type->id }}" selected>{{ $type->name }}</option>
+                    @else
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endif
                 @endforeach
 
             </select>
@@ -50,7 +54,25 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#types').select2();
+            $('#types').on("select2:unselecting", async function(e){
+                e.preventDefault();
+                await alertSweet(
+                    'Deseja realmente remover o tipo?',
+                    'warning',
+                    success => {
+                        if (success) {
+                            $(e.params.args.data.element).remove();
+                            $(e.target).trigger('change');
+                        }
+                        return true;
+                    },
+                    cancel => {
+                        return false;
+                    }
+                );
+            });
 
+            
             var MoneyOptsMinus = {
                 reverse: true,
                 maxlength: false,
@@ -94,6 +116,8 @@
             MoneyOptsPrefix.prefixMoney = 'R$ ';
 
             $('#valor').mask("000.000.000.000.000,00", MoneyOptsPrefix).keydown().keyup();
+            // simula uma ação de adicionar 
+            $('#valor').trigger('input');
 
             $("form").submit(async function(e) {
                 e.preventDefault();

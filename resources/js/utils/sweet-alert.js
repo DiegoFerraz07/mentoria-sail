@@ -1,4 +1,4 @@
-const alertSweet = async (message, type = 'success', success = async () => {} ) => {
+const alertSweet = async (message, type = 'success', success = async () => {}, error = async () => {} ) => {
     let title = 'Sucesso';
     let icon = 'success';
     let showConfirmButton = false; 
@@ -51,6 +51,7 @@ const alertSweet = async (message, type = 'success', success = async () => {} ) 
         if (response.isConfirmed) {
             success(response)
         }
+        error(response)
     })
     .catch(error => {
         console.log(error);
