@@ -18,7 +18,7 @@
         <div class="form-group">
             <!-- TODO: fazer o editar tbm -->
             <label for="valor">Tipos</label>
-            <select id="types" name="types[]" multiple="multiple" class="form-control">
+            <select id="types" name="types[]" multiple="multiple" class="form-control" >
                 @empty($types)
                     <option value="">Nenhum tipo cadastrado</option>
                 @else
@@ -54,7 +54,7 @@
             var MoneyOptsMinus = {
                 reverse: true,
                 maxlength: false,
-                placeholder: '0,00',
+                placeholder: 'R$ 0,00',
                 byPassKeys: [9, 16, 17, 18, 35, 36, 37, 38, 39, 40, 46, 91],
                 eventNeedChanged: false,
                 onKeyPress: function(v, ev, curField, opts) {

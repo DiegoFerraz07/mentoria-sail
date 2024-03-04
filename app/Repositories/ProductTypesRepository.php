@@ -6,6 +6,7 @@ use App\Http\Requests\ProductTypes\ProductTypesAddFormRequest;
 use App\Interfaces\ProductTypesRepositoryInterface;
 use App\Models\ProductTypes;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class ProductTypesRepository implements ProductTypesRepositoryInterface
@@ -13,7 +14,7 @@ class ProductTypesRepository implements ProductTypesRepositoryInterface
     public function store(int $productId, array $typesId): array
     {
         try {
-            foreach($typesId as $typeId) {
+            foreach($typesId as $typeId) {  
                 $productTypes = new ProductTypes();
                 $productTypes->fillProductTypes($productId, $typeId);
                 $saved = $productTypes->save();
@@ -39,4 +40,11 @@ class ProductTypesRepository implements ProductTypesRepositoryInterface
             );
         }
     }
-}
+
+     
+    public function getID(int $productId): ProductTypes|null
+    {
+        return ProductTypes::select('product_id', $productId);
+        
+    }
+}   

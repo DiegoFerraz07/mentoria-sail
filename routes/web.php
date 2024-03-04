@@ -31,7 +31,7 @@ Route::prefix('produtos')->group( function () {
     Route::get('/add', [ProductController::class, 'add'])->name('product.add');
     Route::post('/store', [ProductController::class, 'store'])->name('product.store');
     Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
-    Route::post('/update', [ProductController::class, 'update'])->name('product.update');
+    Route::put('/update', [ProductController::class, 'update'])->name('product.update');
 });
 
 Route::prefix('fornecedores')->group(function() {

@@ -13,6 +13,8 @@ use App\Repositories\ProductTypesRepository;
 use App\Repositories\TypesRepository;
 use Illuminate\Support\Facades\DB;
 
+use function Laravel\Prompts\select;
+
 class ProductController extends Controller
 {
 
@@ -103,10 +105,12 @@ class ProductController extends Controller
      * 
      * @return View
      */
-    public function edit(ProductEditFormRequest $request, ProductRepository $productRepository,TypesRepository $typesRepository)
+    public function edit(ProductEditFormRequest $request, ProductRepository $productRepository,TypesRepository $typesRepository, ProductTypesRepository $productTypesRepository)
     {
         $types = $typesRepository->all(); 
         $product = $productRepository->get($request->id);
+        $productTypes = $productTypesRepository->getID($request->id);
+        
         return view('pages.produtos.form', compact('product', 'types'));
     }
 
@@ -118,18 +122,31 @@ class ProductController extends Controller
      * 
      * @return Json
      */
-    public function update(ProductUpdateFormRequest $request, ProductRepository $productRepository)
+    public function update(ProductUpdateFormRequest $request, ProductRepository $productRepository, ProductTypesRepository $productTypesRepository)
     {
-        $updated = $productRepository->update($request);
-        if($updated) {
-            return response()->json([
-                'success' => true
-            ]);
+        DB::beginTransaction();
+        
+        try {
+            $updated = $productRepository->update($request);
+            if($updated['success'] && $updated['id'] &&  $request['types']) {
+                $updated = $productTypesRepository->store($updated['id'], $request['types']);
+            }
+            
+            if(!$updated || !$updated['success']) {
+                DB::rollBack();
+            } else {
+                DB::commit();
+            }
+            
+            return new ProductResource(['updated' => $updated]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $updated = array(
+                'success' => false,
+                'message' => $e->getMessage()
+            );
+            return new ProductResource(['updated' => $updated]);
         }
-        return response()->json([
-            'success' => false,
-            'message' => 'Erro ao tentar salvar'
-        ]);
     }
 
 }
