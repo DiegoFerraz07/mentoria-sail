@@ -96,14 +96,19 @@ class ProductRepository implements ProductRepositoryInterface
      * Update a product
      * @param ProductUpdateFormRequest $request
      * 
-     * @return bool
+     * @return array
      */
-    public function update(ProductUpdateFormRequest $request): bool
+    public function update(ProductUpdateFormRequest $request): array
     {
         try {
             $product = $this->get($request->id);
             $product->fillProduct($request);
-            return $product->update();
+            $updated = $product->save();
+            return array(
+                'success' => $updated,
+                'message' => '',
+                'id' => $product->id
+            );
         } catch(Exception $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             return false;

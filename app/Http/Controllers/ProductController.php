@@ -56,7 +56,8 @@ class ProductController extends Controller
     public function add( TypesRepository $typesRepository)
     {
         $types = $typesRepository->all(); 
-        return view('pages.produtos.form', compact('types'));
+        $productTypes = [];
+        return view('pages.produtos.form', compact('types', 'productTypes'));
     }
 
      /**
@@ -132,13 +133,18 @@ class ProductController extends Controller
 
 
 
-       /* DB::beginTransaction();
+        DB::beginTransaction();
         
         try {
             $updated = $productRepository->update($request);
             if($updated['success'] && $updated['id'] &&  $request['types']) {
-                //TODO:  aqui remove todos os tipos do produto
-                $updated = $productTypesRepository->store($updated['id'], $request['types']);
+                $deleted = $productTypesRepository->delete($request->id);
+                    if($deleted){
+                        $updated = $productTypesRepository->store($updated['id'], $request['types']);
+                    }
+                    else {
+                        $updated = false;
+                    }
             }
             
             if(!$updated || !$updated['success']) {
@@ -147,7 +153,7 @@ class ProductController extends Controller
                 DB::commit();
             }
             
-            return new ProductResource(['updated' => $updated]);
+            return new ProductResource(['saved' => $updated]);
         } catch (\Exception $e) {
             DB::rollBack();
             $updated = array(
@@ -155,7 +161,7 @@ class ProductController extends Controller
                 'message' => $e->getMessage()
             );
             return new ProductResource(['updated' => $updated]);
-        }*/
+        }
     }
 
 }

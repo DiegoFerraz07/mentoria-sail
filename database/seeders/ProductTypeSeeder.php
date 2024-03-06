@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use App\Models\ProductTypes;
-use App\Models\Produto;
 use Illuminate\Database\Seeder;
 use App\Models\Types;
 
@@ -16,7 +16,7 @@ class ProductTypeSeeder extends Seeder
     {
         // get 100
         $types = Types::all()->random(100);
-        $products = Produto::all()->random(100);
+        $products = Product::all()->random(100);
         
         for ($i = 0; $i < 100; $i++) {
             ProductTypes::create(

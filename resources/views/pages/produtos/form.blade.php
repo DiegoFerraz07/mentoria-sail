@@ -76,7 +76,7 @@
             var MoneyOptsMinus = {
                 reverse: true,
                 maxlength: false,
-                placeholder: 'R$ 0,00',
+                placeholder: '0,00',
                 byPassKeys: [9, 16, 17, 18, 35, 36, 37, 38, 39, 40, 46, 91],
                 eventNeedChanged: false,
                 onKeyPress: function(v, ev, curField, opts) {

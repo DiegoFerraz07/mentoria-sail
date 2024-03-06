@@ -14,6 +14,6 @@ interface ProductRepositoryInterface
     public function find(string $search): Collection;
     public function delete(int $id): bool;
     public function store(ProductAddFormRequest $request): array;
-    public function update(ProductUpdateFormRequest $request): bool;
+    public function update(ProductUpdateFormRequest $request): array;
 }    
    

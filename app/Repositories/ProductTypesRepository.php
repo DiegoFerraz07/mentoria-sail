@@ -64,4 +64,12 @@ class ProductTypesRepository implements ProductTypesRepositoryInterface
         $types = array_column($types, 'type_id');
         return $types;
     }
+
+    public function delete(int $id): bool
+    {
+        $deleted = ProductTypes::where('product_id', $id)
+            ->delete();
+
+        return $deleted;
+    }
 }   

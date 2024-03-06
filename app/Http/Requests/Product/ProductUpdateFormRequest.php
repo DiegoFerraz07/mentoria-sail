@@ -26,7 +26,8 @@ class ProductUpdateFormRequest extends FormRequest
         return [
             'id'=> 'required|integer',
             'nome'=> 'required|string',
-            'valor'=> 'required|decimal'
+            'valor'=> 'required|decimal:2',
+            'types' => 'required|array',
         ];
     }
 
@@ -38,24 +39,32 @@ class ProductUpdateFormRequest extends FormRequest
             'nome.required' => "É obrigatório enviar um nome",
             'nome.string' => "É obrigatório que seja um texto",
             'valor.required'=> "É obrigatorio enviar um valor",
-            'valor.decimal'=> "É obrigatorio que seja um número em decimal"
+            'valor.decimal'=> "É obrigatorio que seja um número em decimal",
+            'types.required' => "É obrigatório enviar um tipo",
+            'types.array' => "É obrigatório que seja um array"
         ];
     }
 
     protected function prepareForValidation()
     {
-        
+
+        $valor = trim(str_replace('R$', '', $this->valor)); // remove o ponto
+        $valor = str_replace('.', '', $valor);
+        $valor = str_replace(',', '.', $valor);
+
+        $this->merge([
+            'valor' => $valor
+        ]);
     }
+    
 
     /**
      * failed validation
      */
     protected function failedValidation(Validator $validator)
     {
-         
         // Pega as mensagens de erro     
         $error_messages = $validator->errors()->all();
-
         // Exibe os parâmetros de erro
         throw new HttpResponseException(
         response()->json([
