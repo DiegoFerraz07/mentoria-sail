@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Supply;
+use App\Models\Brand;
 
-class SupplySeeder extends Seeder
+class BrandSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +14,10 @@ class SupplySeeder extends Seeder
     {
         $faker = \Faker\Factory::create('pt_BR');
         for ($i = 0; $i < 100; $i++) {
-            Supply::create(
+            Brand::create(
                 [
-                    'name' => $faker->name(),
-                    'cnpj' => $faker->cnpj(),
+                    'name' => $faker->word(),
+                    'description' => $faker->sentences(1, true),
                 ]
             );
         }
