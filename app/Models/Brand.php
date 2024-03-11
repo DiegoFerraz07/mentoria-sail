@@ -11,7 +11,7 @@ class Brand extends Model
 
     protected $table = 'brand';
 
-    public function Brand($request) : Brand
+    public function fillBrand($request) : Brand
     {
         $this->name = $request->name;
         $this->description = $request->description;
