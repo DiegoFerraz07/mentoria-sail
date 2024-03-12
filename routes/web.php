@@ -69,14 +69,14 @@ Route::prefix('types')->group( function () {
 });
 
 Route::prefix('brand')->group( function () {
-    Route::get('/', [BrandController::class, 'index'])->name('types.index');
+    Route::get('/', [BrandController::class, 'index'])->name('brand.index');
     Route::get('/find', [BrandController::class, 'index']);
-    Route::post('/find', [BrandController::class, 'find'])->name('types.find');
-    Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('types.edit');
-    Route::delete('/delete', [BrandController::class, 'delete'])->name('types.delete');
-    Route::get('/add', [BrandController::class, 'add'])->name('types.add');
-    Route::post('/store', [BrandController::class, 'store'])->name('types.store');
-    Route::post('/update', [BrandController::class, 'update'])->name('types.update');
+    Route::post('/find', [BrandController::class, 'find'])->name('brand.find');
+    Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('brand.edit');
+    Route::delete('/delete', [BrandController::class, 'delete'])->name('brand.delete');
+    Route::get('/add', [BrandController::class, 'add'])->name('brand.add');
+    Route::post('/store', [BrandController::class, 'store'])->name('brand.store');
+    Route::post('/update', [BrandController::class, 'update'])->name('brand.update');
 });
 
 Auth::routes();
