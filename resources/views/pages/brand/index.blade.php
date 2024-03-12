@@ -20,7 +20,7 @@
             Adicionar
         </a>
         <div class="table-responsive mt-4">
-            @if ($brand->isEmpty())
+            @if ($brands->isEmpty())
                 <p> Não existe dados </p>
             @else
                 <table class="table table-striped table-sm">
@@ -35,7 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($brand as $brand)
+                        @foreach ($brands as $brand)
                             <tr>
                                 <td>{{ $brand->id }}</td>
                                 <td>{{ $brand->name }}</td>
@@ -56,6 +56,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $brands->links() }}
             @endif
         </div>
     </div>

@@ -14,8 +14,8 @@ class BrandController extends Controller
 {   
     public function index(BrandRepository $brandRepository)
     {
-        $brand = $brandRepository->getAll();
-        return view('pages.brand.index', compact('brand'));
+        $brands = $brandRepository->getAll();
+        return view('pages.brand.index', compact('brands'));
     }
 
     public function find(BrandFormRequest $request, BrandRepository $brandRepository)
