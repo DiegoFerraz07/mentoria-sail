@@ -23,45 +23,17 @@
             @if ($brands->isEmpty())
                 <p> Não existe dados </p>
             @else
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Descrição</th>
-                            <th>Data de Criação</th>
-                            <th>Data de Edição</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($brands as $brand)
-                            <tr>
-                                <td>{{ $brand->id }}</td>
-                                <td>{{ $brand->name }}</td>
-                                <td>{{ $brand->description }}</td>
-                                <td>@datetime_ptbr($brand->created_at)</td>
-                                <td>@datetime_ptbr($brand->updated_at)</td>
-                                <td>
-                                    <a href="{{route("brand.edit", ['id' => $brand->id])}}" class="btn btn-light btn-sm">
-                                        Editar
-                                    </a>
-
-                                    <meta name='csrf-token' content="{{ csrf_token() }}"/>
-                                    <button onclick="confirmDeleteBrand('{{$brand->id}}', '{{$brand->name}}')" class="btn btn-danger btn-sm">
-                                        Excluir
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div id="app">
+                <brand
+                    brands="{{json_encode($brands)}}" />
+            </div>
                 {{ $brands->links() }}
             @endif
         </div>
     </div>
 @endsection
 
+@vite('resources/js/app.js')
 @section('scripts')
 <script>
     function confirmDeleteBrand(id, name) {

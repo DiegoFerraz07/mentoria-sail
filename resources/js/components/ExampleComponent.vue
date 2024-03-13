@@ -6,7 +6,8 @@
                     <div class="card-header">Example Component</div>
 
                     <div class="card-body">
-                        I'm an example component.
+                    <button @click="count++">Add +1</button>
+                        count: {{count}}
                     </div>
                 </div>
             </div>
@@ -16,8 +17,14 @@
 
 <script>
     export default {
+        data() {
+            return {
+                count: 0
+            }
+        },
         mounted() {
             console.log('Component mounted.')
         }
+
     }
 </script>

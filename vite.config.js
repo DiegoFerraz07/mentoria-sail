@@ -7,29 +7,16 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/sass/app.scss',
                 'resources/js/app.js',
-                'resources/assets/css/custom.css',
-                'resources/js/utils/sweet-alert.js',
-                'resources/js/utils/cnpj-verify.js',
-                'resources/js/utils/cpf-verify.js',
-                'resources/js/utils/*',
-                'resources/js/utils/utils.js'
             ],
             refresh: true,
         }),
-        vue({
-            template: {
-                transformAssetUrls: {
-                    base: null,
-                    includeAbsolute: false,
-                },
-            },
-        }),
+        vue(),
     ],
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
-            '@sweetAlert': 'resources/js/utils/sweet-alert.js'
         },
     },
 });
