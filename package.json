@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "jquery-mask-plugin": "^1.14.16",
+        "moment": "^2.30.1",
         "sweetalert2": "^11.7.31",
         "vue-loader": "^17.3.1"
     }
