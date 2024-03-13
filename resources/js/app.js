@@ -6,6 +6,8 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
+import filters from './filters/filters';
+
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -14,6 +16,8 @@ import { createApp } from 'vue';
  */
 
 const app = createApp({});
+
+app.config.globalProperties.$filters = filters;
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import Brand from './pages/brand/index.vue';

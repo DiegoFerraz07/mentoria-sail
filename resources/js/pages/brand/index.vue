@@ -12,11 +12,11 @@
         </thead>
         <tbody>
             <tr v-for="brand in allBrands" :key="brand.id">
-                <td>{{ brand.id}}</td>
+                <td>{{ $filters.formatId(brand.id)}}</td>
                 <td>{{ brand.name}}</td>
                 <td>{{ brand.description}}</td>
-                <td>{{ brand.created_at}}</td>
-                <td>{{ brand.updated_at}}</td>
+                <td>{{ $filters.formatDate(brand.created_at) }}</td>
+                <td>{{ $filters.formatDate(brand.updated_at) }}</td>
                 <td>
                     <button class="btn btn-light btn-sm">
                         Editar
