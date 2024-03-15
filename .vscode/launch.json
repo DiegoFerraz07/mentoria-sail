@@ -13,7 +13,7 @@
             "ignore": [
                 "**/vendor/**/*.php"
             ],
-            "port": 9000
+            "port": 9003
         },
         {
             "name": "Launch currently open script",

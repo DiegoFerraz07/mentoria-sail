@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProdutosController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\TypesController;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +25,14 @@ Route::get('/', function () {
 });
 
 Route::prefix('produtos')->group( function () {
-    Route::get('/', [ProdutosController::class, 'index'])->name('produto.index');
-    Route::delete('/delete', [ProdutosController::class, 'delete'])->name('produto.delete');
+    Route::get('/', [ProductController::class, 'index'])->name('product.index');
+    Route::get('/find', [ProductController::class, 'index']);
+    Route::post('/find', [ProductController::class, 'find'])->name('product.find');
+    Route::delete('/delete', [ProductController::class, 'delete'])->name('product.delete');
+    Route::get('/add', [ProductController::class, 'add'])->name('product.add');
+    Route::post('/store', [ProductController::class, 'store'])->name('product.store');
+    Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::put('/update', [ProductController::class, 'update'])->name('product.update');
 });
 
 Route::prefix('fornecedores')->group(function() {
@@ -39,13 +46,15 @@ Route::prefix('fornecedores')->group(function() {
     Route::post('/update', [SupplyController::class, 'update'])->name('supply.update');
 });
 
-Route::prefix('clientes')->group( function () {
+Route::prefix('clientes')->middleware('cors')->group( function () {
     Route::get('/', [ClientController::class, 'index'])->name('client.index');
     Route::get('/find', [ClientController::class, 'index']);
     Route::post('/find', [ClientController::class, 'find'])->name('client.find');
     Route::delete('/delete', [ClientController::class, 'delete'])->name('client.delete');
     Route::get('/add', [ClientController::class, 'add'])->name('client.add');
     Route::post('/store', [ClientController::class, 'store'])->name('client.store');
+    Route::get('/edit/{id}', [ClientController::class, 'edit'])->name('client.edit');
+    Route::put('/update', [ClientController::class, 'update'])->name('client.update');
 });
 
 Route::prefix('types')->group( function () {
@@ -57,6 +66,17 @@ Route::prefix('types')->group( function () {
     Route::get('/add', [TypesController::class, 'add'])->name('types.add');
     Route::post('/store', [TypesController::class, 'store'])->name('types.store');
     Route::post('/update', [TypesController::class, 'update'])->name('types.update');
+});
+
+Route::prefix('brand')->group( function () {
+    Route::get('/', [BrandController::class, 'index'])->name('brand.index');
+    Route::get('/find', [BrandController::class, 'index']);
+    Route::post('/find', [BrandController::class, 'find'])->name('brand.find');
+    Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('brand.edit');
+    Route::delete('/delete', [BrandController::class, 'delete'])->name('brand.delete');
+    Route::get('/add', [BrandController::class, 'add'])->name('brand.add');
+    Route::post('/store', [BrandController::class, 'store'])->name('brand.store');
+    Route::post('/update', [BrandController::class, 'update'])->name('brand.update');
 });
 
 Auth::routes();

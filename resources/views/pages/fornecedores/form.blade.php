@@ -97,7 +97,11 @@
                     route,
                     formData
                 ).then(response => {
-                    if(response.data.success) {
+                    let apiResponse = response.data;
+                    if(apiResponse.data != undefined) {
+                        apiResponse = apiResponse.data;
+                    }
+                    if(apiResponse.success) {
                         alertSweet(
                             messageSuccess,
                             'success',
@@ -107,8 +111,8 @@
                         );
                     } else {
                         let message = 'Não foi possivel Salvar!!';
-                        if(response.data.message) {
-                            message = response.data.message;
+                        if(apiResponse.message) {
+                            message = apiResponse.message;
                         }
                         alertSweet(
                             message,
@@ -118,6 +122,7 @@
 
                 })
                 .catch(error => {
+                    console.log(error)
                     alertSweet(
                         'Não foi possivel Salvar!!',
                         'error'

@@ -8,7 +8,7 @@
     <div>
         <form action="{{ route('client.find') }}" method="POST">
             @csrf
-            <input type="text" required minlength="3" value="{{$search ?? ''}}" name="search" placeholder="Digite o nome" />
+            <input type="text" required minlength="1" value="{{$search ?? ''}}" name="search" placeholder="Digite o nome" />
             <button> pesquisar </button>
             @if(isset($search))
                 <a href="{{ route('client.index') }}" class="btn btn-danger btn-sm">
@@ -42,7 +42,7 @@
                                 <!--td>{{ $client->date_formatted }}</td-->
                                 <td>@date_ptbr($client->date)</td>
                                 <td>
-                                    <a href="#" class="btn btn-light btn-sm">
+                                    <a href="{{route("client.edit", ['id' => $client->id])}}" class="btn btn-light btn-sm">
                                         Editar
                                     </a>
 

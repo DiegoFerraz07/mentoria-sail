@@ -1,4 +1,4 @@
-const alertSweet = (message, type = 'success', success = () => {} ) => {
+const alertSweet = async (message, type = 'success', success = async () => {}, error = async () => {} ) => {
     let title = 'Sucesso';
     let icon = 'success';
     let showConfirmButton = false; 
@@ -26,11 +26,15 @@ const alertSweet = (message, type = 'success', success = () => {} ) => {
     }
 
     if(!showCancelButton) {
-        return Swal.fire({
+        return await Swal.fire({
             title,
             html: message,
             icon,
-        }).then((response) => success(response));
+        }).then((response) => {
+            if (response.isConfirmed) {
+                success(response)
+            }
+        });
     }
 
     return Swal.fire({
@@ -47,6 +51,7 @@ const alertSweet = (message, type = 'success', success = () => {} ) => {
         if (response.isConfirmed) {
             success(response)
         }
+        error(response)
     })
     .catch(error => {
         console.log(error);

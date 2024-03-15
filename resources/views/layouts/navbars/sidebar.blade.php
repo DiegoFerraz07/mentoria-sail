@@ -30,7 +30,7 @@ Tip 2: you can also add an image using data-image tag
                     </p>
                 </a>
                 
-                <div class="collapse @showMenu(["client", "supply"])" id="store">
+                <div class="collapse @showMenu(["client", "supply", "product"])" id="store">
                     <ul class="nav">
                         <li class="nav-item sub-nav @active('client')">
                             <a class="nav-link" href="{{route('client.index')}}">
@@ -44,10 +44,22 @@ Tip 2: you can also add an image using data-image tag
                                 <p>{{ __("Supply") }}</p>
                             </a>
                         </li>
+                        <li class="nav-item sub-nav @active('product')">
+                            <a class="nav-link" href="{{route('product.index')}}">
+                                <i class="nc-icon nc-single-02"></i>
+                                <p>{{ __("Product") }}</p>
+                            </a>
+                        </li>
                         <li class="nav-item sub-nav @active('types')">
                             <a class="nav-link" href="{{route('types.index')}}">
                                 <i class="nc-icon nc-single-02"></i>
                                 <p>{{ __("Types") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item sub-nav @active('brand')">
+                            <a class="nav-link" href="{{route('brand.index')}}">
+                                <i class="nc-icon nc-single-02"></i>
+                                <p>{{ __("Brand") }}</p>
                             </a>
                         </li>
                         

@@ -8,6 +8,7 @@ use App\Interfaces\TypesRepositoryInterface;
 use App\Models\Types;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class TypesRepository implements TypesRepositoryInterface
@@ -23,6 +24,14 @@ class TypesRepository implements TypesRepositoryInterface
             ->sortByDesc('id')
             ->toQuery()
             ->paginate(20);
+    }
+    /**
+    *Get all types no restricion to numbers
+    */
+    public function all(): Collection
+    {
+        $types = Types::all('name', 'id');
+        return $types;
     }
 
     /**

@@ -8,7 +8,6 @@ use App\Http\Requests\Type\TypesEditFormRequest;
 use App\Http\Requests\Type\TypesFormRequest;
 use App\Http\Requests\Type\TypesUpdateFormRequest;
 use App\Http\Resources\TypesResource;
-use App\Repositories\ClientRepository;
 use App\Repositories\TypesRepository;
 
 class TypesController extends Controller

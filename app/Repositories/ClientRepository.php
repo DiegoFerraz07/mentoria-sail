@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\Client\ClientAddFormRequest;
+use App\Http\Requests\Client\ClientUpdateFormRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Client;
@@ -29,8 +30,10 @@ class ClientRepository implements ClientRepositoryInterface
     {
         return Client::where(function($q) use ($search) {
             $q->where("name", "LIKE", "%$search%")
+                ->orWhere("id", $search)
                 ->orWhere("cpf", $search);
-        })->limit(10)->get();
+        })->limit(10)
+        ->get();
     }
 
     /**
@@ -87,6 +90,63 @@ class ClientRepository implements ClientRepositoryInterface
     public function get(int $id): Client|null
     {
         return Client::where('id', $id)->first();
+    }
+
+    /**
+     * Store a new client
+     * @param ClientUpdateFormRequest $request
+     * 
+     * @return bool
+     */
+    public function update(ClientUpdateFormRequest $request): bool
+    {
+        try {
+            $client = $this->get($request->id);
+            $client->fillClient($request);
+            return $client->update();
+        } catch(Exception $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            return false;
+        }
+    }
+
+    /**
+     * get cpf attribute by od
+     * @param int $id
+     * 
+     * @return string
+     * 
+     */
+    public static function getCPFById(int $id): string
+    {
+        $client = Client::select('cpf')
+            ->where(['id' => $id])
+            ->first();
+
+        if($client) {
+            return $client->cpf;
+        }
+        return "";
+    }
+
+    /**
+     * Verify exist cpf in diferents $ids
+     * @param int $id
+     * @param string $newCpf
+     * 
+     * @return bool
+     * 
+     */
+    public static function isOthersCPFById(int $id, string $newCpf): bool
+    {
+        $exist = Client::where(['cpf' => $newCpf])
+            ->where('id', '!=', $id)
+            ->first();
+
+        if($exist) {
+            return true;
+        }
+        return false;
     }
 
 }
