@@ -9,8 +9,8 @@ Tip 2: you can also add an image using data-image tag
 @endphp
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="http://www.creative-tim.com" class="simple-text">
-                {{ __("Creative Tim") }}
+            <a href="/dashboard" class="simple-text">
+                {{ __("Monitoria") }}
             </a>
         </div>
         <ul class="nav">
