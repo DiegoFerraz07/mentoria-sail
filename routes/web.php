@@ -24,7 +24,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('produtos')->group( function () {
+Route::prefix('produtos')->middleware(['cors', 'auth'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.index');
     Route::get('/find', [ProductController::class, 'index']);
     Route::post('/find', [ProductController::class, 'find'])->name('product.find');
@@ -35,7 +35,7 @@ Route::prefix('produtos')->group( function () {
     Route::put('/update', [ProductController::class, 'update'])->name('product.update');
 });
 
-Route::prefix('fornecedores')->group(function() {
+Route::prefix('fornecedores')->middleware(['cors', 'auth'])->group(function() {
     Route::get('/', [SupplyController::class, 'index'])->name('supply.index');
     Route::get('/find', [SupplyController::class, 'index']);
     Route::post('/find', [SupplyController::class, 'find'])->name('supply.find');
@@ -46,7 +46,7 @@ Route::prefix('fornecedores')->group(function() {
     Route::post('/update', [SupplyController::class, 'update'])->name('supply.update');
 });
 
-Route::prefix('clientes')->middleware('cors')->group( function () {
+Route::prefix('clientes')->middleware(['cors', 'auth'])->group( function () {
     Route::get('/', [ClientController::class, 'index'])->name('client.index');
     Route::get('/find', [ClientController::class, 'index']);
     Route::post('/find', [ClientController::class, 'find'])->name('client.find');
@@ -57,7 +57,7 @@ Route::prefix('clientes')->middleware('cors')->group( function () {
     Route::put('/update', [ClientController::class, 'update'])->name('client.update');
 });
 
-Route::prefix('types')->group( function () {
+Route::prefix('types')->middleware(['cors', 'auth'])->group( function () {
     Route::get('/', [TypesController::class, 'index'])->name('types.index');
     Route::get('/find', [TypesController::class, 'index']);
     Route::post('/find', [TypesController::class, 'find'])->name('types.find');
@@ -68,7 +68,7 @@ Route::prefix('types')->group( function () {
     Route::post('/update', [TypesController::class, 'update'])->name('types.update');
 });
 
-Route::prefix('brand')->group( function () {
+Route::prefix('brand')->middleware(['cors', 'auth'])->group( function () {
     Route::get('/', [BrandController::class, 'index'])->name('brand.index');
     Route::get('/find', [BrandController::class, 'index']);
     Route::post('/find', [BrandController::class, 'find'])->name('brand.find');
@@ -81,9 +81,10 @@ Route::prefix('brand')->group( function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-Auth::routes();
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+});
 
 
 Route::group(['middleware' => 'auth'], function () {
