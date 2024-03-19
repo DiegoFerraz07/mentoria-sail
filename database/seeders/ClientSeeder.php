@@ -19,7 +19,8 @@ class ClientSeeder extends Seeder
                 [
                     'name' => $faker->name(),
                     'cpf' => $faker->unique()->cpf(),
-                    'date' => $faker->date()
+                    'date' => $faker->date(),
+                    'email' => $faker->unique()->email(),
                 ]
             );
         }

@@ -19,6 +19,13 @@ class ClientRepository implements ClientRepositoryInterface
             ->sortByDesc('id');
     }
 
+    public function getAllAsArray(): array
+    {
+        return Client::all()
+            ->sortByDesc('id')
+            ->toArray();
+    }
+
     /**
      * find a client by name or CPf and return first 10
      *

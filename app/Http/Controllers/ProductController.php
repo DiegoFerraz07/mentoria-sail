@@ -8,10 +8,14 @@ use App\Http\Requests\Product\ProductEditFormRequest;
 use App\Http\Requests\Product\ProductFormRequest;
 use App\Http\Requests\Product\ProductUpdateFormRequest;
 use App\Http\Resources\ProductResource;
+use App\Jobs\NewProductJob;
+use App\Mail\UserNewProduct;
+use App\Repositories\ClientRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductTypesRepository;
 use App\Repositories\TypesRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 use function Laravel\Prompts\select;
 
@@ -71,20 +75,29 @@ class ProductController extends Controller
     public function store(
         ProductAddFormRequest $request, 
         ProductRepository $productRepository,
-        ProductTypesRepository $productTypesRepository
+        ProductTypesRepository $productTypesRepository,
+        ClientRepository $clientRepository
     )
     {
         DB::beginTransaction();
         
         try {
             $saved = $productRepository->store($request);
-            if($saved['success'] && $saved['id'] &&  $request['types']) {
-                $saved = $productTypesRepository->store($saved['id'], $request['types']);
+            $productId = $saved['id'];
+            if($saved['success'] && $productId &&  $request['types']) {
+                $saved = $productTypesRepository->store($productId, $request['types']);
             }
             
             if(!$saved || !$saved['success']) {
                 DB::rollBack();
             } else {
+                // envio de email para todos os clientes
+                $clients = $clientRepository->getAllAsArray();
+                $product = $productRepository->find($productId)[0];
+
+                NewProductJob::dispatch($clients, $product)
+                    ->onQueue('emails');
+               
                 DB::commit();
             }
             

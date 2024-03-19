@@ -28,6 +28,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
+                            <th>Email</th>
                             <th>Cpf</th>
                             <th>Data</th>
                             <th>Ações</th>
@@ -38,6 +39,7 @@
                             <tr>
                                 <td>{{ $client->id }}</td>
                                 <td>{{ $client->name }}</td>
+                                <td>{{ $client->email }}</td>
                                 <td>{{ $client->cpf }}</td>
                                 <!--td>{{ $client->date_formatted }}</td-->
                                 <td>@date_ptbr($client->date)</td>
