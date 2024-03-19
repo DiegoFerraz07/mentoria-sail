@@ -18,6 +18,12 @@
         <link href="{{ asset('light-bootstrap/css/demo.css') }}" rel="stylesheet" />
         <link href="{{ asset('light-bootstrap/css/custom.css') }}" rel="stylesheet" />
     </head>
+    <style>
+      button.close {
+        position: none !important;
+        margin-top: 0 !important;
+      }
+    </style>
 
     <body>
         <div class="wrapper @if (!auth()->check() || request()->route()->getName() == "") wrapper-full-page @endif">
@@ -30,6 +36,20 @@
             <div class="@if (auth()->check() && request()->route()->getName() != "") main-panel @endif">
                 @include('layouts.navbars.navbar')
                 <div class="container">
+
+                  @if($errors->any())
+                  
+                    <div class="alert alert-danger">
+                        <button type="button" aria-hidden="true" class="close" data-dismiss="alert">
+                            <i class="nc-icon nc-simple-remove"></i>
+                        </button>
+                        <span>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                    </div>
+                  @endif
+                  
                   @yield('content')
                 </div>
                 @include('layouts.footer.nav')

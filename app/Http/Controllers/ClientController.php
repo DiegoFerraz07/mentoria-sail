@@ -13,6 +13,8 @@ use App\Repositories\ClientRepository;
 use Arcanedev\LogViewer\Entities\Log;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {   
