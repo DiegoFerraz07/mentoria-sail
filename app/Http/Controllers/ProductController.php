@@ -11,6 +11,9 @@ use App\Http\Resources\ProductResource;
 use App\Jobs\NewProductJob;
 use App\Mail\UserNewProduct;
 use App\Repositories\ClientRepository;
+use App\Models\ProductBrand;
+use App\Repositories\BrandRepository;
+use App\Repositories\ProductBrandRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductTypesRepository;
 use App\Repositories\TypesRepository;
@@ -57,11 +60,13 @@ class ProductController extends Controller
         ]);
     }
 
-    public function add( TypesRepository $typesRepository)
-    {
+    public function add( TypesRepository $typesRepository, BrandRepository $brandRepository)
+    {   
+        $brands = $brandRepository->all(); 
         $types = $typesRepository->all(); 
         $productTypes = [];
-        return view('pages.produtos.form', compact('types', 'productTypes'));
+        $productBrand = [];
+        return view('pages.produtos.form', compact('types', 'productTypes', 'brands', 'productBrand'));
     }
 
      /**
@@ -76,7 +81,8 @@ class ProductController extends Controller
         ProductAddFormRequest $request, 
         ProductRepository $productRepository,
         ProductTypesRepository $productTypesRepository,
-        ClientRepository $clientRepository
+        ClientRepository $clientRepository,
+        ProductBrandRepository $productBrandRepository
     )
     {
         DB::beginTransaction();
@@ -86,6 +92,10 @@ class ProductController extends Controller
             $productId = $saved['id'];
             if($saved['success'] && $productId &&  $request['types']) {
                 $saved = $productTypesRepository->store($productId, $request['types']);
+            }
+
+            if($saved['success'] && $saved['id'] &&  $request['brand']) {
+                $saved = $productBrandRepository->store($saved['id'], $request['brand']);
             }
             
             if(!$saved || !$saved['success']) {

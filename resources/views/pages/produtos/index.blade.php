@@ -40,7 +40,7 @@
                                 <td>{{ 'R$' . ' ' . number_format($product->valor, 2, ',', '.') }}</td>
                                 <td>
                                     @foreach($product->types as $type)
-                                        <span class="badge badge-primary">{{ $type->name }}</span>
+                                        <span class="badge badge-prim0ary">{{ $type->name }}</span>
                                     @endforeach
                                 </td>
                                 <td>

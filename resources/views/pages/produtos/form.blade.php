@@ -33,6 +33,15 @@
                     @endif
                 @endforeach
 
+                @foreach ($brands as $brand)
+                @if($productTypes && in_array($type->id, $productTypes))
+                    <option value="{{ $type->id }}" selected>{{ $type->name }}</option>
+                @else
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                @endif
+            @endforeach
+
+
             </select>
             <div id="valor-error" class="error"></div>
         </div>
