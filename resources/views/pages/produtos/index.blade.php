@@ -29,6 +29,7 @@
                             <th>Nome</th>
                             <th>Valor</th>
                             <th>Tipos</th>
+                            <th>Marcas</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -40,16 +41,21 @@
                                 <td>{{ 'R$' . ' ' . number_format($product->valor, 2, ',', '.') }}</td>
                                 <td>
                                     @foreach($product->types as $type)
-                                        <span class="badge badge-prim0ary">{{ $type->name }}</span>
+                                        <span class="badge badge-primary">{{ $type->name }}</span>
                                     @endforeach
                                 </td>
+
+                                <td>
+                                        <span class="badge badge-primary">{{ $product->brand->name }}</span>
+                                </td>
+                                
                                 <td>
                                     <a href="{{route("product.edit", ['id' => $product->id])}}" class="btn btn-light btn-sm">
                                         Editar
                                     </a>
 
                                     <meta name='csrf-token' content="{{ csrf_token() }}"/>
-                                    <button onclick="confirmDeleteSupply('{{$product->id}}', '{{$product->name}}')" class="btn btn-danger btn-sm">
+                                    <button onclick="confirmDeleteProduct('{{$product->id}}', '{{$product->name}}')" class="btn btn-danger btn-sm">
                                         Excluir
                                     </button>
                                 </td>
@@ -64,18 +70,18 @@
 
 @section('scripts')
 <script>
-    function confirmDeleteSupply(id, nome) {
+    function confirmDeleteProduct(id, nome) {
         const alertSwal = window.alertSweet;
         alertSwal(
             `Deseja realmente excluir o produto <b>"${nome}"</b>?`, 
             'warning', 
             success => {
-                this.deleteSupply(id);
+                this.deleteProduct(id);
             }
         );
     }
 
-    function deleteSupply(id) {
+    function deleteProduct(id) {
         axios.delete('{{route("product.delete")}}', {
             data: {
                 id: id,

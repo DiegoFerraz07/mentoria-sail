@@ -61,7 +61,7 @@ class BrandController extends Controller
     public function edit(BrandEditFormRequest $request, BrandRepository $brandRepository)
     {
         $brand = $brandRepository->get($request->id);
-        return view('pages.brand.form', compact('brand'));
+        return view('pages.brand.form', compact('brands'));
     }
 
 

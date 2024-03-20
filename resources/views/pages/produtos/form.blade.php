@@ -22,7 +22,7 @@
                 @empty($types)
                     <option value="">Nenhum tipo cadastrado</option>
                 @else
-                    <option value="" readonly disabled>Selecione um tipo</option>
+                    <option value="" readonly disabled >Selecione um tipo</option>
                 @endempty
 
                 @foreach ($types as $type)
@@ -32,16 +32,25 @@
                         <option value="{{ $type->id }}">{{ $type->name }}</option>
                     @endif
                 @endforeach
+            </select>
+            <div id="valor-error" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="valor">Marcas</label>
+            <select id="brandId" name="brandId"  class="form-control" >
+                @empty($brands)
+                    <option value="">Nenhuma marca cadastrada</option>
+                @else
+                    <option value="" readonly disabled selected>Selecione uma marca</option>
+                @endempty
 
                 @foreach ($brands as $brand)
-                @if($productTypes && in_array($type->id, $productTypes))
-                    <option value="{{ $type->id }}" selected>{{ $type->name }}</option>
-                @else
-                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                @endif
-            @endforeach
-
-
+                    @if(isset($product->brand_id) && $brand->id == $product->brand_id)
+                        <option value="{{ $brand->id }}" selected>{{ $brand->name }}</option>
+                    @else
+                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                    @endif
+                @endforeach
             </select>
             <div id="valor-error" class="error"></div>
         </div>
@@ -59,11 +68,32 @@
     <script src="{{ Vite::asset('resources/js/utils/handle-axios.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#types').select2();
+            $('#types').select2({
+                placeholder:'Selecione um tipo'
+            });
             $('#types').on("select2:unselecting", async function(e){
                 e.preventDefault();
                 await alertSweet(
                     'Deseja realmente remover o tipo?',
+                    'warning',
+                    success => {
+                        if (success) {
+                            $(e.params.args.data.element).remove();
+                            $(e.target).trigger('change');
+                        }
+                        return true;
+                    },
+                    cancel => {
+                        return false;
+                    }
+                );
+            });
+
+            $('#brands').select2();
+            $('#brands').on("select2:unselecting", async function(e){
+                e.preventDefault();
+                await alertSweet(
+                    'Deseja realmente remover a Marca?',
                     'warning',
                     success => {
                         if (success) {
@@ -140,6 +170,11 @@
                 $types = $('#types').val();
                 if ($types) {
                     formData['types'] = $types;
+                }
+
+                $brandId = $('#brandId').val();
+                if ($brandId) {
+                    formData['brandId'] = $brandId;
                 }
 
                 let route = "{{ route('product.store') }}";

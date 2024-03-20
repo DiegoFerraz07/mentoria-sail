@@ -28,6 +28,7 @@ class ProductUpdateFormRequest extends FormRequest
             'nome'=> 'required|string',
             'valor'=> 'required|decimal:2',
             'types' => 'required|array',
+            'brandId' => 'required|integer',
         ];
     }
 
@@ -41,7 +42,9 @@ class ProductUpdateFormRequest extends FormRequest
             'valor.required'=> "É obrigatorio enviar um valor",
             'valor.decimal'=> "É obrigatorio que seja um número em decimal",
             'types.required' => "É obrigatório enviar um tipo",
-            'types.array' => "É obrigatório que seja um array"
+            'types.array' => "É obrigatório que seja um array",
+            'brandId.required' => "É obrigatório enviar uma marca",
+            'brandId.integer' => "É obrigatório enviar um numero inteiro",
         ];
     }
 

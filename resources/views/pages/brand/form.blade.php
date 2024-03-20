@@ -5,14 +5,14 @@
         @csrf
         <input type="hidden"
             id="brand-id"
-            value="{{ isset($brand) ? $brand->id : ''}}">
+            value="{{ isset($brands) ? $brands->id : ''}}">
         <div class="form-group">
             <label for="name">Nome</label>
             <input type="text"
                 class="form-control"
                 name="name"
                 id="name"
-                value="{{ isset($brand) ? $brand->name : ''}}"
+                value="{{ isset($brands) ? $brands->name : ''}}"
                 required
                 placeholder="Nome">
         </div>
@@ -23,7 +23,7 @@
                 name="description"
                 maxlength="512"
                 minlength="3"
-                value="{{ isset($brand) ? $brand->description : ''}}"
+                value="{{ isset($brands) ? $brands->description : ''}}"
                 required
                 placeholder="Descrição">
         </div>

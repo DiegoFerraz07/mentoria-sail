@@ -25,7 +25,6 @@ return new class extends Migration
                 ->nullable(false)
                 ->change();
         });
-            Artisan::call('db:seed --class=ClientSeeder --force');
     }
 
     /**

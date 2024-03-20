@@ -17,7 +17,6 @@ class TruncateTables extends Seeder
         DB::table('users')->truncate();
         DB::table('cliente')->truncate();
         DB::table('product_types')->truncate();
-        DB::table('product_brand')->truncate();
         DB::table('produtos')->truncate();
         DB::table('types')->truncate();
         DB::table('brand')->truncate();

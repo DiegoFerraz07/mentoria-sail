@@ -11,7 +11,6 @@ use App\Http\Resources\ProductResource;
 use App\Jobs\NewProductJob;
 use App\Mail\UserNewProduct;
 use App\Repositories\ClientRepository;
-use App\Models\ProductBrand;
 use App\Repositories\BrandRepository;
 use App\Repositories\ProductBrandRepository;
 use App\Repositories\ProductRepository;
@@ -36,7 +35,7 @@ class ProductController extends Controller
         $search = $request->search;
         $customers = $productRepository->find($search);
         return view('pages.produtos.index',
-            compact('customers', 'search')
+            compact('customers', 'search')  
         );
     }
 
@@ -65,8 +64,7 @@ class ProductController extends Controller
         $brands = $brandRepository->all(); 
         $types = $typesRepository->all(); 
         $productTypes = [];
-        $productBrand = [];
-        return view('pages.produtos.form', compact('types', 'productTypes', 'brands', 'productBrand'));
+        return view('pages.produtos.form', compact('types', 'productTypes', 'brands'));
     }
 
      /**
@@ -81,8 +79,7 @@ class ProductController extends Controller
         ProductAddFormRequest $request, 
         ProductRepository $productRepository,
         ProductTypesRepository $productTypesRepository,
-        ClientRepository $clientRepository,
-        ProductBrandRepository $productBrandRepository
+        ClientRepository $clientRepository
     )
     {
         DB::beginTransaction();
@@ -93,11 +90,6 @@ class ProductController extends Controller
             if($saved['success'] && $productId &&  $request['types']) {
                 $saved = $productTypesRepository->store($productId, $request['types']);
             }
-
-            if($saved['success'] && $saved['id'] &&  $request['brand']) {
-                $saved = $productBrandRepository->store($saved['id'], $request['brand']);
-            }
-            
             if(!$saved || !$saved['success']) {
                 DB::rollBack();
             } else {
@@ -105,8 +97,8 @@ class ProductController extends Controller
                 $clients = $clientRepository->getAllAsArray();
                 $product = $productRepository->find($productId)[0];
 
-                NewProductJob::dispatch($clients, $product)
-                    ->onQueue('emails');
+              //  NewProductJob::dispatch($clients, $product)
+                //    ->onQueue('emails');
                
                 DB::commit();
             }
@@ -129,13 +121,19 @@ class ProductController extends Controller
      * 
      * @return View
      */
-    public function edit(ProductEditFormRequest $request, ProductRepository $productRepository,TypesRepository $typesRepository, ProductTypesRepository $productTypesRepository)
+    public function edit(
+        ProductEditFormRequest $request, 
+        ProductRepository $productRepository,
+        TypesRepository $typesRepository, 
+        ProductTypesRepository $productTypesRepository,
+        BrandRepository $brandRepository
+        )
     {
         $types = $typesRepository->all(); 
+        $brands = $brandRepository->all();
         $product = $productRepository->get($request->id);
         $productTypes = $productTypesRepository->getTypeIdByProductId($request->id);
-        
-        return view('pages.produtos.form', compact('product', 'types', 'productTypes'));
+        return view('pages.produtos.form', compact('product', 'types', 'productTypes', 'brands'));
     }
 
       /**

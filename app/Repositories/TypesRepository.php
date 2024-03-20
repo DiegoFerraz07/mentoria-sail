@@ -46,7 +46,7 @@ class TypesRepository implements TypesRepositoryInterface
     }
 
     /**
-     * find a supply by name or CNPJ and return first 10
+     * 
      *
      * @param string $search
      *

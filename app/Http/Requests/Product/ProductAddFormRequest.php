@@ -27,6 +27,7 @@ class ProductAddFormRequest extends FormRequest
             'nome'=> 'required|string',
             'valor'=> 'required|decimal:2',
             'types' => 'required|array',
+            'brandId' => 'required|integer',
         ];
     }
 
@@ -39,6 +40,8 @@ class ProductAddFormRequest extends FormRequest
             'valor.decimal' => "É obrigatório que seja um número decimal",
             'types.required' => "É obrigatório enviar um tipo",
             'types.array' => "É obrigatório que seja um array",
+            'brandId.required' => "É obrigatório enviar uma marca",
+            'brandId.integer' => "É obrigatório enviar um numero inteiro",
         ];
     }
 

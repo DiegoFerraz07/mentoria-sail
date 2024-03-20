@@ -16,11 +16,17 @@ class Product extends Model
     protected $fillable =  [
         'nome',
         'valor',
+        'brand_id',
     ];
 
     public function types(): BelongsToMany
     {
         return $this->belongsToMany(Types::class, 'product_types', 'product_id', 'type_id');
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id', 'id');
     }
 
     public function getProductPesquisarIndex(string $search = '')
@@ -39,6 +45,7 @@ class Product extends Model
     {
         $this->nome = $request->nome;
         $this->valor = $request->valor;
+        $this->brand_id = $request->brandId;
         return $this;
     }
 }

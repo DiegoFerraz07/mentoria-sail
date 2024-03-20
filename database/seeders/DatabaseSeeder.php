@@ -28,12 +28,11 @@ class DatabaseSeeder extends Seeder
         try {
             $this->call([UsersTableSeeder::class]);
             $this->call([ClientSeeder::class]);
+            $this->call([BrandSeeder::class]);
             $this->call([ProdutosSeeder::class]);
             $this->call([SupplySeeder::class]);
             $this->call([TypeSeeder::class]);
             $this->call([ProductTypeSeeder::class]);
-            $this->call([BrandSeeder::class]);
-            $this->call([ProductBrandSeeder::class]);
         } catch (\Exception $e) {
             echo "Error: " . $e->getMessage()  . $e->getTraceAsString() . "\n";
             return;
