@@ -5,6 +5,7 @@ namespace App\Http\Requests\Client;
 use App\Rules\IsLegalAgeRule;
 use App\Rules\UpdateExistCNPJClient;
 use App\Rules\UpdateExistCPF;
+use App\Rules\UpdateExistEmailClient;
 use Illuminate\Foundation\Http\FormRequest;
 use DateTime;
 use Illuminate\Contracts\Validation\Validator;
@@ -52,7 +53,11 @@ class ClientUpdateFormRequest extends FormRequest
         return [
             'id'=> 'required|integer',
             'name'=> 'required|string',
-            'email' => 'required|email|unique:cliente,email',
+            'email' => [
+                'required',
+                'email',
+                new UpdateExistEmailClient($this->id, $this->email)
+            ],
             'cpf'=> $ruleCPF,
             'cnpj'=> $ruleCNPJ,
             'date'=> $ruleDate

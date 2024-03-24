@@ -57,7 +57,7 @@ class ClientRepository implements ClientRepositoryInterface
         ->where(['id' => $id])
             ->first();
 
-        if ($client) {
+        if ($client && $client->cnpj) {
             return $client->cnpj;
         }
         return "";
@@ -75,6 +75,45 @@ class ClientRepository implements ClientRepositoryInterface
     public static function isOthersCNPJById(int $id, string $newCnpj): bool
     {
         $exist = Client::where(['cnpj' => $newCnpj])
+            ->where('id', '!=', $id)
+            ->first();
+
+        if ($exist) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * get email attribute by od
+     * @param int $id
+     * 
+     * @return string
+     * 
+     */
+    public static function getEmailById(int $id): string
+    {
+        $client = Client::select('email')
+        ->where(['id' => $id])
+            ->first();
+
+        if ($client && $client->email) {
+            return $client->email;
+        }
+        return "";
+    }
+
+
+    /**
+     * Verify exist cnpj in diferents $ids
+     * @param int $id
+     * @param string $newEmail
+     * 
+     * @return bool
+     * 
+     */
+    public static function isOthersEmailById(int $id, string $newEmail): bool
+    {
+        $exist = Client::where(['email' => $newEmail])
             ->where('id', '!=', $id)
             ->first();
 

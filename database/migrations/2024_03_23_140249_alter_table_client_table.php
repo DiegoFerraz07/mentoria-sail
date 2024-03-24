@@ -14,9 +14,16 @@ return new class extends Migration
         Schema::table('cliente', function (Blueprint $table) {
             $table->string('cnpj', 18)
                 ->nullable()
-                ->unique()
                 ->after('cpf');
-            $table->json('address')->nullable()->default(null);
+
+            $table->json('address')
+                ->nullable()
+                ->after('email');
+
+            $table->string('cpf', 14)
+                ->nullable()
+                ->unique(false)
+                ->change();
         });
     }
 
