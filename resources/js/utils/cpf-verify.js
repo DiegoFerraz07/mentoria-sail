@@ -33,4 +33,4 @@ const validityCPF = (cpf) => {
     return true
 }
 
-window.validity = validityCPF;
+window.scriptValidityCPF = validityCPF;

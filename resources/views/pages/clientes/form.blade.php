@@ -17,22 +17,35 @@
                 placeholder="Nome">
         </div>
         <div class="form-group">
-            <label for="cpf">CPF</label>
+            <label for="name">E-mail</label>
+            <input type="text"
+                class="form-control"
+                name="email"
+                id="email"
+                value="{{ isset($client) ? $client->email : ''}}"
+                required
+                placeholder="E-mail">
+        </div>
+        <div class="form-group">
+            <label for="cpf">CPF/CNPJ</label>
             <input type="hidden" 
                 id="isLegalAge" 
                 name="is_legal_age" 
                 value="{{ isset($client) && isset($client->is_legal_age) ? $client->is_legal_age : '0'}}">
             <input type="text"
-                class="form-control cpf"
-                name="cpf"
-                maxlength="14"
-                minlength="14"
-                id="cpf"
-                mask="000.000.000-00"
-                value="{{ isset($client) ? $client->cpf : ''}}"
+                class="form-control document"
+                name="document"
+                id="document"
+                @if (isset($client) && $client->cpf != "" && $client->cpf != null && strlen($client->cpf) == 14)
+                    value="{{ $client->cpf }}"
+                @elseif((isset($client) && $client->cnpj != "" && $client->cnpj != null && strlen($client->cnpj) == 18))
+                    value="{{ $client->cnpj }}"
+                @else
+                    value=""
+                @endif
                 required
-                placeholder="CPF">
-            <div id="cpf-error" class="error"></div>
+                placeholder="CPF/CNPJ">
+            <div id="document-error" class="error"></div>
         </div>
         <div class="form-group">
             <label for="date">Data Nascimento</label>
@@ -53,6 +66,7 @@
 
 @section('scripts')
     <script src="{{ Vite::asset('resources/js/utils/cpf-verify.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/utils/cnpj-verify.js') }}"></script>
     <script src="{{ Vite::asset('resources/js/utils/utils.js') }}"></script>
     <script src="{{ Vite::asset('resources/js/utils/handle-axios.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
@@ -65,7 +79,7 @@
         $(document).ready( function() {
 
             function setMessageErrorCPF(message = '') {
-                $('#cpf-error')[0].innerHTML = message;
+                $('#document-error')[0].innerHTML = message;
             }
 
             function validateIsLegalAge() {
@@ -76,27 +90,48 @@
                 return false;
             }
 
-            function validateCPF() {
+            function validateDocument() {
                 // pegar o valor do input cpf
-                const cpf = $('#cpf').val();
+                const document = $('#document').val();
                 // Limpar a div
                 setMessageErrorCPF();
                 // verifica o tamanho do cpf
-                if(cpf.length == 14) {
-                    if(!validity(cpf)) {
+                if(document.length == 14) {
+                    if(!scriptValidityCPF(document)) {
                         setMessageErrorCPF("<p class='text-danger'>CPF inválido</p>");
                         return false;
                     } else {
                         setMessageErrorCPF("<p class='text-success'>CPF válido</p>")
                         return true;
                     }
+                } else if(document.length == 18) {
+                    if(!scriptValidityCNPJ(document)) {
+                        setMessageErrorCPF("<p class='text-danger'>CNPJ inválido</p>");
+                        return false;
+                    } else {
+                        setMessageErrorCPF("<p class='text-success'>CNPJ válido</p>")
+                        return true;
+                    }
                 }
                 return false
             }
-            $('#cpf').keyup(function (event) {
-                validateCPF();
+            $('#document').keyup(function (event) {
+                validateDocument();
             });
-            $('#cpf').mask('000.000.000-00', {reverse: false});
+
+            var options = {
+                onKeyPress: function (doc, ev, el, op) {
+                    var masks = ['000.000.000-00#', '00.000.000/0000-00'];
+                    var mask = doc.length <= 14 ? masks[0] : masks[1]
+                    $('#document').mask(mask, op);
+                }
+            }
+            
+            $('#document').mask('000.000.000-00#', options);
+            $('#document').trigger('input');
+            validateDocument();
+
+
             $('input[name="date"]').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
@@ -112,20 +147,32 @@
                 }
             });
 
+            function isCPF() {
+                return $('#document').val().length == 14;
+            }
+
             $("form").submit(async function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
 
-                if(!validateCPF()) {
+                let isCNPJ = false;
+
+                if(!validateDocument()) {
+                    const typeDoc = isCPF() ? 'CPF' : 'CNPJ';
                     alertSweet(
-                            'informe um CPF válido!',
+                            `informe um ${typeDoc} válido!`,
                             'error'
                         )
                     return;
                 }
 
-                if(!validateIsLegalAge()) {
+                if(!isCPF()) {
+                    $('#isLegalAge').val(1);
+                    isCNPJ = true;
+                }
+
+                if(!validateIsLegalAge() && isCPF()) {
                     alertSweet(
                             'Você não possui idade minima para se cadastrar!',
                             'error'
@@ -138,6 +185,9 @@
                 for (let input of formInputs) {
                     formData[input.name] = input.value;
                 }
+
+                formData['isCNPJ'] = isCNPJ;
+
                 let route = "{{route('client.store')}}";
                 let messageSuccess = "Adicionado com sucesso";
                 const clientId = $('#client-id').val();
@@ -161,9 +211,9 @@
                         );
                         return true;
                     },
-                    errorCallback: errorCallback = () => {
+                    errorCallback: errorCallback = (message) => {
                         alertSweet(
-                            'Erro ao salvar',
+                            message,
                             'error'
                         );
                         return false;

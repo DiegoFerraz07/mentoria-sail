@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cliente', function (Blueprint $table) {
-            $table->string('cnpj', 18)->nullable()->unique();
-            $table->json('address');
+            $table->string('cnpj', 18)
+                ->nullable()
+                ->unique()
+                ->after('cpf');
+            $table->json('address')->nullable()->default(null);
         });
     }
 

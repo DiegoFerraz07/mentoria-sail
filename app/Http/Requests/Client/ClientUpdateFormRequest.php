@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Client;
 
 use App\Rules\IsLegalAgeRule;
+use App\Rules\UpdateExistCNPJClient;
 use App\Rules\UpdateExistCPF;
 use Illuminate\Foundation\Http\FormRequest;
 use DateTime;
@@ -26,19 +27,35 @@ class ClientUpdateFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        $ruleCPF = $this->cpf 
+            ? [
+                'required',
+                'string',
+                new UpdateExistCPF($this->id, $this->cpf)] 
+            : 'string';
+        $ruleCNPJ = $this->cnpj 
+            ? [
+                'required',
+                'string',
+                new UpdateExistCNPJClient($this->id, $this->cnpj)]  
+            : 'string';
+        $isCPF = $this->cpf ? true : false;
+        $ruleDate = $this->date && $isCPF 
+            ? [
+                'required',
+                'date',
+                new IsLegalAgeRule($this->date, $isCPF),
+            ] 
+            : 'required|date';
+
+
         return [
             'id'=> 'required|integer',
             'name'=> 'required|string',
-            'cpf'=> [
-                'required',
-                'string',
-                new UpdateExistCPF($this->id, $this->cpf)
-            ],
-            'date'=> [
-                'required',
-                'date',
-                new IsLegalAgeRule($this->date),
-                ]
+            'email' => 'required|email|unique:cliente,email',
+            'cpf'=> $ruleCPF,
+            'cnpj'=> $ruleCNPJ,
+            'date'=> $ruleDate
         ];
     }
 
@@ -49,9 +66,17 @@ class ClientUpdateFormRequest extends FormRequest
             'id.integer' => "é obrigatório que seja um número",
             'name.required' => "É obrigatório enviar um nome",
             'name.string' => "É obrigatório que seja um texto",
+            'email.required' => "É obrigatório enviar um email",
+            'email.email' => "É obrigatório que o email seja válido",
+            'email.unique' => "Este email já está cadastrado",
             'cpf.required' => "É obrigatório enviar um CPF",
             'cpf.string' => "É obrigatório que o CPF seja um texto",
             'cpf.unique' => "Este CPF já está cadastrado",
+            'cnpj.required' => "É obrigatório enviar um CNPJ",
+            'cnpj.string' => "É obrigatório que o CNPJ seja um texto",
+            'cnpj.unique' => "Este CNPJ já está cadastrado",
+            'date.required' => "É obrigatório enviar uma data",
+            'date.date' => "É obrigatório que a data seja válida",
         ];
     }
 
@@ -62,6 +87,18 @@ class ClientUpdateFormRequest extends FormRequest
         $this->merge([
             'date' => $date
         ]);
+
+        if ($this->isCNPJ) {
+            $this->merge([
+                'cnpj' => $this->document,
+                'cpf' => ''
+            ]);
+        } else {
+            $this->merge([
+                'cnpj' => '',
+                'cpf' => $this->document
+            ]);
+        }
     }
 
     /**

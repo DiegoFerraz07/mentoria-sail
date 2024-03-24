@@ -51,7 +51,7 @@
                 setMessageErrorCNPJ();
                 // verificando o tamho do cnpj antes de mostra a mensagem
                 if(cnpj.length == 18) {
-                    if(!validity(cnpj)) {
+                    if(!scriptValidityCNPJ(cnpj)) {
                         setMessageErrorCNPJ("<p class='text-danger'>CNPJ inválido</p>");
                         return false;
                     } else {

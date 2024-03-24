@@ -21,6 +21,7 @@ class ClientSeeder extends Seeder
                     'cpf' => $faker->unique()->cpf(),
                     'date' => $faker->date(),
                     'email' => $faker->unique()->email(),
+                    'address' => json_encode($faker->address()),
                 ]
             );
         }

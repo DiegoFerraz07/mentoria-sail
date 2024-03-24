@@ -13,6 +13,9 @@ use function Laravel\Prompts\error;
 
 class IsLegalAgeRule implements ValidationRule
 {
+
+    public function __construct(private string $date, private bool $isCPF)
+    {}
     /**
      * Run the validation rule.
      *
@@ -20,8 +23,8 @@ class IsLegalAgeRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $age = Carbon::parse($value)->age;
-        if($age < Client::LEGAL_AGE ){
+        $age = Carbon::parse($this->date)->age;
+        if($this->isCPF && $age < Client::LEGAL_AGE ){
             $fail('Idade não permitidade');
         }
     }

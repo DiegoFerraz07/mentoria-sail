@@ -17,7 +17,9 @@ class Client extends Model
     protected $table = 'cliente';
     protected $fillable = [
         'name',
+        'email',
         'cpf',
+        'cnpj',
         'date',
     ];
 
@@ -42,6 +44,8 @@ class Client extends Model
     {
         $this->name = $request->name;
         $this->cpf = $request->cpf;
+        $this->email = $request->email;
+        $this->cnpj = $request->cnpj;
         $this->date = $request->date;
         return $this;
     }

@@ -1,4 +1,4 @@
-const validity = (cnpj) => {
+const validityCNPJ = (cnpj) => {
     cnpj = cnpj.replace(/[^\d]+/g,'');
  
     if(cnpj == '') return false;
@@ -50,4 +50,4 @@ const validity = (cnpj) => {
     return true;
 }
 
-window.validity = validity;
+window.scriptValidityCNPJ = validityCNPJ;

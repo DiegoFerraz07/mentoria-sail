@@ -43,6 +43,47 @@ class ClientRepository implements ClientRepositoryInterface
         ->get();
     }
 
+
+    /**
+     * get cnpj attribute by od
+     * @param int $id
+     * 
+     * @return string
+     * 
+     */
+    public static function getCNPJById(int $id): string
+    {
+        $client = Client::select('cnpj')
+        ->where(['id' => $id])
+            ->first();
+
+        if ($client) {
+            return $client->cnpj;
+        }
+        return "";
+    }
+
+
+    /**
+     * Verify exist cnpj in diferents $ids
+     * @param int $id
+     * @param string $newCnpj
+     * 
+     * @return bool
+     * 
+     */
+    public static function isOthersCNPJById(int $id, string $newCnpj): bool
+    {
+        $exist = Client::where(['cnpj' => $newCnpj])
+            ->where('id', '!=', $id)
+            ->first();
+
+        if ($exist) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Delete a specific client
      * @param int $id

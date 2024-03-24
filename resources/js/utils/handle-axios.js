@@ -40,14 +40,15 @@ const handleRequest = ({
                 'success',
             );
         } else {
-            if(typeof errorCallback == 'function' && errorCallback) {
-                return errorCallback();
-            }
-
             let message = 'Não foi possivel Salvar!!';
             if(apiResponse.message) {
                 message = apiResponse.message;
             }
+
+            if(typeof errorCallback == 'function' && errorCallback) {
+                return errorCallback(message);
+            }
+            
             alertSweet(
                 message,
                 'error'

@@ -25,14 +25,22 @@ class ClientAddFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name'=> 'required|string',
-            'cpf'=> 'required|string|unique:cliente,cpf',
-            'date'=> [
+        $ruleCPF = $this->cpf ? 'required|string|unique:cliente,cpf' : 'string';
+        $ruleCNPJ = $this->cnpj ? 'required|string|unique:cliente,cnpj' : 'string';
+        $isCPF = $this->cpf ? true : false;
+        $ruleDate = $this->date && $isCPF
+            ? [
                 'required',
                 'date',
-                new IsLegalAgeRule($this->date)
-                ]
+                new IsLegalAgeRule($this->date, $isCPF),
+            ]
+            : 'required|date';
+        return [
+            'name'=> 'required|string',
+            'email'=> 'required|email|unique:cliente,email',
+            'cpf'=> $ruleCPF,
+            'cnpj'=> $ruleCNPJ,
+            'date'=> $ruleDate
         ];
     }
 
@@ -41,9 +49,17 @@ class ClientAddFormRequest extends FormRequest
         return [
             'name.required' => "É obrigatório enviar um nome",
             'name.string' => "É obrigatório que seja um texto",
+            'email.required' => "É obrigatório enviar um email",
+            'email.email' => "É obrigatório que o email seja válido",
+            'email.unique' => "Este email já está cadastrado",
             'cpf.required' => "É obrigatório enviar um CPF",
             'cpf.string' => "É obrigatório que o CPF seja um texto",
             'cpf.unique' => "Este CPF já está cadastrado",
+            'cnpj.required' => "É obrigatório enviar um CNPJ",
+            'cnpj.string' => "É obrigatório que o CNPJ seja um texto",
+            'cnpj.unique' => "Este CNPJ já está cadastrado",
+            'date.required' => "É obrigatório enviar uma data",
+            'date.date' => "É obrigatório que a data seja válida",
         ];
     }
 
@@ -51,9 +67,24 @@ class ClientAddFormRequest extends FormRequest
     {
         $date = DateTime::createFromFormat('d/m/Y', $this->date)
             ->format("Y-m-d");
+        
         $this->merge([
             'date' => $date
         ]);
+
+        if($this->isCNPJ) {
+            $this->merge([
+                'cnpj' => $this->document,
+                'cpf' => ''
+            ]);
+        } else {
+            $this->merge([
+                'cnpj' => '',
+                'cpf' => $this->document
+            ]);
+        }
+
+        
     }
 
     /**
