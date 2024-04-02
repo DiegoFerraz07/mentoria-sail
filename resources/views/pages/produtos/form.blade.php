@@ -16,7 +16,6 @@
             <div id="valor-error" class="error"></div>
         </div>
         <div class="form-group">
-            <!-- TODO: fazer o editar tbm -->
             <label for="valor">Tipos</label>
             <select id="types" name="types[]" multiple="multiple" class="form-control" >
                 @empty($types)

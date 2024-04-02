@@ -21,8 +21,10 @@ app.config.globalProperties.$filters = filters;
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import Brand from './pages/brand/index.vue';
+import Client from './pages/clientes/index.vue';
 
 app.component('brand', Brand);
+app.component('client', Client);
 app.component('example-component', ExampleComponent);
 
 /**

@@ -21,6 +21,11 @@ class SupplyRepository implements SupplyRepositoryInterface
             ->toQuery()
             ->paginate(10);
     }
+    public function all(): Collection
+    {
+        return Supply::all()
+            ->sortByDesc('id');
+    }
 
     /**
      * find a supply by name or CNPJ and return first 10

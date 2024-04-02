@@ -23,44 +23,7 @@
             @if ($customers->isEmpty())
                 <p> Não existe dados </p>
             @else
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>CPF/CNPJ</th>
-                            <th>Data</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($customers as $client)
-                            <tr>
-                                <td>{{ $client->id }}</td>
-                                <td>{{ $client->name }}</td>
-                                <td>{{ $client->email }}</td>
-                                @if($client->cpf)
-                                    <td>{{ $client->cpf }}</td>
-                                @else
-                                    <td>{{ $client->cnpj }}</td>
-                                @endif
-                                <!--td>{{ $client->date_formatted }}</td-->
-                                <td>@date_ptbr($client->date)</td>
-                                <td>
-                                    <a href="{{route("client.edit", ['id' => $client->id])}}" class="btn btn-light btn-sm">
-                                        Editar
-                                    </a>
-
-                                    <meta name='csrf-token' content="{{ csrf_token() }}"/>
-                                    <button onclick="confirmDeleteClient('{{$client->id}}', '{{$client->name}}')" class="btn btn-danger btn-sm">
-                                        Excluir
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                
             @endif
         </div>
     </div>
