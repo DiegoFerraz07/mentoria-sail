@@ -58,7 +58,7 @@ class SupplyFormRequest extends FormRequest
      * 
      * @return Json
      */
-    /*protected function failedValidation(Validator $validator) 
+    protected function failedValidation(Validator $validator) 
     {   
 
         // Pega as mensagens de erro     
@@ -74,5 +74,5 @@ class SupplyFormRequest extends FormRequest
                 'error_messages' => $error_messages,
             ]
         ));
-    }  */
+    } 
 }

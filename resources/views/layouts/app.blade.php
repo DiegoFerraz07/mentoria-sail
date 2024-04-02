@@ -2,6 +2,7 @@
 
 <html lang="en">
     <head>
+        @routes
         <meta charset="utf-8" />
         <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('light-bootstrap/img/apple-icon.png') }}">
         <link rel="icon" type="image/png" href="{{ asset('light-bootstrap/img/favicon.ico') }}">
@@ -37,7 +38,7 @@
                 @include('layouts.navbars.navbar')
                 <div class="container">
 
-                  @if($errors->any())
+                  @if(isset($errors) && $errors->any())
                   
                     <div class="alert alert-danger">
                         <button type="button" aria-hidden="true" class="close" data-dismiss="alert">
@@ -49,8 +50,9 @@
                             @endforeach
                     </div>
                   @endif
-                  
-                  @yield('content')
+                  <div id="app">
+                    @yield('content')
+                  </div>
                 </div>
                 @include('layouts.footer.nav')
             </div>
@@ -60,6 +62,7 @@
 
 
     </body>
+    @vite('resources/js/app.js')
         <!--   Core JS Files   -->
     <script src="{{ asset('light-bootstrap/js/core/jquery.3.2.1.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('light-bootstrap/js/core/popper.min.js') }}" type="text/javascript"></script>
