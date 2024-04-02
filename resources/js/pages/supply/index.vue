@@ -39,6 +39,7 @@
                     </tr>
                 </tbody>
             </table>
+            <PaginationVue />
         </div>
     </div>
 </template>
