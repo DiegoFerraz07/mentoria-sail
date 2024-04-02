@@ -56,7 +56,7 @@
 <script>
 import axios from 'axios';
 const alertSwal = window.alertSweet;
-import PaginationVue from '../../components/Pagination.Vue';
+import PaginationVue from '../../components/Pagination.vue';
 
 export default {
     components: {
