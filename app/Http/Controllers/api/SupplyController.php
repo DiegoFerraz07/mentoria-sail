@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Supply\SupplyAddFormRequest;
 use App\Http\Requests\Supply\SupplyDeleteFormRequest;
 use App\Http\Requests\Supply\SupplyEditFormRequest;
@@ -10,6 +11,8 @@ use App\Http\Requests\Supply\SupplyFormRequest;
 use App\Http\Requests\Supply\SupplyUpdateFormRequest;
 use App\Http\Resources\SupplyResource;
 use App\Models\Supply;
+use Illuminate\Database\Eloquent\Casts\Json;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class SupplyController extends Controller
 {
@@ -17,17 +20,24 @@ class SupplyController extends Controller
     public function index(SupplyRepository $supplyRepository)
     {
         $supplies = $supplyRepository->getAll();
-        return view('pages.fornecedores.index', compact('supplies'));
+        return JsonResource::collection($supplies);
     }
 
-    /**
-     * Open view to add a new Supply 
-     * 
-     * @return View
-     */
-    public function add()
+    public function find(SupplyFormRequest $request, SupplyRepository $supplyRepository)
     {
-        return view('pages.fornecedores.form');
+        $search = $request->search;
+        $supplies = $supplyRepository->find($search);
+        return JsonResource::collection($supplies);
+    }
+
+    public function delete(SupplyDeleteFormRequest $request, SupplyRepository $supplyRepository)
+    {
+        $deleted = $supplyRepository->delete($request->idForne);
+        // create collection with response
+        $collection = collect([
+            'success' => $deleted
+        ]);
+        return new JsonResource($collection);
     }
 
     /**
@@ -43,19 +53,6 @@ class SupplyController extends Controller
         $saveAndMessage = $supplyRepository->store($request);
         return new SupplyResource(['saveAndMessage' => $saveAndMessage]);
     }
-
-
-    /**
-     * Open view to edit a specific Supply 
-     * 
-     * @return View
-     */
-    public function edit(SupplyEditFormRequest $request, SupplyRepository $supplyRepository)
-    {
-        $supply = $supplyRepository->get($request->id);
-        return view('pages.fornecedores.form', compact('supply'));
-    }
-
 
     /**
      * Update a supply

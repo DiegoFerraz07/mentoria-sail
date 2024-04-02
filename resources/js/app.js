@@ -7,6 +7,7 @@
 import './bootstrap';
 import { createApp } from 'vue';
 import filters from './filters/filters';
+import { ZiggyVue } from 'ziggy-js';
 
 
 /**
@@ -20,12 +21,19 @@ const app = createApp({});
 app.config.globalProperties.$filters = filters;
 
 import ExampleComponent from './components/ExampleComponent.vue';
+import PaginationVue from './components/Pagination.Vue';
+
 import Brand from './pages/brand/index.vue';
 import Client from './pages/clientes/index.vue';
+import Supplies from './pages/supply/index.vue';
 
 app.component('brand', Brand);
 app.component('client', Client);
 app.component('example-component', ExampleComponent);
+app.component('supplies', Supplies);
+app.component('pagination-vue', PaginationVue);
+
+app.use(ZiggyVue, Ziggy);
 
 /**
  * The following block of code may be used to automatically register your

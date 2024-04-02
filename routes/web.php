@@ -37,9 +37,6 @@ Route::prefix('produtos')->middleware(['cors', 'auth'])->group(function () {
 
 Route::prefix('fornecedores')->middleware(['cors', 'auth'])->group(function() {
     Route::get('/', [SupplyController::class, 'index'])->name('supply.index');
-    Route::get('/find', [SupplyController::class, 'index']);
-    Route::post('/find', [SupplyController::class, 'find'])->name('supply.find');
-    Route::delete('/delete', [SupplyController::class, 'delete'])->name('supply.delete');
     Route::get('/add', [SupplyController::class, 'add'])->name('supply.add');
     Route::post('/store', [SupplyController::class, 'store'])->name('supply.store');
     Route::get('/edit/{id}', [SupplyController::class, 'edit'])->name('supply.edit');
