@@ -21,7 +21,7 @@ const app = createApp({});
 app.config.globalProperties.$filters = filters;
 
 import ExampleComponent from './components/ExampleComponent.vue';
-import PaginationVue from './components/Pagination.Vue';
+import PaginationVue from './components/Pagination.vue';
 
 import Brand from './pages/brand/index.vue';
 import Client from './pages/clientes/index.vue';
