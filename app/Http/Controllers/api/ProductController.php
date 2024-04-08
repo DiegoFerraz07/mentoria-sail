@@ -8,17 +8,12 @@ use App\Http\Requests\Product\ProductDeleteFormRequest;
 use App\Http\Requests\Product\ProductFormRequest;
 use App\Http\Requests\Product\ProductUpdateFormRequest;
 use App\Http\Resources\ProductResource;
-use App\Jobs\NewProductJob;
-use App\Mail\UserNewProduct;
-use App\Models\Product;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductTypesRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+
 
 use function Laravel\Prompts\select;
 
@@ -29,7 +24,6 @@ class ProductController extends Controller
         ProductRepository $productRepository
     ) {
         $products = $productRepository->getAll();
-        //$products = Product::with('types', 'brand')->get();
         return JsonResource::collection($products); 
     }
 

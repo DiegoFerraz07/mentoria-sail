@@ -32,15 +32,15 @@
 						<td>{{ product.nome }}</td>
 						<td>R$: {{ (product.valor) }}</td>
 						<td>
-							<span v-for="(type, key) in product.types" :key="key" class="badge badge-primary">{{type.name}}</span>
+							<span v-for="(type, key) in product.types" :key="key" class="badge badge-primary mr-1">{{type.name}}</span>
 						</td>
 
 						<td>
-							<span v-bind:types="type" class="badge badge-primary">{{ product.brand.name }}</span>
+							<span v-if="product.brand" class="badge badge-primary">{{ product.brand.name }}</span>
 						</td>
 
 						<td>
-							<a :href="route('product.edit', { id: product.id })" class="btn btn-light btn-sm">
+							<a :href="route('product.edit', { id: product.id })" class="btn btn-light btn-sm mr-1">
 								Editar
 							</a>
 							<button @click="confirmDeleteProduct(product.id, product.nome)"
@@ -138,6 +138,9 @@ export default {
 			if (this.search.length < 3 && this.search.length > 0) {
 				inputSearch.classList.add('is-invalid');
 				return false;
+			}
+			if (this.search.length == 0){
+				this.getAllProducts();
 			}
 
 			return true;
