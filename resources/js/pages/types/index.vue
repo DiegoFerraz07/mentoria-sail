@@ -1,50 +1,53 @@
 <template>
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Fornecedores</h1>
+        <h1 class="h2">Marcas</h1>
     </div>
     <div>
-        <input type="text" id="input-search" @keyup="handleInputSearch" required minlength="3" v-model="search" placeholder="Digite o nome" />
+        <input type="text" id="input-search" @keyup="handleInputSearch" required minlength="3" v-model="search"
+            placeholder="Digite o nome" />
         <button @click="find()"> pesquisar </button>
         <button v-if="search" @click="clearSearch" class="btn btn-danger btn-sm">
             Limpar Pesquisa
         </button>
-        <a type="button" :href="route('supply.add')" class="btn btn-success float-end">
+        <a type="button" :href="route('types.add')" class="btn btn-success float-end">
             Adicionar
         </a>
         <div class="table-responsive mt-4">
-            <p v-if="!supplies"> Não existe dados </p>
-            <table v-if="supplies" class="table table-striped table-sm">
+            <p v-if="!types"> Não existe dados </p>
+            <table v-if="types" class="table table-striped table-sm">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
-                        <th>cnpj</th>
+                        <th>Descrição</th>
+                        <th>Data de Criação</th>
+                        <th>Data de Edição</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(supply, key) in supplies " :key="key">
-                        <td>{{ supply.id }}</td>
-                        <td>{{ supply.name }}</td>
-                        <td>{{ supply.cnpj }}</td>
+                    <tr v-for="(type, key) in types" :key="key">
+                        <td>{{ type.id }}</td>
+                        <td>{{ type.name }}</td>
+                        <td>{{ type.description }}</td>
+                        <td>{{ format_date(type.created_at) }}</td>
+                        <td>{{ format_date(type.updated_at) }}</td>
                         <td>
-                            <a :href="route('supply.edit', { id: supply.id })" class="btn btn-light btn-sm">
+                            <button :href="route('types.edit', { id: type.id })" class="btn btn-light btn-sm">
                                 Editar
-                            </a>
-                            <button @click="confirmDeleteSupply(supply.id,  supply.name)" class="btn btn-danger btn-sm">
+                            </button>
+                            <button @click="confirmDeleteTypes(type.id, type.name)" class="btn btn-danger btn-sm">
                                 Excluir
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <PaginationVue />
         </div>
     </div>
 </template>
 <style scoped>
-
 .is-invalid {
     border-color: #dc3545;
     border-width: 2px;
@@ -52,30 +55,35 @@
 }
 </style>
 <script>
+import moment from 'moment';
 import axios from 'axios';
-const alertSwal = window.alertSweet;
 import PaginationVue from '../../components/Pagination.vue';
-
+const alertSwal = window.alertSweet;
 export default {
     components: {
         PaginationVue
     },
     data() {
         return {
-            supplies: [],
+            types: [],
             paginationData: null,
             search: '',
         }
     },
     created() {
-        this.getAllSupplies();
+        this.getAllTypes();
     },
     methods: {
-        getAllSupplies() {
-            axios.get(route('api.supply.index'))
+		format_date(value){
+         if (value) {
+           return moment(String(value)).format('DD/MM/YYYY')
+          }
+      	},
+        getAllTypes() {
+            axios.get(route('api.brand.index'))
                 .then(response => {
                     console.log(response)
-                    this.supplies = response.data.data
+                    this.types = response.data.data
                     this.paginationData = {
                         links: response.data.links,
                         meta: response.data.meta
@@ -84,37 +92,38 @@ export default {
                 .catch(error => {
                     console.log(error)
                 })
-
         },
-        confirmDeleteSupply(id, name) {
+        confirmDeleteTypes(id, name) {
+
             alertSwal(
-                `Deseja realmente excluir o fornecedor <b>"${name}"</b>?`,
+                `Deseja realmente excluir o tipo <b>"${name}"</b>?`,
                 'warning',
                 success => {
-                    this.deleteSupply(id);
+                    this.deleteType(id);
                 }
             );
         },
-        deleteSupply(id) {
-            axios.delete(route('api.supply.delete'), {
+
+        deleteType(id) {
+            axios.delete(route('api.types.delete'), {
                 data: {
-                    idForne: id,
+                    id,
                 }
-            })  .then(response => {
-                response = response.data;
+            })
+                .then(response => {
                     if (response.data.success) {
                         alertSweet(
-                            'Excluído com sucesso',
+                            'Excluido com sucesso',
                             'success',
                             success => {
-                                this.getAllSupplies();
+                                this.getAllTypes();
                             }
                         );
                     }
                 })
                 .catch(error => {
                     alertSweet(
-                        'Não foi possível excluir!!',
+                        'Não foi possivel excluir!!',
                         'error'
                     )
                 });
@@ -132,14 +141,14 @@ export default {
             return true;
         },
         find() {
-            
-            if(!this.handleInputSearch()) {
+
+            if (!this.handleInputSearch()) {
                 return;
             }
 
-            axios.post(route('api.supply.find'), {search: this.search})
+            axios.post(route('api.types.find'), { search: this.search })
                 .then(response => {
-                    this.supplies = response.data.data
+                    this.types = response.data.data
                     this.paginationData = {
                         links: response.data.links,
                         meta: response.data.meta
@@ -150,8 +159,8 @@ export default {
                 })
         },
         clearSearch() {
-            this.search = ''; 
-            this.getAllSupplies()
+            this.search = '';
+            this.getAllTypes()
         }
     }
 }

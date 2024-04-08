@@ -26,15 +26,18 @@ import PaginationVue from './components/Pagination.vue';
 import Brand from './pages/brand/index.vue';
 import Client from './pages/clientes/index.vue';
 import Supplies from './pages/supply/index.vue';
+import Product from './pages/product/index.vue';
+import Types from './pages/types/index.vue';
 
 app.component('brand', Brand);
-app.component('client', Client);
+app.component('types', Types);
 app.component('example-component', ExampleComponent);
+app.component('client', Client);
 app.component('supplies', Supplies);
+app.component('product', Product);
 app.component('pagination-vue', PaginationVue);
 
 app.use(ZiggyVue, Ziggy);
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

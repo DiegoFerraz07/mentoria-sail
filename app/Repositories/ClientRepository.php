@@ -8,15 +8,18 @@ use App\Interfaces\ClientRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Client;
 use Exception;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 class ClientRepository implements ClientRepositoryInterface
 {
 
-    public function getAll(): Collection
+    public function getAll(): LengthAwarePaginator
     {
         return Client::all()
-            ->sortByDesc('id');
+        ->sortByDesc('id')
+        ->toQuery()
+        ->paginate(10);
     }
 
     public function getAllAsArray(): array

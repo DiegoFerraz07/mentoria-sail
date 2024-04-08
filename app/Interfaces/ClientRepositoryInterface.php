@@ -6,10 +6,11 @@ use App\Http\Requests\Client\ClientAddFormRequest;
 use App\Http\Requests\Client\ClientUpdateFormRequest;
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ClientRepositoryInterface
 {
-    public function getAll(): Collection;
+    public function getAll(): LengthAwarePaginator;
     public function get(int $id): Client|null;
     public function find(string $search): Collection;
     public function delete(int $id): bool;

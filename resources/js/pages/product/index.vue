@@ -1,56 +1,56 @@
 <template>
 	<div
 		class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h1 class="h2">Cliente</h1>
+		<h1 class="h2">Produtos</h1>
 	</div>
 	<div>
 		<input type="text" id="input-search" @keyup="handleInputSearch" required minlength="3" v-model="search"
 			placeholder="Digite o nome" />
 		<button @click="find()"> pesquisar </button>
-		<button v-if="search" @click="clearSearch" class="btn btn-danger btn-sm">
+		<a v-if="search" @click="clearSearch" class="btn btn-danger btn-sm">
 			Limpar Pesquisa
-		</button>
-		<a type="button" :href="route('client.add')" class="btn btn-success float-end">
+		</a>
+		<a type="button" :href="route('product.add')" class="btn btn-success float-end">
 			Adicionar
 		</a>
 		<div class="table-responsive mt-4">
-			<p v-if="!customers"> Não existe dados </p>
-
-
-			<table v-if="customers" class="table table-striped table-sm">
+			<p v-if="!products"> Não existe dados </p>
+			<table v-if="products" class="table table-striped table-sm">
 				<thead>
 					<tr>
 						<th>ID</th>
 						<th>Nome</th>
-						<th>Email</th>
-						<th>CPF/CNPJ</th>
-						<th>Data</th>
-						<th>Endereço</th>
+						<th>Valor</th>
+						<th>Tipos</th>
+						<th>Marcas</th>
 						<th>Ações</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr v-for="(client, key) in customers " :key="key">
-						<td>{{ client.id }}</td>
-						<td>{{ client.name }}</td>
-						<td>{{ client.email }}</td>
-						<td v-if="client.cpf">{{ client.cpf }}</td>
-						<td v-else>{{ client.cnpj }}</td>
-						<!--td>{{ $client->date_formatted }}</td-->
-						<td>{{ format_date(client.date) }}</td>
-						<td>{{ client.address }}</td>
+				<tbody v-for="(product, key) in products " :key="key">
+					<tr>
+						<td>{{ product.id }}</td>
+						<td>{{ product.nome }}</td>
+						<td>R$: {{ (product.valor) }}</td>
 						<td>
-							<a :href="route('client.edit', { id: client.id })" class="btn btn-light btn-sm">
+							<span v-for="(type, key) in product.types" :key="key" class="badge badge-primary">{{type.name}}</span>
+						</td>
+
+						<td>
+							<span v-bind:types="type" class="badge badge-primary">{{ product.brand.name }}</span>
+						</td>
+
+						<td>
+							<a :href="route('product.edit', { id: product.id })" class="btn btn-light btn-sm">
 								Editar
 							</a>
-							<button @click="confirmDeleteClient(client.id, client.name)" class="btn btn-danger btn-sm">
+							<button @click="confirmDeleteProduct(product.id, product.nome)"
+								class="btn btn-danger btn-sm">
 								Excluir
 							</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<PaginationVue />
 		</div>
 	</div>
 </template>
@@ -62,35 +62,30 @@
 }
 </style>
 <script>
-import moment from 'moment';
 import axios from 'axios';
-import PaginationVue from '../../components/Pagination.vue';
 const alertSwal = window.alertSweet;
+import PaginationVue from '../../components/Pagination.vue';
+
 export default {
 	components: {
 		PaginationVue
 	},
 	data() {
 		return {
-			customers: [],
+			products: [],
 			paginationData: null,
 			search: '',
 		}
 	},
 	created() {
-		this.getAllCustomers();
+		this.getAllProducts();
 	},
 	methods: {
-		format_date(value){
-         if (value) {
-           return moment(String(value)).format('DD/MM/YYYY')
-          }
-      	},
-		getAllCustomers() {
-			axios.get(route('api.client.index'))
+		getAllProducts() {
+			axios.get(route('api.product.index'))
 				.then(response => {
 					console.log(response)
-					this.customers = response.data.data
+					this.products = response.data.data
 					this.paginationData = {
 						links: response.data.links,
 						meta: response.data.meta
@@ -99,37 +94,37 @@ export default {
 				.catch(error => {
 					console.log(error)
 				})
+
 		},
-		confirmDeleteClient(id, name) {
+		confirmDeleteProduct(id, nome) {
 			alertSwal(
-				`Deseja realmente excluir o Cliente <b>"${name}"</b>?`,
+				`Deseja realmente excluir o produto <b>"${nome}"</b>?`,
 				'warning',
 				success => {
-					this.deleteClient(id);
+					this.deleteProduct(id);
 				}
 			);
 		},
 
-		deleteClient(id) {
-			axios.delete(route('api.client.delete'), {
+		deleteProduct(id) {
+			axios.delete(route('api.product.delete'), {
 				data: {
-					id,
+					id: id,
 				}
 			})
 				.then(response => {
-					response = response.data
 					if (response.data.success) {
-						alertSwal(
+						alertSweet(
 							'Excluido com sucesso',
 							'success',
 							success => {
-								this.getAllCustomers();
+								this.getAllProducts();
 							}
 						);
 					}
 				})
 				.catch(error => {
-					alertSwal(
+					alertSweet(
 						'Não foi possivel excluir!!',
 						'error'
 					)
@@ -153,9 +148,9 @@ export default {
 				return;
 			}
 
-			axios.post(route('api.client.find'), { search: this.search })
+			axios.post(route('api.product.find'), { search: this.search })
 				.then(response => {
-					this.customers = response.data.data
+					this.products = response.data.data
 					this.paginationData = {
 						links: response.data.links,
 						meta: response.data.meta
@@ -167,9 +162,9 @@ export default {
 		},
 		clearSearch() {
 			this.search = '';
-			this.getAllCustomers()
+			this.getAllProducts()
 		}
 	}
-};
+}
 
 </script>

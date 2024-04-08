@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductAddFormRequest;
 use App\Http\Requests\Product\ProductDeleteFormRequest;
-use App\Http\Requests\Product\ProductEditFormRequest;
 use App\Http\Requests\Product\ProductFormRequest;
 use App\Http\Requests\Product\ProductUpdateFormRequest;
 use App\Http\Resources\ProductResource;
 use App\Jobs\NewProductJob;
 use App\Mail\UserNewProduct;
+use App\Models\Product;
 use App\Repositories\ClientRepository;
-use App\Repositories\BrandRepository;
-use App\Repositories\ProductBrandRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductTypesRepository;
-use App\Repositories\TypesRepository;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 use function Laravel\Prompts\select;
@@ -24,20 +25,19 @@ use function Laravel\Prompts\select;
 class ProductController extends Controller
 {
 
-    public function index(ProductRepository $productRepository,)
-    {
+    public function index(
+        ProductRepository $productRepository
+    ) {
         $products = $productRepository->getAll();
-        return view('pages.produtos.index', compact('products'));
+        //$products = Product::with('types', 'brand')->get();
+        return JsonResource::collection($products); 
     }
 
     public function find(ProductFormRequest $request, ProductRepository $productRepository)
     {
         $search = $request->search;
         $products = $productRepository->find($search);
-        return view(
-            'pages.produtos.index',
-            compact('products', 'search')
-        );
+        return JsonResource::collection($products);
     }
 
     /**
@@ -50,22 +50,11 @@ class ProductController extends Controller
     public function delete(ProductDeleteFormRequest $request, ProductRepository $productRepository)
     {
         $deleted = $productRepository->delete($request->id);
-        if ($deleted) {
-            return response()->json([
-                'success' => true
-            ]);
-        }
-        return response()->json([
-            "success" => false
+        // create collection with response
+        $collection = collect([
+            'success' => $deleted
         ]);
-    }
-
-    public function add(TypesRepository $typesRepository, BrandRepository $brandRepository)
-    {
-        $brands = $brandRepository->all();
-        $types = $typesRepository->all();
-        $productTypes = [];
-        return view('pages.produtos.form', compact('types', 'productTypes', 'brands'));
+        return new JsonResource($collection);
     }
 
     /**
@@ -112,25 +101,6 @@ class ProductController extends Controller
             );
             return new ProductResource(['saved' => $saved]);
         }
-    }
-
-    /**
-     * Open view to edit a specific Product
-     * 
-     * @return View
-     */
-    public function edit(
-        ProductEditFormRequest $request,
-        ProductRepository $productRepository,
-        TypesRepository $typesRepository,
-        ProductTypesRepository $productTypesRepository,
-        BrandRepository $brandRepository
-    ) {
-        $types = $typesRepository->all();
-        $brands = $brandRepository->all();
-        $product = $productRepository->get($request->id);
-        $productTypes = $productTypesRepository->getTypeIdByProductId($request->id);
-        return view('pages.produtos.form', compact('product', 'types', 'productTypes', 'brands'));
     }
 
     /**

@@ -23,7 +23,7 @@ class BrandRepository implements BrandRepositoryInterface
         return Brand::all()
             ->sortByDesc('id')
             ->toQuery()
-            ->paginate(20);
+            ->paginate(10);
     }
     /**
     *Get all brands no restricion to numbers

@@ -15,11 +15,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getAll(): Collection
     {
-        return Product::all()
-            ->sortByDesc('id');
+        return Product::orderBy('id', 'ASC')
+                ->with('types','brand')->get();
     }
 
-      /**
+    /**
      * get a specific product
      * @param int $id
      *
@@ -39,11 +39,11 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function find(string $search): Collection
     {
-        return Product::where(function($q) use ($search) {
+        return Product::where(function ($q) use ($search) {
             $q->where("nome", "LIKE", "%$search%")
                 ->orWhere("id", $search);
         })->limit(10)
-        ->get();
+            ->get();
     }
 
     /**
@@ -62,7 +62,7 @@ class ProductRepository implements ProductRepositoryInterface
             : false;
     }
 
-     /**
+    /**
      * Store a new Product
      * @param ProductAddFormRequest $request
      *
@@ -79,7 +79,7 @@ class ProductRepository implements ProductRepositoryInterface
                 'message' => '',
                 'id' => $product->id,
             );
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $message = 'Houve um erro';
             /*if($e->getMessage() && str_contains($e->getMessage(), 'cliente_cpf_unique')) {
                 $message = 'Já existe um cliente com esse CPF';
@@ -92,7 +92,7 @@ class ProductRepository implements ProductRepositoryInterface
         }
     }
 
-     /**
+    /**
      * Update a product
      * @param ProductUpdateFormRequest $request
      * 
@@ -109,12 +109,9 @@ class ProductRepository implements ProductRepositoryInterface
                 'message' => '',
                 'id' => $product->id
             );
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             return false;
         }
     }
-
-
-
 }
