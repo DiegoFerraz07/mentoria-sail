@@ -37,7 +37,7 @@
 						<td v-if="client.cpf">{{ client.cpf }}</td>
 						<td v-else>{{ client.cnpj }}</td>
 						<!--td>{{ $client->date_formatted }}</td-->
-						<td>{{ format_date(client.date) }}</td>
+						<td>{{ $filters.formatDate(client.date, 'MM/DD/YYYY') }}</td>
 						<td>{{ client.address }}</td>
 						<td>
 							<a :href="route('client.edit', { id: client.id })" class="btn btn-light btn-sm">
@@ -62,7 +62,6 @@
 }
 </style>
 <script>
-import moment from 'moment';
 import axios from 'axios';
 import PaginationVue from '../../components/Pagination.vue';
 const alertSwal = window.alertSweet;
@@ -81,11 +80,6 @@ export default {
 		this.getAllCustomers();
 	},
 	methods: {
-		format_date(value){
-         if (value) {
-           return moment(String(value)).format('DD/MM/YYYY')
-          }
-      	},
 		getAllCustomers() {
 			axios.get(route('api.client.index'))
 				.then(response => {
@@ -139,7 +133,6 @@ export default {
 			const inputSearch = document.getElementById('input-search');
 			inputSearch.classList.remove('is-invalid');
 
-			console.log(this.search)
 			if (this.search.length < 3 && this.search.length > 0) {
 				inputSearch.classList.add('is-invalid');
 				return false;

@@ -1,11 +1,11 @@
 import moment from 'moment';
 
 export default {
-    formatDate(value) {
+    formatDate(value, mask = 'MM/DD/YYYY hh:mm') {
         if (value) {
-            return moment(String(value)).format('MM/DD/YYYY hh:mm')
+            return moment(String(value)).format(mask)
         } else {
-            return moment().format('MM/DD/YYYY hh:mm')
+            return moment().format(mask)
         }
     }, 
 

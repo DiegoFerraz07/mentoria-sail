@@ -39,7 +39,9 @@
                     </tr>
                 </tbody>
             </table>
-            <PaginationVue />
+            <PaginationVue v-if="paginationData" 
+                :pagination-data="paginationData"
+                @go-page="(url) => getAllSupplies(url)" />
         </div>
     </div>
 </template>
@@ -55,6 +57,7 @@
 import axios from 'axios';
 const alertSwal = window.alertSweet;
 import PaginationVue from '../../components/Pagination.vue';
+import { route } from 'ziggy-js';
 
 export default {
     components: {
@@ -71,8 +74,14 @@ export default {
         this.getAllSupplies();
     },
     methods: {
-        getAllSupplies() {
-            axios.get(route('api.supply.index'))
+        getAllSupplies(goPage = '') {
+            let url = route('api.supply.index');
+            if(goPage) {
+                url = goPage;
+            }
+
+            this.paginationData = null;
+            axios.get(url)
                 .then(response => {
                     console.log(response)
                     this.supplies = response.data.data

@@ -17,21 +17,20 @@ import { ZiggyVue } from 'ziggy-js';
  */
 
 const app = createApp({});
-
 app.config.globalProperties.$filters = filters;
 
-import ExampleComponent from './components/ExampleComponent.vue';
 import PaginationVue from './components/Pagination.vue';
 
 import Brand from './pages/brand/index.vue';
+import FormBrand from './pages/brand/form.vue';
 import Client from './pages/clientes/index.vue';
 import Supplies from './pages/supply/index.vue';
 import Product from './pages/product/index.vue';
 import Types from './pages/types/index.vue';
 
 app.component('brand', Brand);
+app.component('form-brand', FormBrand);
 app.component('types', Types);
-app.component('example-component', ExampleComponent);
 app.component('client', Client);
 app.component('supplies', Supplies);
 app.component('product', Product);
