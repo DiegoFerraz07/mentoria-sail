@@ -31,9 +31,9 @@ export default{
 	data() {
         return {
             brand: {
-				id: '',
-				name: '',
-				description: '',
+				id: this.brandProp.id,
+				name: this.brandProp.name,
+				description: this.brandProp.description,
 			},
 			routeIndex: route('brand.index'),
 			routeSave: route('api.brand.store'),

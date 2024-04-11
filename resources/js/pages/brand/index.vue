@@ -34,9 +34,9 @@
                         <td>{{ format_date(brand.created_at) }}</td>
                         <td>{{ format_date(brand.updated_at) }}</td>
                         <td>
-                            <button :href="route('brand.edit', { id: brand.id })" class="btn btn-light btn-sm">
-                                Editar
-                            </button>
+                            <a :href="route('brand.edit', { id: brand.id })" class="btn btn-light btn-sm">
+								Editar
+							</a>
                             <button @click="confirmDeleteBrand(brand.id, brand.name)" class="btn btn-danger btn-sm">
                                 Excluir
                             </button>

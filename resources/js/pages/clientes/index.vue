@@ -50,7 +50,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<PaginationVue />
 		</div>
 	</div>
 </template>
@@ -72,7 +71,7 @@ export default {
 	data() {
 		return {
 			customers: [],
-			paginationData: null,
+			//paginationData: null,
 			search: '',
 		}
 	},
@@ -85,10 +84,10 @@ export default {
 				.then(response => {
 					console.log(response)
 					this.customers = response.data.data
-					this.paginationData = {
+					/*this.paginationData = {
 						links: response.data.links,
 						meta: response.data.meta
-					}
+					}*/
 				})
 				.catch(error => {
 					console.log(error)
@@ -149,10 +148,10 @@ export default {
 			axios.post(route('api.client.find'), { search: this.search })
 				.then(response => {
 					this.customers = response.data.data
-					this.paginationData = {
+					/*this.paginationData = {
 						links: response.data.links,
 						meta: response.data.meta
-					}
+					}*/
 				})
 				.catch(error => {
 					console.log(error)
