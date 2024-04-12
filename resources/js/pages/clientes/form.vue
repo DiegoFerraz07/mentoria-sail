@@ -13,48 +13,30 @@
 		<label for="cpf">CPF/CNPJ</label>
 		<input type="hidden" id="isLegalAge" name="is_legal_age"
 			v-model="client.is_legal_age">
-		<input v-if="client.cpf" 
-				type="text"
-				class="form-control document"
-				name="document"
-				id="document"
-				maxlength="14"
-				v-model="client.cpf"
-				v-mask="['###.###.###-##']"
-				placeholder="CPF/CNPJ"
-				required>
-			<input v-else-if="client.cnpj" 
-				v-model="client.cnpj"
-				type="text"
-				class="form-control document"
-				name="document"
-				id="document"
-				maxlength="18"
-				v-mask="['##.###.###/####-##']"
-				placeholder="CPF/CNPJ"
-				required>
-				<input v-else 
-				:v-model="client.cpf || client.cnpj"
-				type="text"
-				class="form-control document"
-				name="document"
-				id="document"
-				maxlength="18"
-				v-mask="['###.###.###-##','##.###.###/####-##']"
-				placeholder="CPF/CNPJ"
-				required>
+		<input
+			:v-model="client.cpf || client.cnpj"
+			type="text"
+			class="form-control document"
+			name="document"
+			id="document"
+			@keyup="changeDocument($event.target.value)"
+			v-mask="['###.###.###-##','##.###.###/####-##']"
+			placeholder="CPF/CNPJ"
+			required>
 		<div id="document-error" class="error"></div>
 	</div>
-	<div class="form-group">
-		<label for="date">Data Nascimento</label>
+	<div v-if="isClientCpf()" class="form-group">
+		<label for="date">{{ getLabelBirth }}</label>
 			<VueDatePicker
-				:readonly="getClientCpf()"
+				:readonly="!isClientCpf()"
 				v-model="client.date"
-			 	:max-date="maxDate"
+			 	:max-date="isClientCpf() ? maxDate : null"
 			 	prevent-min-max-navigation
 				:enable-time-picker="false"
 				locale="pt-BR"
 				format="dd/MM/yyyy"
+				@date-update="updateDate"
+				@select-date="updateDate"
 			/>
 			<div id="data-error" class="error"></div>
 	</div>
@@ -69,6 +51,7 @@ import { route } from 'ziggy-js';
 import { mask } from 'vue-the-mask';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import moment from 'moment';
 
 export default {
 	props:['clientProp'],
@@ -79,40 +62,74 @@ export default {
 	data() {
 		return {
 			client: {
-				id: this.clientProp.id,
-				name: this.clientProp.name,
-				email: this.clientProp.email,
-				cpf: this.clientProp.cpf,
-				cnpj: this.clientProp.cnpj,
-				date: this.clientProp.date,
-				address: this.clientProp.address
-
+				id: this.clientProp.id || '',
+				name: this.clientProp.name || '',
+				email: this.clientProp.email || '',
+				cpf: this.clientProp.cpf || '',
+				cnpj: this.clientProp.cnpj || '',
+				date: this.clientProp.date || moment().subtract(18, 'years').format('YYYY-MM-DD'),
+				address: this.clientProp.address || '',
+				document: 0
 			},
 			routeIndex: route('client.index'),
 			routeSave: route('api.client.store'),
 			routeUpdate: route('api.client.update'),
-			maxDate: Date.now(),
+			maxDate: moment().subtract(18, 'years').format('YYYY-MM-DD'),
 		}
 	},
 	created(){
 		console.log(this.clientProp, route('api.client.store'));
-		this.getClientCpf();
+	},
+	computed: {
+		getLabelBirth() {
+			const isClient = this.client 
+				&& this.client.cpf 
+				&& this.client.cpf.length > 0 
+				&& this.client.cpf.length < 14 ? true : false;
+			const isCompany = this.client 
+				&& this.client.cnpj 
+				&& this.client.cnpj.length > 14 
+				&& this.client.cnpj.length <= 18 ? true : false;
+			if(isClient)
+				return 'Data de Nascimento';
+			if(isCompany)
+				return 'Data de Abertura da Empresa';
+			return 'Data de Nascimento';
+		}
 	},
 	methods: {
-		getClientCpf(){
-			return this.client.cnpj ? true : false
+		isClientCpf(){
+			return this.client.cpf ? true : false
+		},
+		changeDocument(document) {
+			console.log(this.client);
+			if (document.length > 0 && document.length <= 14) {
+				this.client.cnpj = '';
+				this.client.cpf = document;
+			} else {
+				this.client.cpf = '';
+				this.client.date = moment().format('YYYY-MM-DD');
+				this.client.cnpj = document;
+			}
+
+		},
+		updateDate(date) {
+			this.client.date = moment(date)
+				
+				.format('YYYY-MM-DD');
 		},
 		save() {
-			console.log('save');
 			let route = this.routeSave;
 			let messageSuccess = "Adicionado com sucesso";
-
 
 			if(this.client.id) {
 				route = this.routeUpdate;
 				messageSuccess = "Alterado com sucesso";
 			}
 
+			this.client.date = moment(this.client.date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+			console.log(this.client);
+			return; 
 			axios.post(
 				route,
 				this.client

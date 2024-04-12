@@ -18,6 +18,7 @@
         <!-- CSS Just for demo purpose, don't include it in your project -->
         <link href="{{ asset('light-bootstrap/css/demo.css') }}" rel="stylesheet" />
         <link href="{{ asset('light-bootstrap/css/custom.css') }}" rel="stylesheet" />
+        @notifyCss
     </head>
     <style>
       button.close {
@@ -60,7 +61,8 @@
         </div>
        
 
-
+      <x-notify::notify />
+      @notifyJs
     </body>
     @vite('resources/js/app.js')
         <!--   Core JS Files   -->

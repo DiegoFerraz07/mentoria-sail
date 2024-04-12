@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav mr-auto">
                 <li class="dropdown nav-item">
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <i class="nc-icon nc-planet"></i>
+                        <i class="nc-icon nc-bell-55"></i>
                         <span class="notification">5</span>
                         <span class="d-lg-none">{{ __('Notification') }}</span>
                     </a>

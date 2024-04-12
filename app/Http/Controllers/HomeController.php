@@ -23,6 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        notify()->success('teste', 'teste');
         return view('dashboard');
     }
 }
