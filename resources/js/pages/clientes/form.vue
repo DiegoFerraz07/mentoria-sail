@@ -14,16 +14,25 @@
 		<input type="hidden" id="isLegalAge" name="is_legal_age"
 			v-model="client.is_legal_age">
 		<input
-			:v-model="client.cpf || client.cnpj"
+			:value="client.cpf || client.cnpj"
 			type="text"
 			class="form-control document"
 			name="document"
 			id="document"
-			@keyup="changeDocument($event.target.value)"
+			minlength="14"
+			@keyup="validateDocument($event.target.value)"
 			v-mask="['###.###.###-##','##.###.###/####-##']"
 			placeholder="CPF/CNPJ"
 			required>
 		<div id="document-error" class="error"></div>
+	</div>
+	<div class="form-group">
+		<label for="name">Cep</label>
+		<input type="text" class="form-control" v-model="this.addressParts.cep" required
+			placeholder="Cep"><br/>
+			<label for="name">Rua</label>
+		<input type="text" class="form-control" v-model="this.addressParts.rua" required
+			placeholder="Rua">
 	</div>
 	<div v-if="isClientCpf()" class="form-group">
 		<label for="date">{{ getLabelBirth }}</label>
@@ -34,16 +43,17 @@
 			 	prevent-min-max-navigation
 				:enable-time-picker="false"
 				locale="pt-BR"
+				:format-locale="formatLocale"
 				format="dd/MM/yyyy"
 				@date-update="updateDate"
 				@select-date="updateDate"
 			/>
 			<div id="data-error" class="error"></div>
-	</div>
+	</div >
+
 
 	<button @click="save" class="btn btn-success mt-2">Salvar</button>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -52,6 +62,9 @@ import { mask } from 'vue-the-mask';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment';
+import { ptBR } from 'date-fns/locale';
+import validityCPF from '@/utils/cpf-verify.js';
+import validityCNPJ from '@/utils/cnpj-verify.js';
 
 export default {
 	props:['clientProp'],
@@ -71,16 +84,31 @@ export default {
 				address: this.clientProp.address || '',
 				document: 0
 			},
+			
 			routeIndex: route('client.index'),
 			routeSave: route('api.client.store'),
 			routeUpdate: route('api.client.update'),
 			maxDate: moment().subtract(18, 'years').format('YYYY-MM-DD'),
+			formatLocale: ptBR,
+			erroMessage: '',
+
 		}
 	},
 	created(){
 		console.log(this.clientProp, route('api.client.store'));
 	},
 	computed: {
+		addressParts(){
+			let address = this.client.address.replace('\\', ',' ).replace(/"/g, ' ').split(',').map(address => address.trim());
+			console.log(address);
+			return {
+				cep : address[0],
+				rua : address[1],
+				numero : address[2],
+				cidade : address[3],
+				estado : address[4],
+			}
+		},
 		getLabelBirth() {
 			const isClient = this.client 
 				&& this.client.cpf 
@@ -95,9 +123,38 @@ export default {
 			if(isCompany)
 				return 'Data de Abertura da Empresa';
 			return 'Data de Nascimento';
-		}
+		},
+	
 	},
 	methods: {
+		setMessageErrorCPF(message = '') {
+			$('#document-error')[0].innerHTML = message;
+            },
+		validateDocument(document) {
+            // pegar o valor do input cpf
+			console.log(document)
+            // Limpar a div
+            this.setMessageErrorCPF();
+            // verifica o tamanho do cpf
+            	if(document.length == 14) {
+                    if(!validityCPF(document)) {
+                        this.setMessageErrorCPF("<p class='text-danger'>CPF inválido</p>");
+                        return false;
+                    } else {
+                        this.setMessageErrorCPF("<p class='text-success'>CPF válido</p>")
+                        return true;
+                    }
+                }else if(document.length == 18) {
+                    if(!validityCNPJ(document)) {
+                        this.setMessageErrorCPF("<p class='text-danger'>CNPJ inválido</p>");
+                        return false;
+                    } else {
+                        this.setMessageErrorCPF("<p class='text-success'>CNPJ válido</p>")
+                        return true;
+                    }
+                }
+            	return false
+            },
 		isClientCpf(){
 			return this.client.cpf ? true : false
 		},
@@ -106,6 +163,7 @@ export default {
 			if (document.length > 0 && document.length <= 14) {
 				this.client.cnpj = '';
 				this.client.cpf = document;
+				console.log(this.client.cpf);
 			} else {
 				this.client.cpf = '';
 				this.client.date = moment().format('YYYY-MM-DD');
@@ -113,12 +171,14 @@ export default {
 			}
 
 		},
+
 		updateDate(date) {
 			this.client.date = moment(date)
 				
 				.format('YYYY-MM-DD');
 		},
 		save() {
+			this.client.address = this.addressParts.cep+','+ this.addressParts.rua+','+ this.addressParts.numero+','+ this.addressParts.cidade;
 			let route = this.routeSave;
 			let messageSuccess = "Adicionado com sucesso";
 
@@ -126,7 +186,7 @@ export default {
 				route = this.routeUpdate;
 				messageSuccess = "Alterado com sucesso";
 			}
-
+			
 			this.client.date = moment(this.client.date, 'YYYY-MM-DD').format('DD/MM/YYYY');
 			console.log(this.client);
 			return; 

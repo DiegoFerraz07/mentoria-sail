@@ -33,4 +33,4 @@ const validityCPF = (cpf) => {
     return true
 }
 
-window.scriptValidityCPF = validityCPF;
+export default validityCPF;
