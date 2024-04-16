@@ -25,7 +25,7 @@ class IsLegalAgeRule implements ValidationRule
     {
         $age = Carbon::parse($this->date)->age;
         if($this->isCPF && $age < Client::LEGAL_AGE ){
-            $fail('Idade não permitidade');
+            $fail('Idade não permitida');
         }
     }
 }

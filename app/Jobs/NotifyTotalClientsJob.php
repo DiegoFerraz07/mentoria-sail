@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\AlertTotalClienteEvent;
 use App\Models\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,6 +31,6 @@ class NotifyTotalClientsJob implements ShouldQueue
         $totalClients = Client::count();
         // show in horizon
         echo $totalClients;
-        notify()->success("Total de clientes: $totalClients", 'Total de clientes');
+        AlertTotalClienteEvent::dispatch($totalClients);
     }
 }

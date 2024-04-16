@@ -40,7 +40,8 @@ class ClientAddFormRequest extends FormRequest
             'email'=> 'required|email|unique:cliente,email',
             'cpf'=> $ruleCPF,
             'cnpj'=> $ruleCNPJ,
-            'date'=> $ruleDate
+            'date'=> $ruleDate,
+            'address' => 'required|array',
         ];
     }
 
@@ -60,6 +61,8 @@ class ClientAddFormRequest extends FormRequest
             'cnpj.unique' => "Este CNPJ já está cadastrado",
             'date.required' => "É obrigatório enviar uma data",
             'date.date' => "É obrigatório que a data seja válida",
+            'address.required' => "É obrigatório enviar um endereço",
+            'address.array' => "É obrigatório que o endereço seja um array",
         ];
     }
 

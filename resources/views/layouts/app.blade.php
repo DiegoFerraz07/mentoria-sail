@@ -58,11 +58,9 @@
                 @include('layouts.footer.nav')
             </div>
 
+            <x-notify::notify />
+            @notifyJs
         </div>
-       
-
-      <x-notify::notify />
-      @notifyJs
     </body>
     @vite('resources/js/app.js')
         <!--   Core JS Files   -->

@@ -38,7 +38,7 @@
 						<td v-else>{{ client.cnpj }}</td>
 						<!--td>{{ $client->date_formatted }}</td-->
 						<td>{{ $filters.formatDate(client.date, 'MM/DD/YYYY') }}</td>
-						<td>{{ client.address }}</td>
+						<td>{{ getFullAddress(client.address) }}</td>
 						<td>
 							<a :href="route('client.edit', { id: client.id })" class="btn btn-light btn-sm">
 								Editar
@@ -160,6 +160,10 @@ export default {
 		clearSearch() {
 			this.search = '';
 			this.getAllCustomers()
+		},
+		getFullAddress(address) {
+			address = JSON.parse(address);
+			return `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.state}`;
 		}
 	}
 };

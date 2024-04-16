@@ -24,6 +24,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('try-websocket', function () {
+    event(new \App\Events\AlertTotalClienteEvent());
+    return 'ok';
+});
+
 Route::prefix('produtos')->middleware(['cors', 'auth'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.index');
     Route::get('/find', [ProductController::class, 'index']);

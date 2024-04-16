@@ -21,6 +21,7 @@ class Client extends Model
         'cpf',
         'cnpj',
         'date',
+        'address'
     ];
 
     protected $appends = ['date_formatted', 'is_legal_age'];
@@ -47,6 +48,7 @@ class Client extends Model
         $this->email = $request->email;
         $this->cnpj = $request->cnpj;
         $this->date = $request->date;
+        $this->address = json_encode($request->address);
         return $this;
     }
 

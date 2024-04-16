@@ -60,7 +60,8 @@ class ClientUpdateFormRequest extends FormRequest
             ],
             'cpf'=> $ruleCPF,
             'cnpj'=> $ruleCNPJ,
-            'date'=> $ruleDate
+            'date'=> $ruleDate,
+            'address' => 'required|array:street,number,complement,neighborhood,city,state,zipcode',
         ];
     }
 
@@ -82,6 +83,15 @@ class ClientUpdateFormRequest extends FormRequest
             'cnpj.unique' => "Este CNPJ já está cadastrado",
             'date.required' => "É obrigatório enviar uma data",
             'date.date' => "É obrigatório que a data seja válida",
+            'address.required' => "É obrigatório enviar um endereço",
+            'address.array' => "É obrigatório que o endereço seja um array",
+            'address.street' => 'É obrigatório enviar a rua',
+            'address.number' => 'É obrigatório enviar o número',
+            'address.complement' => 'É obrigatório enviar o complemento',
+            'address.neighborhood' => 'É obrigatório enviar o bairro',
+            'address.city' => 'É obrigatório enviar a cidade',
+            'address.state' => 'É obrigatório enviar o estado',
+            'address.zipcode' => 'É obrigatório enviar o CEP',
         ];
     }
 
@@ -95,13 +105,13 @@ class ClientUpdateFormRequest extends FormRequest
 
         if ($this->isCNPJ) {
             $this->merge([
-                'cnpj' => $this->document,
+                'cnpj' => $this->cnpj,
                 'cpf' => ''
             ]);
         } else {
             $this->merge([
                 'cnpj' => '',
-                'cpf' => $this->document
+                'cpf' => $this->cpf
             ]);
         }
     }

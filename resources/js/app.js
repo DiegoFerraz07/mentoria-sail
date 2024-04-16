@@ -28,6 +28,7 @@ import FormClient from './pages/clientes/form.vue';
 import Supplies from './pages/supply/index.vue';
 import Product from './pages/product/index.vue';
 import Types from './pages/types/index.vue';
+import NavNotification from './components/NavNotification.vue';
 
 app.component('brand', Brand);
 app.component('form-brand', FormBrand);
@@ -37,6 +38,7 @@ app.component('form-client', FormClient);
 app.component('supplies', Supplies);
 app.component('product', Product);
 app.component('pagination-vue', PaginationVue);
+app.component('nav-notification', NavNotification);
 
 app.use(ZiggyVue, Ziggy);
 /**

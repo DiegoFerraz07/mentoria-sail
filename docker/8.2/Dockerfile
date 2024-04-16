@@ -48,6 +48,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN npm install -g laravel-echo-server
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.2
 
 
@@ -59,6 +60,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 COPY php.ini /etc/php/8.2/cli/conf.d/99-sail.ini
+COPY laravel-echo.conf /etc/supervisor/conf.d/laravel-echo.conf
 RUN chmod +x /usr/local/bin/start-container
 
 EXPOSE 8000

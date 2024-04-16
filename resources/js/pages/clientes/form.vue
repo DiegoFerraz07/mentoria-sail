@@ -1,18 +1,24 @@
 <template>
-	<input type="hidden" id="client-id" v-model="client.id">
-	<div class="form-group">
-		<label for="name">Nome</label>
-		<input type="text" class="form-control" name="name" id="name" v-model="client.name" required placeholder="Nome">
-	</div>
-	<div class="form-group">
-		<label for="name">E-mail</label>
-		<input type="text" class="form-control" name="email" id="email" v-model="client.email" required
-			placeholder="E-mail">
+	<div class="row">
+		<div class="col-md-6 col-lg-6">
+			<input type="hidden" id="client-id" v-model="client.id">
+			<div class="form-group">
+				<label for="name">Nome</label>
+				<input type="text" class="form-control" name="name" id="name" v-model="client.name" required placeholder="Nome">
+			</div>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<div class="form-group">
+				<label for="name">E-mail</label>
+				<input type="text" class="form-control" name="email" id="email" v-model="client.email" required
+					placeholder="E-mail">
+			</div>
+		</div>
 	</div>
 	<div class="form-group">
 		<label for="cpf">CPF/CNPJ</label>
 		<input type="hidden" id="isLegalAge" name="is_legal_age"
-			v-model="client.is_legal_age">
+			v-model="this.client.is_legal_age">
 		<input
 			:value="client.cpf || client.cnpj"
 			type="text"
@@ -26,13 +32,32 @@
 			required>
 		<div id="document-error" class="error"></div>
 	</div>
-	<div class="form-group">
-		<label for="name">Cep</label>
-		<input type="text" class="form-control" v-model="this.addressParts.cep" required
-			placeholder="Cep"><br/>
-			<label for="name">Rua</label>
-		<input type="text" class="form-control" v-model="this.addressParts.rua" required
-			placeholder="Rua">
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="form-group">
+				<label for="name">Cep</label>
+				<input type="text" 
+					class="form-control" 
+					:key="count"
+					v-mask="'#####-###'" 
+					@keyup="getCep"
+					v-model="this.client.address.zipcode"
+					required
+					placeholder="Cep">
+			</div>
+		</div>
+		<div class="col-sm-9">
+			<div class="form-group">
+				<label for="name">Rua</label>
+				<input type="text" class="form-control" v-model="this.client.address.street" required
+					placeholder="Rua">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			
+		</div>
 	</div>
 	<div v-if="isClientCpf()" class="form-group">
 		<label for="date">{{ getLabelBirth }}</label>
@@ -74,6 +99,7 @@ export default {
 	},
 	data() {
 		return {
+			count: 0,
 			client: {
 				id: this.clientProp.id || '',
 				name: this.clientProp.name || '',
@@ -81,10 +107,10 @@ export default {
 				cpf: this.clientProp.cpf || '',
 				cnpj: this.clientProp.cnpj || '',
 				date: this.clientProp.date || moment().subtract(18, 'years').format('YYYY-MM-DD'),
-				address: this.clientProp.address || '',
+				is_legal_age: this.clientProp.is_legal_age || 0,
+				address: JSON.parse(this.clientProp.address) || {},
 				document: 0
 			},
-			
 			routeIndex: route('client.index'),
 			routeSave: route('api.client.store'),
 			routeUpdate: route('api.client.update'),
@@ -94,21 +120,14 @@ export default {
 
 		}
 	},
-	created(){
+	mounted(){
+		if(this.clientProp.address) {
+			this.client.address = JSON.parse(this.clientProp.address);
+			this.count++;
+		}
 		console.log(this.clientProp, route('api.client.store'));
 	},
 	computed: {
-		addressParts(){
-			let address = this.client.address.replace('\\', ',' ).replace(/"/g, ' ').split(',').map(address => address.trim());
-			console.log(address);
-			return {
-				cep : address[0],
-				rua : address[1],
-				numero : address[2],
-				cidade : address[3],
-				estado : address[4],
-			}
-		},
 		getLabelBirth() {
 			const isClient = this.client 
 				&& this.client.cpf 
@@ -123,13 +142,12 @@ export default {
 			if(isCompany)
 				return 'Data de Abertura da Empresa';
 			return 'Data de Nascimento';
-		},
-	
+		}
 	},
 	methods: {
 		setMessageErrorCPF(message = '') {
 			$('#document-error')[0].innerHTML = message;
-            },
+        },
 		validateDocument(document) {
             // pegar o valor do input cpf
 			console.log(document)
@@ -154,7 +172,7 @@ export default {
                     }
                 }
             	return false
-            },
+        },
 		isClientCpf(){
 			return this.client.cpf ? true : false
 		},
@@ -171,14 +189,11 @@ export default {
 			}
 
 		},
-
 		updateDate(date) {
 			this.client.date = moment(date)
-				
 				.format('YYYY-MM-DD');
 		},
 		save() {
-			this.client.address = this.addressParts.cep+','+ this.addressParts.rua+','+ this.addressParts.numero+','+ this.addressParts.cidade;
 			let route = this.routeSave;
 			let messageSuccess = "Adicionado com sucesso";
 
@@ -188,12 +203,11 @@ export default {
 			}
 			
 			this.client.date = moment(this.client.date, 'YYYY-MM-DD').format('DD/MM/YYYY');
-			console.log(this.client);
-			return; 
-			axios.post(
-				route,
-				this.client
-			).then(response => {
+			axios({
+				method: this.client.id ? 'put' : 'post',
+				url: route,
+				data: this.client
+			}).then(response => {
 				let apiResponse = response.data;
 				if (apiResponse.data) {
 					apiResponse = apiResponse.data;
@@ -227,6 +241,13 @@ export default {
 				)
 			});
 
+		},
+		getCep() {
+			let cep = this.client.address.zipcode;
+			if(cep.length < 9) {
+				return;
+			}
+			
 		}
 	}
 }
