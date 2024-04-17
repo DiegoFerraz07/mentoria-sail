@@ -1,60 +1,10 @@
 @extends('layouts.app', ['activePage' => 'dashboard', 'title' => 'Light Bootstrap Dashboard Laravel by Creative Tim & UPDIVISION', 'navName' => 'Dashboard', 'activeButton' => 'laravel'])
 
 @section('content')
-    <form>
-        @csrf
-        <input type="hidden" id="product-id" value="{{ isset($product) ? $product->id : '' }}">
-        <div class="form-group">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" name="nome" id="nome"
-                value="{{ isset($product) ? $product->nome : '' }}" required placeholder="Nome">
-        </div>
-        <div class="form-group">
-            <label for="valor">Valor</label>
-            <input type="text" class="form-control valor" name="valor" id="valor"
-                value="{{ isset($product) ? $product->valor : '' }}" required placeholder="Valor">
-            <div id="valor-error" class="error"></div>
-        </div>
-        <div class="form-group">
-            <label for="valor">Tipos</label>
-            <select id="types" name="types[]" multiple="multiple" class="form-control" >
-                @empty($types)
-                    <option value="">Nenhum tipo cadastrado</option>
-                @else
-                    <option value="" readonly disabled >Selecione um tipo</option>
-                @endempty
-
-                @foreach ($types as $type)
-                    @if($productTypes && in_array($type->id, $productTypes))
-                        <option value="{{ $type->id }}" selected>{{ $type->name }}</option>
-                    @else
-                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                    @endif
-                @endforeach
-            </select>
-            <div id="valor-error" class="error"></div>
-        </div>
-        <div class="form-group">
-            <label for="valor">Marcas</label>
-            <select id="brandId" name="brandId"  class="form-control" >
-                @empty($brands)
-                    <option value="">Nenhuma marca cadastrada</option>
-                @else
-                    <option value="" readonly disabled selected>Selecione uma marca</option>
-                @endempty
-
-                @foreach ($brands as $brand)
-                    @if(isset($product->brand_id) && $brand->id == $product->brand_id)
-                        <option value="{{ $brand->id }}" selected>{{ $brand->name }}</option>
-                    @else
-                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                    @endif
-                @endforeach
-            </select>
-            <div id="valor-error" class="error"></div>
-        </div>
-        <button type="submit" class="btn btn-success mt-2">Salvar</button>
-    </form>
+    <form-product 
+        :products-prop="{{ isset($products) ? json_encode($products) : json_encode([]) }}" 
+        :product-types-prop="{{ isset($productTypes) ? json_encode($productTypes) : json_encode([]) }}" 
+    />
 @endsection
 
 @section('scripts')

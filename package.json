@@ -18,8 +18,7 @@
         "vue": "^3.4.21"
     },
     "dependencies": {
-        "@syncfusion/ej2-vue-calendars": "^25.1.39",
-        "@vuepic/vue-datepicker": "^8.4.0",
+        "@syncfusion/ej2-vue-calendars": "^25.1.40",
         "install": "^0.13.0",
         "jquery-mask-plugin": "^1.14.16",
         "laravel-echo-server": "^1.6.3",
@@ -30,7 +29,8 @@
         "vue-loader": "^17.3.1",
         "vue-the-mask": "^0.11.1",
         "vue3-datepicker": "^0.4.0",
-        "vue3-daterange-picker": "^1.0.1",
+        "vue3-select2-component": "^0.1.7",
+        "vuejs3-datepicker": "^1.1.2",
         "ziggy-js": "^2.1.0"
     }
 }

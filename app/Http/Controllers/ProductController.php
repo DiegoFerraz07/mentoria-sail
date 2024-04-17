@@ -128,9 +128,9 @@ class ProductController extends Controller
     ) {
         $types = $typesRepository->all();
         $brands = $brandRepository->all();
-        $product = $productRepository->get($request->id);
+        $products = $productRepository->get($request->id);
         $productTypes = $productTypesRepository->getTypeIdByProductId($request->id);
-        return view('pages.produtos.form', compact('product', 'types', 'productTypes', 'brands'));
+        return view('pages.produtos.form', compact('products', 'types', 'productTypes', 'brands'));
     }
 
     /**

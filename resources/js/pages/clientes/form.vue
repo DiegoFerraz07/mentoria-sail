@@ -46,32 +46,53 @@
 					placeholder="Cep">
 			</div>
 		</div>
-		<div class="col-sm-9">
+		<div class="col-sm-6">
 			<div class="form-group">
-				<label for="name">Rua</label>
-				<input type="text" class="form-control" v-model="this.client.address.street" required
-					placeholder="Rua">
+				<label for="name">Cidade</label>
+				<input type="text" class="form-control" v-model="this.client.address.city" required
+					placeholder="Cidade">
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="form-group">
+				<label for="name">Estado</label>
+				<input type="text" class="form-control" v-model="this.client.address.state" required
+					placeholder="Estado">
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-4">
-			
+		<div class="col-sm-3">
+			<div class="form-group">
+				<label for="name">Rua</label>
+				<input type="text" 
+					class="form-control" v-model="this.client.address.street" required
+					placeholder="Rua">
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<div class="form-group">
+				<label for="name">Numero</label>
+				<input type="text" class="form-control" v-model="this.client.address.number" required
+					placeholder="Numero">
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label for="name">Complemento</label>
+				<input type="text" class="form-control" v-model="this.client.address.complement" required
+					placeholder="Complemento">
+			</div>
 		</div>
 	</div>
 	<div v-if="isClientCpf()" class="form-group">
-		<label for="date">{{ getLabelBirth }}</label>
-			<VueDatePicker
-				:readonly="!isClientCpf()"
+		<label for="date">{{ getLabelBirth }}</label><br/>
+			<Datepicker
+				:disabled="!isClientCpf()"
 				v-model="client.date"
-			 	:max-date="isClientCpf() ? maxDate : null"
-			 	prevent-min-max-navigation
-				:enable-time-picker="false"
-				locale="pt-BR"
-				:format-locale="formatLocale"
+				:selected="updateDate"
 				format="dd/MM/yyyy"
-				@date-update="updateDate"
-				@select-date="updateDate"
+				:max-date="isClientCpf() ? maxDate : null"
 			/>
 			<div id="data-error" class="error"></div>
 	</div >
@@ -84,18 +105,15 @@
 import axios from 'axios';
 import { route } from 'ziggy-js';
 import { mask } from 'vue-the-mask';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment';
-import { ptBR } from 'date-fns/locale';
 import validityCPF from '@/utils/cpf-verify.js';
 import validityCNPJ from '@/utils/cnpj-verify.js';
-
+import Datepicker from 'vuejs3-datepicker';
 export default {
 	props:['clientProp'],
 	directives:{mask},
 	components: {
-		VueDatePicker,
+		Datepicker
 	},
 	data() {
 		return {
@@ -114,8 +132,7 @@ export default {
 			routeIndex: route('client.index'),
 			routeSave: route('api.client.store'),
 			routeUpdate: route('api.client.update'),
-			maxDate: moment().subtract(18, 'years').format('YYYY-MM-DD'),
-			formatLocale: ptBR,
+			maxDate: moment().subtract(18, 'years').format('YYYY-MM-DD'),	
 			erroMessage: '',
 
 		}
@@ -244,10 +261,24 @@ export default {
 		},
 		getCep() {
 			let cep = this.client.address.zipcode;
-			if(cep.length < 9) {
-				return;
+			console.log(cep);
+			if(cep.length === 9) {
+				axios.get(`https:viacep.com.br/ws/${cep}/json/`)
+					.then(response => {
+						this.client.address = {
+						zipcode: response.data.cep,
+						city: response.data.localidade,
+						state: response.data.uf,
+						street: response.data.logradouro,
+						neighborhood : response.data.bairro
+						};
+					})
+					.catch(error =>{
+						console.error('ops! ocorreu um erro na busca do endereço:', error);
+					})
+			}else{
+				console.error('Cep invalido'. error);
 			}
-			
 		}
 	}
 }

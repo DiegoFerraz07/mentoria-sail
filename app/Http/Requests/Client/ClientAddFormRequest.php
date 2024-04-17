@@ -41,7 +41,7 @@ class ClientAddFormRequest extends FormRequest
             'cpf'=> $ruleCPF,
             'cnpj'=> $ruleCNPJ,
             'date'=> $ruleDate,
-            'address' => 'required|array',
+            'address' => 'required|array:street,number,complement,neighborhood,city,state,zipcode',
         ];
     }
 
@@ -63,6 +63,13 @@ class ClientAddFormRequest extends FormRequest
             'date.date' => "É obrigatório que a data seja válida",
             'address.required' => "É obrigatório enviar um endereço",
             'address.array' => "É obrigatório que o endereço seja um array",
+            'address.street' => 'É obrigatório enviar a rua',
+            'address.number' => 'É obrigatório enviar o número',
+            'address.complement' => 'É obrigatório enviar o complemento',
+            'address.neighborhood' => 'É obrigatório enviar o bairro',
+            'address.city' => 'É obrigatório enviar a cidade',
+            'address.state' => 'É obrigatório enviar o estado',
+            'address.zipcode' => 'É obrigatório enviar o CEP',
         ];
     }
 
