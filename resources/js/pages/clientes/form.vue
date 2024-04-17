@@ -33,7 +33,7 @@
 		<div id="document-error" class="error"></div>
 	</div>
 	<div class="row">
-		<div class="col-sm-3">
+		<div class="col-sm-2">
 			<div class="form-group">
 				<label for="name">Cep</label>
 				<input type="text" 
@@ -46,23 +46,23 @@
 					placeholder="Cep">
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-2">
+			<div class="form-group">
+				<label for="name">Uf</label>
+				<input type="text" class="form-control" v-model="this.client.address.state" required
+					placeholder="Estado">
+			</div>
+		</div>
+		<div class="col-sm-8">
 			<div class="form-group">
 				<label for="name">Cidade</label>
 				<input type="text" class="form-control" v-model="this.client.address.city" required
 					placeholder="Cidade">
 			</div>
 		</div>
-		<div class="col-sm-3">
-			<div class="form-group">
-				<label for="name">Estado</label>
-				<input type="text" class="form-control" v-model="this.client.address.state" required
-					placeholder="Estado">
-			</div>
-		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-3">
+		<div class="col-sm-5">
 			<div class="form-group">
 				<label for="name">Rua</label>
 				<input type="text" 
@@ -77,7 +77,7 @@
 					placeholder="Numero">
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-5">
 			<div class="form-group">
 				<label for="name">Complemento</label>
 				<input type="text" class="form-control" v-model="this.client.address.complement" required
@@ -262,23 +262,22 @@ export default {
 		getCep() {
 			let cep = this.client.address.zipcode;
 			console.log(cep);
-			if(cep.length === 9) {
-				axios.get(`https:viacep.com.br/ws/${cep}/json/`)
-					.then(response => {
-						this.client.address = {
-						zipcode: response.data.cep,
-						city: response.data.localidade,
-						state: response.data.uf,
-						street: response.data.logradouro,
-						neighborhood : response.data.bairro
-						};
-					})
-					.catch(error =>{
-						console.error('ops! ocorreu um erro na busca do endereço:', error);
-					})
-			}else{
-				console.error('Cep invalido'. error);
+			if(cep.length != 9) {
+				return;
 			}
+			axios.get(`https:viacep.com.br/ws/${cep}/json/`)
+				.then(response => {
+					this.client.address = {
+					zipcode: response.data.cep,
+					city: response.data.localidade,
+					state: response.data.uf,
+					street: response.data.logradouro,
+					neighborhood : response.data.bairro
+					};
+				})
+				.catch(error =>{
+					console.error('ops! ocorreu um erro na busca do endereço:', error);
+				})
 		}
 	}
 }
