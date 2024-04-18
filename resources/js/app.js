@@ -8,7 +8,7 @@ import './bootstrap';
 import { createApp } from 'vue';
 import filters from './filters/filters';
 import { ZiggyVue } from 'ziggy-js';
-
+import PrimeVue from 'primevue/config';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -20,6 +20,7 @@ const app = createApp({});
 app.config.globalProperties.$filters = filters;
 
 import PaginationVue from './components/Pagination.vue';
+import 'primevue/resources/themes/aura-light-green/theme.css';
 
 import Brand from './pages/brand/index.vue';
 import FormBrand from './pages/brand/form.vue';
@@ -41,6 +42,7 @@ app.component('product', Product);
 app.component('form-product', FormProduct);
 app.component('pagination-vue', PaginationVue);
 app.component('nav-notification', NavNotification);
+app.use(PrimeVue);
 
 app.use(ZiggyVue, Ziggy);
 /**

@@ -32,5 +32,6 @@ class NotifyTotalClientsJob implements ShouldQueue
         // show in horizon
         echo $totalClients;
         AlertTotalClienteEvent::dispatch($totalClients);
+        event(new AlertTotalClienteEvent($totalClients));
     }
 }

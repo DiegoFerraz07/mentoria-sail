@@ -4,7 +4,8 @@
 			<input type="hidden" id="client-id" v-model="client.id">
 			<div class="form-group">
 				<label for="name">Nome</label>
-				<input type="text" class="form-control" name="name" id="name" v-model="client.name" required placeholder="Nome">
+				<input type="text" class="form-control" name="name" id="name" v-model="client.name" required
+					placeholder="Nome">
 			</div>
 		</div>
 		<div class="col-md-6 col-lg-6">
@@ -17,47 +18,39 @@
 	</div>
 	<div class="form-group">
 		<label for="cpf">CPF/CNPJ</label>
-		<input type="hidden" id="isLegalAge" name="is_legal_age"
-			v-model="this.client.is_legal_age">
-		<input
-			:value="client.cpf || client.cnpj"
-			type="text"
-			class="form-control document"
-			name="document"
-			id="document"
-			minlength="14"
-			@keyup="validateDocument($event.target.value)"
-			v-mask="['###.###.###-##','##.###.###/####-##']"
-			placeholder="CPF/CNPJ"
-			required>
+		<input type="hidden" id="isLegalAge" name="is_legal_age" v-model="this.client.is_legal_age">
+		<input :value="client.cpf || client.cnpj" type="text" class="form-control document" name="document"
+			id="document" minlength="14" @keyup="validateDocument($event.target.value)"
+			v-mask="['###.###.###-##','##.###.###/####-##']" placeholder="CPF/CNPJ" required>
 		<div id="document-error" class="error"></div>
 	</div>
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label for="name">Cep</label>
-				<input type="text" 
-					class="form-control" 
-					:key="count"
-					v-mask="'#####-###'" 
-					@keyup="getCep"
-					v-model="this.client.address.zipcode"
-					required
-					placeholder="Cep">
-			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="form-group">
-				<label for="name">Cidade</label>
-				<input type="text" class="form-control" v-model="this.client.address.city" required
-					placeholder="Cidade">
+				<input type="text" class="form-control" :key="count" v-mask="'#####-###'" @keyup="getCep"
+					v-model="this.client.address.zipcode" required placeholder="Cep">
 			</div>
 		</div>
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label for="name">Estado</label>
-				<input type="text" class="form-control" v-model="this.client.address.state" required
-					placeholder="Estado">
+				<Dropdown v-if="allStates" v-model="this.client.address.state" :options="allStates" filter
+					optionLabel="name" placeholder="Selecione um estado" class="w-full md:w-14rem">
+				</Dropdown>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label for="name">Cidade</label>
+				<Dropdown v-model="this.client.address.city"
+					:disabled="!this.client.address.state"
+					:options="this.client.address.state ? this.getCitiesByState() : []" 
+					filter 
+					optionLabel="name"
+					:placeholder="!this.client.address.state ? 'Selecione um estado primeiro' : 'Selecione uma cidade'" 
+					class="w-full md:w-14rem">
+				</Dropdown>
 			</div>
 		</div>
 	</div>
@@ -65,9 +58,7 @@
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label for="name">Rua</label>
-				<input type="text" 
-					class="form-control" v-model="this.client.address.street" required
-					placeholder="Rua">
+				<input type="text" class="form-control" v-model="this.client.address.street" required placeholder="Rua">
 			</div>
 		</div>
 		<div class="col-sm-2">
@@ -86,16 +77,11 @@
 		</div>
 	</div>
 	<div v-if="isClientCpf()" class="form-group">
-		<label for="date">{{ getLabelBirth }}</label><br/>
-			<Datepicker
-				:disabled="!isClientCpf()"
-				v-model="client.date"
-				:selected="updateDate"
-				format="dd/MM/yyyy"
-				:max-date="isClientCpf() ? maxDate : null"
-			/>
-			<div id="data-error" class="error"></div>
-	</div >
+		<label for="date">{{ getLabelBirth }}</label><br />
+		<Datepicker :disabled="!isClientCpf()" v-model="client.date" :selected="updateDate" format="dd/MM/yyyy"
+			:max-date="isClientCpf() ? maxDate : null" />
+		<div id="data-error" class="error"></div>
+	</div>
 
 
 	<button @click="save" class="btn btn-success mt-2">Salvar</button>
@@ -109,11 +95,15 @@ import moment from 'moment';
 import validityCPF from '@/utils/cpf-verify.js';
 import validityCNPJ from '@/utils/cnpj-verify.js';
 import Datepicker from 'vuejs3-datepicker';
+import {states, cities} from '@/utils/statesAndCitiesBR.js';
+import Dropdown from 'primevue/dropdown'; // https://primevue.org/
+
 export default {
 	props:['clientProp'],
 	directives:{mask},
 	components: {
-		Datepicker
+		Datepicker,
+		Dropdown
 	},
 	data() {
 		return {
@@ -126,7 +116,9 @@ export default {
 				cnpj: this.clientProp.cnpj || '',
 				date: this.clientProp.date || moment().subtract(18, 'years').format('YYYY-MM-DD'),
 				is_legal_age: this.clientProp.is_legal_age || 0,
-				address: JSON.parse(this.clientProp.address) || {},
+				address: this.clientProp && this.clientProp.address ? 
+					JSON.parse(this.clientProp.address || {}) : 
+					{},
 				document: 0
 			},
 			routeIndex: route('client.index'),
@@ -134,6 +126,7 @@ export default {
 			routeUpdate: route('api.client.update'),
 			maxDate: moment().subtract(18, 'years').format('YYYY-MM-DD'),	
 			erroMessage: '',
+			allStates: states
 
 		}
 	},
@@ -142,7 +135,7 @@ export default {
 			this.client.address = JSON.parse(this.clientProp.address);
 			this.count++;
 		}
-		console.log(this.clientProp, route('api.client.store'));
+		console.log(this.clientProp, route('api.client.store'), states, cities);
 	},
 	computed: {
 		getLabelBirth() {
@@ -159,12 +152,18 @@ export default {
 			if(isCompany)
 				return 'Data de Abertura da Empresa';
 			return 'Data de Nascimento';
-		}
+		},
 	},
 	methods: {
 		setMessageErrorCPF(message = '') {
 			$('#document-error')[0].innerHTML = message;
-        },
+		},
+		getCitiesByState() {
+			const stateId = this.allStates.find(state => state.mast == this.client.address.state.mast).id;
+			if(!stateId)
+				return [];
+			return cities.filter(city => city.state == stateId);
+		},
 		validateDocument(document) {
             // pegar o valor do input cpf
 			console.log(document)
