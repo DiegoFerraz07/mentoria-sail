@@ -56,12 +56,11 @@ class ProductTypesRepository implements ProductTypesRepositoryInterface
         orderby ---- ->orderBy('id', 'desc')
         */
         
-        $types = ProductTypes::select('type_id')
-            ->where('product_id', $productId)
+        $types = ProductTypes::where('product_id', $productId)
             ->get()
             ->toArray();
 
-        $types = array_column($types, 'type_id');
+        //$types = array_column($types, 'type_id');
         return $types;
     }
 

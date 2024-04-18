@@ -46,20 +46,16 @@
 import axios from 'axios';
  
 export default{
-	props:['productsProp', 'productsTypesProp'],
+	props:['productsProp', 'productTypesProp'],
 	data(){
-		console.log(this.productsProp);
+		console.log('productsProp', this.productsProp);
 		return {
 			products: {
 					id: this.productsProp.id || '',
 					name: this.productsProp.name || '',
 					brand_id: this.productsProp.brand_id || '',
 				},
-			productTypes: {
-					id: this.productsTypesProp || '',
-					type_id: this.productsTypesProp.typeId || '',
-					product_id: this.productsTypesProp.productId || '',
-			},
+			productTypes: this.productTypesProp || [],
 			types: [],	
 			brands: [],
 			routeIndex: route('product.index'),
