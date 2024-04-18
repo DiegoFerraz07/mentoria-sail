@@ -19,8 +19,8 @@
 	<div class="form-group">
 		<label for="cpf">CPF/CNPJ</label>
 		<input type="hidden" id="isLegalAge" name="is_legal_age" v-model="this.client.is_legal_age">
-		<input :value="client.cpf || client.cnpj" type="text" class="form-control document" name="document"
-			id="document" minlength="14" @keyup="validateDocument($event.target.value)"
+		<input :value="this.client.cpf || this.client.cnpj" type="text" class="form-control document"
+			minlength="14" @keyup="validateDocument($event.target.value)"
 			v-mask="['###.###.###-##','##.###.###/####-##']" placeholder="CPF/CNPJ" required>
 		<div id="document-error" class="error"></div>
 	</div>
@@ -28,7 +28,7 @@
 		<div class="col-sm-2">
 			<div class="form-group">
 				<label for="name">Cep</label>
-				<input type="text" class="form-control" :key="count" v-mask="'#####-###'" @keyup="getCep"
+				<input type="text" class="form-control" v-mask="'#####-###'" @keyup="getCep"
 					v-model="this.client.address.zipcode" required placeholder="Cep">
 			</div>
 		</div>
@@ -40,7 +40,7 @@
 				</Dropdown>
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-7">
 			<div class="form-group">
 				<label for="name">Cidade</label>
 				<Dropdown v-model="this.client.address.city"
@@ -107,7 +107,6 @@ export default {
 	},
 	data() {
 		return {
-			count: 0,
 			client: {
 				id: this.clientProp.id || '',
 				name: this.clientProp.name || '',
@@ -118,8 +117,7 @@ export default {
 				is_legal_age: this.clientProp.is_legal_age || 0,
 				address: this.clientProp && this.clientProp.address ? 
 					JSON.parse(this.clientProp.address || {}) : 
-					{},
-				document: 0
+					{}
 			},
 			routeIndex: route('client.index'),
 			routeSave: route('api.client.store'),
@@ -130,12 +128,12 @@ export default {
 
 		}
 	},
-	mounted(){
-		if(this.clientProp.address) {
+	beforeMount() {
+		if (this.clientProp.address) {
 			this.client.address = JSON.parse(this.clientProp.address);
-			this.count++;
+			this.client.address.state = this.getObjectStateByUf(this.client.address.state);
+			this.client.address.city = this.getObjectCityByName(this.client.address.city);
 		}
-		console.log(this.clientProp, route('api.client.store'), states, cities);
 	},
 	computed: {
 		getLabelBirth() {
@@ -159,14 +157,18 @@ export default {
 			$('#document-error')[0].innerHTML = message;
 		},
 		getCitiesByState() {
-			const stateId = this.allStates.find(state => state.mast == this.client.address.state.mast).id;
+			let mast = '';
+			if (!this.client.address.state.mast && this.client.address.state) {
+				mast = this.getObjectStateByUf(this.client.address.state).mast;
+			} else {
+				mast = this.client.address.state.mast;
+			}
+			const stateId = this.allStates.find(state => state.mast == mast).id;
 			if(!stateId)
 				return [];
 			return cities.filter(city => city.state == stateId);
 		},
 		validateDocument(document) {
-            // pegar o valor do input cpf
-			console.log(document)
             // Limpar a div
             this.setMessageErrorCPF();
             // verifica o tamanho do cpf
@@ -175,7 +177,8 @@ export default {
                         this.setMessageErrorCPF("<p class='text-danger'>CPF inválido</p>");
                         return false;
                     } else {
-                        this.setMessageErrorCPF("<p class='text-success'>CPF válido</p>")
+                        this.setMessageErrorCPF("<p class='text-success'>CPF válido</p>");
+						this.changeDocument(document);
                         return true;
                     }
                 }else if(document.length == 18) {
@@ -183,7 +186,8 @@ export default {
                         this.setMessageErrorCPF("<p class='text-danger'>CNPJ inválido</p>");
                         return false;
                     } else {
-                        this.setMessageErrorCPF("<p class='text-success'>CNPJ válido</p>")
+                        this.setMessageErrorCPF("<p class='text-success'>CNPJ válido</p>");
+						this.changeDocument(document);
                         return true;
                     }
                 }
@@ -193,11 +197,9 @@ export default {
 			return this.client.cpf ? true : false
 		},
 		changeDocument(document) {
-			console.log(this.client);
 			if (document.length > 0 && document.length <= 14) {
 				this.client.cnpj = '';
 				this.client.cpf = document;
-				console.log(this.client.cpf);
 			} else {
 				this.client.cpf = '';
 				this.client.date = moment().format('YYYY-MM-DD');
@@ -212,17 +214,28 @@ export default {
 		save() {
 			let route = this.routeSave;
 			let messageSuccess = "Adicionado com sucesso";
+			let data = this.client;
 
-			if(this.client.id) {
+			if(data.id) {
 				route = this.routeUpdate;
 				messageSuccess = "Alterado com sucesso";
 			}
 			
-			this.client.date = moment(this.client.date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+			data.date = moment(data.date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+			if(data.address.city && data.address.city.name) {
+				data.address.city = data.address.city.name;
+			}
+			if(data.address.state && data.address.state.mast) {
+				data.address.state = data.address.state.mast;
+			}
+
+			if(!this.validateAllFields(data)) {
+				return;
+			}
 			axios({
-				method: this.client.id ? 'put' : 'post',
+				method: data.id ? 'put' : 'post',
 				url: route,
-				data: this.client
+				data
 			}).then(response => {
 				let apiResponse = response.data;
 				if (apiResponse.data) {
@@ -258,21 +271,44 @@ export default {
 			});
 
 		},
+		validateAllFields(data) {
+			if(!data.name) {
+				alertSweet('Nome é obrigatório', 'error');
+				return false;
+			}
+
+			if(!data.email) {
+				alertSweet('E-mail é obrigatório', 'error');
+				return false;
+			}
+
+			return true;
+
+		},
+		getObjectStateByUf(uf) {
+			return states.find(state => state.mast.toLowerCase() == uf.toLowerCase());
+		},
+		getObjectCityByName(name) {
+			return cities.find(city => city.name.toLowerCase() == name.toLowerCase());
+		},
 		getCep() {
 			let cep = this.client.address.zipcode;
-			console.log(cep);
-			if(cep.length != 9) {
+			if(!cep || cep.length != 9) {
 				return;
 			}
 			axios.get(`https:viacep.com.br/ws/${cep}/json/`)
 				.then(response => {
-					this.client.address = {
-					zipcode: response.data.cep,
-					city: response.data.localidade,
-					state: response.data.uf,
-					street: response.data.logradouro,
-					neighborhood : response.data.bairro
-					};
+					if(response.data && response.data.cep) {
+						this.client.address = {
+							zipcode: response.data.cep || cep,
+							city: this.getObjectCityByName(response.data.localidade) || '',
+							state: this.getObjectStateByUf(response.data.uf) || '',
+							street: response.data.logradouro || '',
+							neighborhood : response.data.bairro || '',
+						};
+					} else {
+						alertSweet('Cep não encontrado', 'error');
+					}
 				})
 				.catch(error =>{
 					console.error('ops! ocorreu um erro na busca do endereço:', error);

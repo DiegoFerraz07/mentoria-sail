@@ -84,13 +84,13 @@ class ClientAddFormRequest extends FormRequest
 
         if($this->isCNPJ) {
             $this->merge([
-                'cnpj' => $this->document,
+                'cnpj' => $this->cnpj,
                 'cpf' => ''
             ]);
         } else {
             $this->merge([
                 'cnpj' => '',
-                'cpf' => $this->document
+                'cpf' => $this->cpf
             ]);
         }
 
