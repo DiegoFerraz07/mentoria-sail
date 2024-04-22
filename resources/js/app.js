@@ -32,6 +32,7 @@ import FormProduct from './pages/product/form.vue';
 import Types from './pages/types/index.vue';
 import NavNotification from './components/NavNotification.vue';
 
+
 app.component('brand', Brand);
 app.component('form-brand', FormBrand);
 app.component('types', Types);
@@ -42,7 +43,19 @@ app.component('product', Product);
 app.component('form-product', FormProduct);
 app.component('pagination-vue', PaginationVue);
 app.component('nav-notification', NavNotification);
-app.use(PrimeVue);
+app.use(PrimeVue, {
+	locale:{	
+			firstDayOfWeek: 0,
+			dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+			dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+			dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+			monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+				'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+			monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+			today: 'Hoje',
+			clear: 'Limpar',
+	}
+});
 
 app.use(ZiggyVue, Ziggy);
 /**
