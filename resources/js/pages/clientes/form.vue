@@ -20,7 +20,7 @@
 		<label for="cpf">CPF/CNPJ</label>
 		<input type="hidden" id="isLegalAge" name="is_legal_age" v-model="this.client.is_legal_age">
 		<input :value="this.client.cpf || this.client.cnpj" type="text" class="form-control document"
-			minlength="14" @keyup="validateDocument($event.target.value)"
+			minlength="14" v-on:keyup="validateDocument($event.target.value)"
 			v-mask="['###.###.###-##','##.###.###/####-##']" placeholder="CPF/CNPJ" required>
 		<div id="document-error" class="error"></div>
 	</div>
@@ -35,8 +35,13 @@
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label for="name">Estado</label>
-				<Dropdown v-if="allStates" v-model="this.client.address.state" :options="allStates" filter
-					optionLabel="name" placeholder="Selecione um estado" class="w-full md:w-14rem">
+				<Dropdown v-if="allStates" 
+					v-model="this.client.address.state" 
+					:options="allStates" 
+					filter
+					optionLabel="name" 
+					placeholder="Selecione um estado" 
+					class="w-full md:w-14rem">
 				</Dropdown>
 			</div>
 		</div>
@@ -78,8 +83,15 @@
 	</div>
 	<div v-if="isClientCpf()" class="form-group">
 		<label for="date">{{ getLabelBirth }}</label><br />
-		<Datepicker :disabled="!isClientCpf()" v-model="client.date" :selected="updateDate" format="dd/MM/yyyy"
-			:max-date="isClientCpf() ? maxDate : null" />
+		<Calendar 
+			:disabled="!isClientCpf()"
+			v-model="client.date"
+			showIcon
+			:manualInput="false"
+			iconDisplay="input"
+			:maxDate="maxDate" 
+			date-format="dd/mm/yy"
+		/>
 		<div id="data-error" class="error"></div>
 	</div>
 
@@ -94,16 +106,17 @@ import { mask } from 'vue-the-mask';
 import moment from 'moment';
 import validityCPF from '@/utils/cpf-verify.js';
 import validityCNPJ from '@/utils/cnpj-verify.js';
-import Datepicker from 'vuejs3-datepicker';
 import {states, cities} from '@/utils/statesAndCitiesBR.js';
+import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown'; // https://primevue.org/
+
 
 export default {
 	props:['clientProp'],
-	directives:{mask},
+	directives:{mask},	
 	components: {
-		Datepicker,
-		Dropdown
+		Dropdown,
+		Calendar
 	},
 	data() {
 		return {
@@ -113,7 +126,7 @@ export default {
 				email: this.clientProp.email || '',
 				cpf: this.clientProp.cpf || '',
 				cnpj: this.clientProp.cnpj || '',
-				date: this.clientProp.date || moment().subtract(18, 'years').format('YYYY-MM-DD'),
+				date: this.clientProp.date || moment().subtract(18, 'years').format('DD/MM/YYYY'),
 				is_legal_age: this.clientProp.is_legal_age || 0,
 				address: this.clientProp && this.clientProp.address ? 
 					JSON.parse(this.clientProp.address || {}) : 
@@ -122,10 +135,9 @@ export default {
 			routeIndex: route('client.index'),
 			routeSave: route('api.client.store'),
 			routeUpdate: route('api.client.update'),
-			maxDate: moment().subtract(18, 'years').format('YYYY-MM-DD'),	
+			maxDate: moment().subtract(18, 'years').toDate(),	
 			erroMessage: '',
-			allStates: states
-
+			allStates: states,
 		}
 	},
 	beforeMount() {
@@ -134,6 +146,7 @@ export default {
 			this.client.address.state = this.getObjectStateByUf(this.client.address.state);
 			this.client.address.city = this.getObjectCityByName(this.client.address.city);
 		}
+		this.client.date = moment().format('DD/MM/YYYY')
 	},
 	computed: {
 		getLabelBirth() {
@@ -197,19 +210,20 @@ export default {
 			return this.client.cpf ? true : false
 		},
 		changeDocument(document) {
+			console.log(document)
 			if (document.length > 0 && document.length <= 14) {
 				this.client.cnpj = '';
 				this.client.cpf = document;
 			} else {
 				this.client.cpf = '';
-				this.client.date = moment().format('YYYY-MM-DD');
+				this.client.date = moment().format('DD/MM/YYYY');
 				this.client.cnpj = document;
 			}
 
 		},
 		updateDate(date) {
 			this.client.date = moment(date)
-				.format('YYYY-MM-DD');
+				.format('DD/MM/YYYY');
 		},
 		save() {
 			let route = this.routeSave;

@@ -26,7 +26,7 @@ Route::get('/', function () {
 
 
 Route::get('try-websocket', function () {
-    event(new \App\Events\AlertTotalClienteEvent());
+    event(new \App\Events\AlertTotalClienteEvent(''));
     return 'ok';
 });
 

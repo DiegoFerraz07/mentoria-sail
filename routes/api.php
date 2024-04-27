@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('produtos')->middleware(['cors'])->group(function () {
+Route::prefix('product')->middleware(['cors'])->group(function () {
     Route::get('/all', [ProductController::class, 'index'])->name('api.product.index');
     Route::post('/find', [ProductController::class, 'find'])->name('api.product.find');
     Route::delete('/delete', [ProductController::class, 'delete'])->name('api.product.delete');
@@ -49,6 +49,7 @@ Route::prefix('clientes')->middleware(['cors'])->group( function () {
 
 Route::prefix('brand')->middleware(['cors'])->group( function () {
     Route::get('/all', [BrandController::class, 'index'])->name('api.brand.index');
+    Route::get('/allBrands', [BrandController::class, 'allBrands'])->name('api.brand.allBrands');
     Route::post('/find', [BrandController::class, 'find'])->name('api.brand.find');
     Route::delete('/delete', [BrandController::class, 'delete'])->name('api.brand.delete');
     Route::post('/store', [BrandController::class, 'store'])->name('api.brand.store');
@@ -56,7 +57,8 @@ Route::prefix('brand')->middleware(['cors'])->group( function () {
 });
 
 Route::prefix('types')->middleware(['cors'])->group( function () {
-    Route::get('/', [TypesController::class, 'index'])->name('api.types.index');
+    Route::get('/all', [TypesController::class, 'index'])->name('api.types.index');
+    Route::get('/allTypes', [TypesController::class, 'allTypes'])->name('api.types.allTypes');
     Route::post('/find', [TypesController::class, 'find'])->name('api.types.find');
     Route::delete('/delete', [TypesController::class, 'delete'])->name('api.types.delete');
     Route::post('/store', [TypesController::class, 'store'])->name('api.types.store');
