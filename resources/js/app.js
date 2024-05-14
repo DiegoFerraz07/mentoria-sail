@@ -54,6 +54,7 @@ app.use(PrimeVue, {
 			monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
 			today: 'Hoje',
 			clear: 'Limpar',
+			dateFormat: 'dd/mm/yy'
 	}
 });
 

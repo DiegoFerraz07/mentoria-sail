@@ -20,6 +20,12 @@ class TypesController extends Controller
         return JsonResource::collection($types);
     }
 
+    public function allTypes(TypesRepository $typesRepository)
+    {
+        $types = $typesRepository->all();
+        return $types;
+    }
+
     public function find(TypesFormRequest $request, TypesRepository $typesRepository)
     {
         $search = $request->search;

@@ -32,13 +32,15 @@ class ClientUpdateFormRequest extends FormRequest
             ? [
                 'required',
                 'string',
-                new UpdateExistCPF($this->id, $this->cpf)] 
+                new UpdateExistCPF($this->id, $this->cpf)
+            ] 
             : 'string';
         $ruleCNPJ = $this->cnpj 
             ? [
                 'required',
                 'string',
-                new UpdateExistCNPJClient($this->id, $this->cnpj)]  
+                new UpdateExistCNPJClient($this->id, $this->cnpj)
+            ]  
             : 'string';
         $isCPF = $this->cpf ? true : false;
         $ruleDate = $this->date && $isCPF 
@@ -103,15 +105,15 @@ class ClientUpdateFormRequest extends FormRequest
             'date' => $date
         ]);
 
-        if ($this->isCNPJ) {
-            $this->merge([
-                'cnpj' => $this->cnpj,
-                'cpf' => ''
-            ]);
-        } else {
+        if ($this->isCPF) {
             $this->merge([
                 'cnpj' => '',
                 'cpf' => $this->cpf
+            ]);
+        } else {
+            $this->merge([
+                'cnpj' => $this->cnpj,
+                'cpf' => ''
             ]);
         }
     }

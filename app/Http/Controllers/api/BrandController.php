@@ -21,6 +21,12 @@ class BrandController extends Controller
         return JsonResource::collection($brands);
     }
 
+    public function allBrands(BrandRepository $brandRepository)
+    {
+        $brands = $brandRepository->all();
+        return $brands;
+    }
+
     public function find(BrandFormRequest $request, BrandRepository $brandRepository)
     {
         $search = $request->search;
