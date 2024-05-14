@@ -28,7 +28,7 @@ class TypesRepository implements TypesRepositoryInterface
     /**
     *Get all types no restricion to numbers
     */
-    public function all(): Collection
+    public function getAllForTypes(): Collection
     {
         $types = Types::all('name', 'id');
         return $types;
@@ -46,7 +46,7 @@ class TypesRepository implements TypesRepositoryInterface
     }
 
     /**
-     * 
+     * Find by name or description 
      *
      * @param string $search
      *

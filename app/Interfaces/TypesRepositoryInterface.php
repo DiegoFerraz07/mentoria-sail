@@ -9,6 +9,6 @@ use Illuminate\Database\Eloquent\Collection;
 interface TypesRepositoryInterface
 {
     public function getAll(): LengthAwarePaginator;
-    public function all(): Collection;
+    public function getAllForTypes(): Collection;
 
 }

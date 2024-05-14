@@ -22,7 +22,7 @@ class TypesController extends Controller
 
     public function allTypes(TypesRepository $typesRepository)
     {
-        $types = $typesRepository->all();
+        $types = $typesRepository->getAllForTypes();
         return $types;
     }
 
