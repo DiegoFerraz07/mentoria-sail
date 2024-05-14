@@ -50,8 +50,8 @@
 <script>
 import axios from 'axios';
 import Dropdown from 'primevue/dropdown';
-import InputNumber from 'primevue/inputnumber';
 import MultiSelect from 'primevue/multiselect';
+// https://www.npmjs.com/package/v-money3
 import { Money3Component, format } from 'v-money3'
 
 
@@ -60,7 +60,6 @@ export default{
 	components: {
 		Dropdown,
 		MultiSelect,
-		InputNumber,
 		money3: Money3Component
 	},
 	data(){
@@ -90,8 +89,7 @@ export default{
 				precision: 2,
 				disableNegative: true,
 				disabled: false,
-				min: null,
-				max: 999999999999999999,
+				min: 0,
 				allowBlank: false,
 				minimumNumberOfCharacters: 0,
 				shouldRound: true,
