@@ -106,25 +106,30 @@ export default{
 	created(){
 	},
 	methods: {
+		findType(id) {
+			const found = this.productTypes.find(productType => productType.type_id === id);
+			if(found !== undefined){
+				return true;
+			}
+			return false;
+		},
 		getAllTypes() {
 			axios.get(route('api.types.allTypes'))
 				.then(response => {
 					console.log(response)
 					this.types = response.data;
-					let chosenType = null;
+					let chosenType = [];
+					
 					this.types.forEach(type => { 
-					if(type.id === this.productTypes[0].type_id){
-						chosenType = type;
-					}
+						if( this.findType(type.id) ){
+							chosenType.push(type);
+						}
 					});
-					if(chosenType) {
-						this.selectType = Array(chosenType)
+					
+					if (chosenType.length > 0) {
+						this.selectType = chosenType
 						console.log('select: ', this.selectType)
-					}else{
-						console.log('Tipos disponíveis: ', this.types);
-						console.log('id: ', this.productTypes[0].type_id)
-						this.selectType;
-					}	
+					}
 				})
 				.catch(error => {
 					console.log(error)
@@ -137,18 +142,17 @@ export default{
 					console.log(response)
 					this.brands = response.data
 					let chosenBrand = null;
+
 					this.brands.forEach(brand => {
-					if(brand.id === this.products.brandId){
-						console.log('brand: ', brand)
-						chosenBrand = brand;
-					}
+						if(brand.id === this.products.brandId){
+							console.log('brand: ', brand)
+							chosenBrand = brand;
+						}
 					});
+
 					if(chosenBrand) {
 						this.selectBrand = chosenBrand;
 						console.log('select: ', selectBrand)
-					}else{
-						console.log('Marcas disponíveis: ', this.brands);
-						this.selectBrand;
 					}	
 				})
 				.catch(error => {
@@ -177,11 +181,16 @@ export default{
 				route = this.routeUpdate;
 				messageSuccess = "Alterado com sucesso";
 			}
-			console.log('data: ', this.products)
-			axios.post(
-				route, 
-				this.products
-			).then(response => {
+			
+			let method = 'post';
+			if(this.products.id) {
+				method = 'put';
+			}
+			axios({
+				method: method,
+				url: route, 
+				data: this.products
+			}).then(response => {
 				let apiResponse = response.data;
 				if (apiResponse.data) {
 					apiResponse = apiResponse.data;

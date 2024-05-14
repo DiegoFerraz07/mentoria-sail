@@ -113,7 +113,11 @@ export default {
 				}
 			})
 				.then(response => {
-					if (response.data.success) {
+					let dataResp = response.data;
+					if (dataResp.data) {
+						dataResp = dataResp.data;
+					}
+					if (dataResp.success) {
 						alertSweet(
 							'Excluido com sucesso',
 							'success',

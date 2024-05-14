@@ -50,13 +50,25 @@ class ProductUpdateFormRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $valor = $this->valor;
+        //22.300,00
+        if (strpos($this->valor, ',') !== false) {
+            $valor = trim(str_replace('R$', '', $this->valor));
+            // remove o ponto
+            $valor = str_replace('.', '', $valor);
+            $valor = str_replace(',', '.', $valor);
+        }
 
-        $valor = trim(str_replace('R$', '', $this->valor)); // remove o ponto
-        $valor = str_replace('.', '', $valor);
-        $valor = str_replace(',', '.', $valor);
+        if (is_array($this->types)) {
+            if ($this->types[0]['id']) {
+                $this->merge([
+                    'types' => array_column($this->types, 'id'),
+                ]);
+            }
+        }
 
         $this->merge([
-            'valor' => $valor
+            'valor' => number_format($valor, 2, '.', '')
         ]);
     }
     
