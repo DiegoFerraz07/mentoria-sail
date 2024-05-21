@@ -11,13 +11,18 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class OrdersRepository extends OrdersRepositoryInterface
+class OrdersRepository implements OrdersRepositoryInterface
 {
-    public function getAll(): LengthAwarePaginator
+    public function getAll(): LengthAwarePaginator|Collection
     {
-        return Orders::all()
-          ->sortByDesc('id')
-          ->toQuery()
+        $orders = Orders::all()
+            ->sortByDesc('id');
+
+        if($orders->isEmpty()) {
+            return $orders;
+        }
+
+        return $orders->toQuery()
           ->paginate(20);
     }
 
