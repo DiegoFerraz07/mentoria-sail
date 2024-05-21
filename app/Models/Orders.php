@@ -31,6 +31,7 @@ class Orders extends Model
         $this->numero_order = $request->numeroOrder;
         $this->description_order = $request->descriptionOrder;
         $this->tax_order = $request->taxOrder;
+        $this->icms_order = $request->icmsOrder;
         $this->total_value_order = $request->totalValueOrder;
         $this->obs_order = $request->obsOrder;
         $this->name_supply = $request->nameSupply;
@@ -38,8 +39,8 @@ class Orders extends Model
         $this->name_client = $request->nameClient;
         $this->cpf_client = $request->cpfClient;
         $this->cnpj_client = $request->cnpjClient;
-        $this->address_client = $request->addressClient;
-        $this->orders_itens = $request->ordersItens;
+        $this->address_client = json_encode($request->addressClient);
+        $this->orders_itens = json_encode($request->ordersItens);
         return $this;
     }
 }

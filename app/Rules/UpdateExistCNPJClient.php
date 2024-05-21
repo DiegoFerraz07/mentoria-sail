@@ -2,9 +2,8 @@
 
 namespace App\Rules;
 
-use App\Models\Supply;
+
 use App\Repositories\ClientRepository;
-use App\Repositories\SupplyRepository;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
@@ -25,10 +24,10 @@ class UpdateExistCNPJClient implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {   
         // id, cnpj
-        $bdSupplyCNPJ = $this->clientRepository->getCNPJById($this->id);
+        $bdClientCNPJ = $this->clientRepository->getCNPJById($this->id);
         $requestCNPJ = $this->cnpj;
 
-        if($requestCNPJ !== $bdSupplyCNPJ) {
+        if($requestCNPJ !== $bdClientCNPJ) {
             // verifica se já existe algum com cnpj cadastrado
             $isOtherCNPJExist = $this->clientRepository->isOthersCNPJById($this->id, $requestCNPJ);
             if($isOtherCNPJExist) {

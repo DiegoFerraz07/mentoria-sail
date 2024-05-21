@@ -63,7 +63,7 @@ class ProductController extends Controller
     public function add(TypesRepository $typesRepository, BrandRepository $brandRepository)
     {
         $brands = $brandRepository->all();
-        $types = $typesRepository->all();
+        $types = $typesRepository->getAllForTypes();
         $productTypes = [];
         return view('pages.produtos.form', compact('types', 'productTypes', 'brands'));
     }
@@ -126,7 +126,7 @@ class ProductController extends Controller
         ProductTypesRepository $productTypesRepository,
         BrandRepository $brandRepository
     ) {
-        $types = $typesRepository->all();
+        $types = $typesRepository->getAllForTypes();
         $brands = $brandRepository->all();
         $products = $productRepository->get($request->id);
         $productTypes = $productTypesRepository->getTypeIdByProductId($request->id);

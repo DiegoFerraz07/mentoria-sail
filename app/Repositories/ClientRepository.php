@@ -183,7 +183,7 @@ class ClientRepository implements ClientRepositoryInterface
     }
 
     /**
-     * Store a new client
+     * Update a new client
      * @param ClientUpdateFormRequest $request
      * 
      * @return bool

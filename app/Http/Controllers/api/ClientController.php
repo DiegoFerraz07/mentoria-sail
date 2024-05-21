@@ -55,7 +55,7 @@ class ClientController extends Controller
      * Update a Client
      * 
      * @param ClientUpdateFormRequest $request, 
-     * @param ClientRepository $productRepository
+     * @param ClientRepository $clientRepository
      * 
      * @return Json
      */
