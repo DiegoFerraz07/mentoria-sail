@@ -3,6 +3,7 @@
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\TypesController;
@@ -82,6 +83,14 @@ Route::prefix('brand')->middleware(['cors', 'auth'])->group( function () {
     Route::post('/store', [BrandController::class, 'store'])->name('brand.store');
     Route::post('/update', [BrandController::class, 'update'])->name('brand.update');
 });
+
+Route::prefix('orders')->middleware(['cors', 'auth'])->group( function () {
+    Route::get('/', [OrdersController::class, 'index'])->name('orders.index');
+    Route::get('/find', [OrdersController::class, 'index']);
+    Route::post('/find', [OrdersController::class, 'find'])->name('orders.find');
+    Route::get('/add', [OrdersController::class, 'add'])->name('orders.add');
+});
+
 
 Auth::routes();
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\BrandController;
 use App\Http\Controllers\api\ClientController;
+use App\Http\Controllers\api\OrdersController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\SupplyController;
 use App\Http\Controllers\api\TypesController;
@@ -63,4 +64,11 @@ Route::prefix('types')->middleware(['cors'])->group( function () {
     Route::delete('/delete', [TypesController::class, 'delete'])->name('api.types.delete');
     Route::post('/store', [TypesController::class, 'store'])->name('api.types.store');
     Route::post('/update', [TypesController::class, 'update'])->name('api.types.update');
+});
+
+Route::prefix('orders')->middleware(['cors'])->group( function () {
+    Route::get('/all', [OrdersController::class, 'index'])->name('api.orders.index');
+    Route::post('/find', [OrdersController::class, 'find'])->name('api.orders.find');
+    Route::delete('/delete', [OrdersController::class, 'delete'])->name('api.orders.delete');
+    Route::post('/store', [OrdersController::class, 'store'])->name('api.orders.store');
 });

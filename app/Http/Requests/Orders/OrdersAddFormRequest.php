@@ -39,7 +39,7 @@ class OrdersAddFormRequest extends FormRequest
             'cpfClient' => $ruleCPF,
             'cnpjClient' => $ruleCNPJ,
             'addressClient' => 'required|array:street,number,complement,neighborhood,city,state,zipcode',
-            'ordersItens' => 'required|array:id,nome,valor,amount,description,unitValue,totalValue,taxValue,icmsValue'
+            'ordersItens' => 'required|array:id,nome,valor,quantity,description,unitValue,totalValue,taxValue,icmsValue'
         ];
     }
 
