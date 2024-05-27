@@ -21,5 +21,6 @@ class TruncateTables extends Seeder
         DB::table('types')->truncate();
         DB::table('brand')->truncate();
         DB::table('fornecedores')->truncate();
+        DB::table('orders')->truncate();
     }
 }

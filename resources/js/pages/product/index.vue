@@ -51,6 +51,9 @@
 					</tr>
 				</tbody>
 			</table>
+			<PaginationVue v-if="paginationData" 
+                :pagination-data="paginationData"
+                @go-page="(url) => getAllProducts(url)" />
 		</div>
 	</div>
 </template>
@@ -81,8 +84,14 @@ export default {
 		this.getAllProducts();
 	},
 	methods: {
-		getAllProducts() {
-			axios.get(route('api.product.index'))
+		getAllProducts(goPage = '') {
+			let url = route('api.product.index')
+			if(goPage) {
+                url = goPage;
+            }
+
+			this.paginationData = null;
+			axios.get(url)
 				.then(response => {
 					console.log(response)
 					this.products = response.data.data

@@ -1,7 +1,7 @@
 <template>
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Marcas</h1>
+        <h1 class="h2">Tipos</h1>
     </div>
     <div>
         <input type="text" id="input-search" @keyup="handleInputSearch" required minlength="3" v-model="search"
@@ -44,6 +44,9 @@
                     </tr>
                 </tbody>
             </table>
+            <PaginationVue v-if="paginationData" 
+                :pagination-data="paginationData"
+                @go-page="(url) => getAllTypes(url)" />
         </div>
     </div>
 </template>
@@ -79,8 +82,14 @@ export default {
            return moment(String(value)).format('DD/MM/YYYY')
           }
       	},
-        getAllTypes() {
-            axios.get(route('api.brand.index'))
+        getAllTypes(goPage = '') {
+            let url = route('api.types.index');
+                if(goPage) {
+                    url = goPage;
+                }
+
+                this.paginationData = null;
+                axios.get(url)
                 .then(response => {
                     console.log(response)
                     this.types = response.data.data

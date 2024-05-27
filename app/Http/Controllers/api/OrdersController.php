@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Orders\OrdersAddFormRequest;
 use App\Http\Requests\Orders\OrdersDeleteFormRequest;
 use App\Http\Requests\Orders\OrdersFormRequest;
-use App\Http\Requests\Orders\OrdersUpdateFormRequest;
 use App\Http\Resources\OrdersResource;
-use App\Repositories\ClientRepository;
 use App\Repositories\OrdersRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -64,25 +62,4 @@ class OrdersController extends Controller
         return new OrdersResource(['saved' => $saved]);
     }
 
-    /**
-     * Update a orders
-     * 
-     * @param OrdersUpdateFormRequest $request, 
-     * @param OrdersRepository $ordersRepository
-     * 
-     * @return Json
-     */
-    public function update(OrdersUpdateFormRequest $request, OrdersRepository $ordersRepository)
-    {
-        $updated = $ordersRepository->update($request);
-        if($updated) {
-            return response()->json([
-                'success' => true
-            ]);
-        }
-        return response()->json([
-            'success' => false,
-            'message' => 'Erro ao tentar salvar'
-        ]);
-    }
 }

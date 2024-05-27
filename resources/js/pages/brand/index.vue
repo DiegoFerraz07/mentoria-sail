@@ -44,6 +44,9 @@
                     </tr>
                 </tbody>
             </table>
+            <PaginationVue v-if="paginationData" 
+                :pagination-data="paginationData"
+                @go-page="(url) => getAllBrands(url)" />
         </div>
     </div>
 </template>
@@ -79,8 +82,14 @@ export default {
            return moment(String(value)).format('DD/MM/YYYY')
           }
       	},
-        getAllBrands() {
-            axios.get(route('api.brand.index'))
+        getAllBrands(goPage = '') {
+            let url = route('api.brand.index')
+            if(goPage) {
+                    url = goPage;
+                }
+
+            this.paginationData = null;
+            axios.get(url)
                 .then(response => {
                     console.log(response)
                     this.brands = response.data.data

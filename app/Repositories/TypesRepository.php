@@ -23,7 +23,7 @@ class TypesRepository implements TypesRepositoryInterface
         return Types::all()
             ->sortByDesc('id')
             ->toQuery()
-            ->paginate(20);
+            ->paginate(10);
     }
     /**
     *Get all types no restricion to numbers

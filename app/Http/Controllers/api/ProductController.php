@@ -11,6 +11,7 @@ use App\Http\Resources\ProductResource;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductTypesRepository;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +23,8 @@ class ProductController extends Controller
 
     public function index(
         ProductRepository $productRepository
-    ) {
+    )
+    {
         $products = $productRepository->getAll();
         return JsonResource::collection($products); 
     }

@@ -87,24 +87,6 @@ class OrdersRepository implements OrdersRepositoryInterface
         return Orders::where('id', $id)->first();
     }
 
-    /**
-     * Update a new client
-     * @param OrdersUpdateFormRequest $request
-     * 
-     * @return bool
-     */
-    public function update(OrdersUpdateFormRequest $request): bool
-    {
-        try {
-            $orders = $this->get($request->id);
-            $orders->fillOrders($request);
-            return $orders->update();
-        } catch(Exception $e) {
-            Log::error($e->getMessage() . $e->getTraceAsString());
-            return false;
-        }
-    }
-
 
     /**
      * get numero Order attribute by od

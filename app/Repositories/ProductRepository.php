@@ -16,7 +16,8 @@ class ProductRepository implements ProductRepositoryInterface
     public function getAll(): Collection
     {
         return Product::orderBy('id', 'ASC')
-                ->with('types','brand')->get();
+                ->with('types','brand')
+                ->get();
     }
 
     /**
