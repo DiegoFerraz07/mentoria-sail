@@ -62,6 +62,12 @@ Tip 2: you can also add an image using data-image tag
                                 <p>{{ __("Brand") }}</p>
                             </a>
                         </li>
+                        <li class="nav-item sub-nav @active('orders')">
+                            <a class="nav-link" href="{{route('orders.index')}}">
+                                <i class="nc-icon nc-single-02"></i>
+                                <p>{{ __("Orders") }}</p>
+                            </a>
+                        </li>
                         
                     </ul>
                 </div>

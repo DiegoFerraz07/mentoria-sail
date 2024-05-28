@@ -30,6 +30,7 @@ import Supplies from './pages/supply/index.vue';
 import Product from './pages/product/index.vue';
 import FormProduct from './pages/product/form.vue';
 import Types from './pages/types/index.vue';
+import Orders from './pages/orders/index.vue';
 import NavNotification from './components/NavNotification.vue';
 
 
@@ -40,6 +41,7 @@ app.component('client', Client);
 app.component('form-client', FormClient);
 app.component('supplies', Supplies);
 app.component('product', Product);
+app.component('orders', Orders);
 app.component('form-product', FormProduct);
 app.component('pagination-vue', PaginationVue);
 app.component('nav-notification', NavNotification);

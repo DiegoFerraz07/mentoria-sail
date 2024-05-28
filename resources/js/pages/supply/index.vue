@@ -4,14 +4,16 @@
         <h1 class="h2">Fornecedores</h1>
     </div>
     <div>
-        <input type="text" id="input-search" @keyup="handleInputSearch" required minlength="3" v-model="search" placeholder="Digite o nome" />
-        <button @click="find()"> pesquisar </button>
-        <button v-if="search" @click="clearSearch" class="btn btn-danger btn-sm">
-            Limpar Pesquisa
-        </button>
-        <a type="button" :href="route('supply.add')" class="btn btn-success float-end">
-            Adicionar
-        </a>
+        <Find idInput="input-search"
+        	:search="search"
+        	:inputKeyup="(search) => handleInputSearch(search)"
+			:btnClearClick="() => clearSearch()"
+        	:btnFindClick="() => find()"
+			:routeAddNew="route('supply.add')"
+        	textAddNew="Adicionar novo Fornecedor"
+			clearSearchText="Limpar Pesquisa"
+			searchText="Pesquisar Fornecedor" />
+
         <div class="table-responsive mt-4">
             <p v-if="!supplies"> Não existe dados </p>
             <table v-if="supplies" class="table table-striped table-sm">
@@ -57,11 +59,13 @@
 import axios from 'axios';
 const alertSwal = window.alertSweet;
 import PaginationVue from '../../components/Pagination.vue';
+import Find from '../../components/Find.vue';
 import { route } from 'ziggy-js';
 
 export default {
     components: {
-        PaginationVue
+        PaginationVue,
+        Find
     },
     data() {
         return {
@@ -128,21 +132,21 @@ export default {
                     )
                 });
         },
-        handleInputSearch() {
-            const inputSearch = document.getElementById('input-search');
-            inputSearch.classList.remove('is-invalid');
-
-            console.log(this.search)
-            if (this.search.length < 3 && this.search.length > 0) {
-                inputSearch.classList.add('is-invalid');
-                return false;
-            }
-
-            return true;
+        handleInputSearch(search) {
+            this.search = search;
+			const inputSearch = document.getElementById('input-search');
+			if(inputSearch) {
+				inputSearch.classList.remove('is-invalid');
+	
+				if (this.search.length < 3 && this.search.length > 0) {
+					inputSearch.classList.add('is-invalid');
+					return false;
+				}
+			}
+			return true;
         },
         find() {
-            
-            if(!this.handleInputSearch()) {
+            if(!this.handleInputSearch(this.search)) {
                 return;
             }
 

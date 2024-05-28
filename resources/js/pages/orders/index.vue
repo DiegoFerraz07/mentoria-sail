@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h1 class="h2">Cliente</h1>
+		<h1 class="h2">Pedidos</h1>
 	</div>
 	<div>
 		<Find idInput="input-search"
@@ -9,40 +9,44 @@
         	:inputKeyup="(search) => handleInputSearch(search)"
 			:btnClearClick="() => clearSearch()"
         	:btnFindClick="() => find()"
-			:routeAddNew="route('client.add')"
-        	textAddNew="Adicionar novo Cliente"
+			:routeAddNew="route('orders.add')"
+        	textAddNew="Adicionar novos Pedidos"
 			clearSearchText="Limpar Pesquisa"
-			searchText="Pesquisar Cliente" />
+			searchText="Pesquisar Pedido" />
 			
 		<div class="table-responsive mt-4">
-			<p v-if="customers.length == 0"> Não existe dados </p>
-			<table v-if="customers.length > 0" class="table table-hover table-striped table-sm">
+			<p v-if="orders.length == 0"> Não existe dados </p>
+			<table v-if="orders.length > 0" class="table table-hover table-striped table-sm">
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Nome</th>
-						<th>Email</th>
+						<th>numero do Pedido</th>
+						<th>descrição</th>
+						<th>taxa</th>
+						<th>Icms</th>
+						<th>Valor Total</th>
+						<th>Cliente</th>
 						<th>CPF/CNPJ</th>
-						<th>Data</th>
-						<th>Endereço</th>
 						<th>Ações</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(client, key) in customers " :key="key">
-						<td>{{ client.id }}</td>
-						<td>{{ client.name }}</td>
-						<td>{{ client.email }}</td>
-						<td v-if="client.cpf">{{ client.cpf }}</td>
-						<td v-else>{{ client.cnpj }}</td>
-						<!--td>{{ $client->date_formatted }}</td-->
-						<td>{{ $filters.formatDate(client.date, 'DD/MM/YYYY') }}</td>
-						<td>{{ getFullAddress(client.address) }}</td>
+					<tr v-for="(order, key) in orders " :key="key">
+						<td>{{ order.id }}</td>
+						<td>{{ order.numero_order }}</td>
+						<td>{{ order.description_order }}</td>
+						<td>{{ order.tax_order }}</td>
+						<td>{{ order.icms_order }}</td>
+						<td>{{ order.total_value_order }}</td>
+						<td>{{ order.name_client }}</td>
+						<td v-if="order.cpf_client">{{ order.cpf_client }}</td>
+						<td v-else>{{ cnpj_client }}</td>
+						
 						<td>
-							<a :href="route('client.edit', { id: client.id })" class="btn btn-light btn-sm">
-								Editar
+							<a  class="btn btn-light btn-sm">
+								Ver Pedido
 							</a>
-							<button @click="confirmDeleteClient(client.id, client.name)" class="btn btn-danger btn-sm">
+							<button @click="confirmDeleteOrder(order.id, order.nameClient)" class="btn btn-danger btn-sm">
 								Excluir
 							</button>
 						</td>
@@ -50,7 +54,7 @@
 				</tbody>
 			</table>
 			<PaginationVue v-if="paginationData" :pagination-data="paginationData"
-				@go-page="(url) => getAllCustomers(url)" />
+				@go-page="(url) => getAllOrders(url)" />
 		</div>
 	</div>
 </template>
@@ -73,17 +77,17 @@ export default {
 	},
 	data() {
 		return {
-			customers: [],
+			orders: [],
 			paginationData: null,
 			search: '',
 		}
 	},
 	created() {
-		this.getAllCustomers();
+		this.getAllOrders();
 	},
 	methods: {
-		getAllCustomers(goPage = '') {
-			let url = route('api.client.index');
+		getAllOrders(goPage = '') {
+			let url = route('api.orders.index');
 			if (goPage) {
 				url = goPage;
 			}
@@ -92,7 +96,7 @@ export default {
 			axios.get(url)
 				.then(response => {
 					console.log(response)
-					this.customers = response.data.data
+					this.orders = response.data.data
 					if(response.data.links && response.data.meta) {
 						this.paginationData = {
 							links: response.data.links,
@@ -104,18 +108,18 @@ export default {
 					console.log(error)
 				})
 		},
-		confirmDeleteClient(id, name) {
+		confirmDeleteOrder(id, nameClient) {
 			alertSwal(
-				`Deseja realmente excluir o Cliente <b>"${name}"</b>?`,
+				`Deseja realmente excluir o Pedido do<b>"${nameClient}"</b>?`,
 				'warning',
 				success => {
-					this.deleteClient(id);
+					this.deleteOrder(id);
 				}
 			);
 		},
 
-		deleteClient(id) {
-			axios.delete(route('api.client.delete'), {
+		deleteOrder(id) {
+			axios.delete(route('api.orders.delete'), {
 				data: {
 					id,
 				}
@@ -127,7 +131,7 @@ export default {
 							'Excluido com sucesso',
 							'success',
 							success => {
-								this.getAllCustomers();
+								this.getAllOrders();
 							}
 						);
 					}
@@ -157,7 +161,7 @@ export default {
 				return;
 			}
 
-			axios.post(route('api.client.find'), { search: this.search })
+			axios.post(route('api.orders.find'), { search: this.search })
 				.then(response => {
 					this.customers = response.data.data
 					if(response.data.links && response.data.meta) {
@@ -173,12 +177,9 @@ export default {
 		},
 		clearSearch() {
 			this.search = '';
-			this.getAllCustomers()
+			this.getAllOrders()
 		},
-		getFullAddress(address) {
-			address = JSON.parse(address);
-			return `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.state}`;
-		}
+	
 	}
 };
 
